@@ -1,0 +1,36 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "compile_program",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-g",
+                "src\\*.cpp",
+                "-o",
+                "build\\bicudo_64x.exe",
+                "-I${workspaceFolder}\\external\\include",
+                "-L${workspaceFolder}\\external\\lib",
+                "-lglew32",
+                "-lmingw32",
+                "-lSDL2main",
+                "-lSDL2",
+                "-mwindows",
+                "-lopengl32"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
