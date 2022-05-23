@@ -1,9 +1,12 @@
 # bicudo
 
-- Hello, this is a simple game base with modules system (most like scripts) with dynamic interactions,
-works for 2D and 3D (require a minimal change into matrix proj and OpenGL setup).
+Hello, the project is not finished yet.
 
-- The project only works for window and uses mingw32, consider having mingw installed in default path for
+# details
+
+Simple game base with modules system (most like scripts) with dynamic interactions,
+works for 2D and 3D (require a minimal change into matrix proj and OpenGL setup).
+The project only works for window and uses mingw32, consider having mingw installed in default path for
 windows (C:MinGW/).
 
 For compile and run in VS Code: 
