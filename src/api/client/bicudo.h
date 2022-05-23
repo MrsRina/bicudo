@@ -2,16 +2,16 @@
  * @author Rina
  * @since 23/05/22
  * 
- * Please I love credits <3, many of things I do is skidded
- * and stole (:C this make me very sad & you do not want to)
- * see a girl sad).
+ * Please I love credits <3, many of things that I do, others "devs"
+ * skid and stole from me (:C this make me very sad & you do not
+ * want to see a girl sad), so I only want your respect.
  **/
 #pragma once
 #include "includes/includes.h"
 #include <SDL2/SDL.h>
 
 /**
- * Main class game where everything is processed.
+ * Main class of game where everything is processed.
  **/
 class game_core {
 protected:
