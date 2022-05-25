@@ -1,5 +1,11 @@
 #include "impl/instance/bicudo.h"
 
-int main(int* argv, char** argc) {
-    
+int main(int argc, char** argv) {
+    game_core::edit_client_details("Bicudo", "1.0");
+
+    BICUDO->init();
+    BICUDO->mainloop();
+    BICUDO->quit();
+
+    return game_core::internal_flag;
 }

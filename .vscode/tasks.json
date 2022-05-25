@@ -13,6 +13,7 @@
                 //"src\\includes\\*.cpp",
                 "src\\api\\client\\*.cpp",
                 "src\\api\\util\\*.cpp",
+                "src\\api\\render\\*.cpp",
                 "src\\impl\\instance\\*.cpp",
                 "-o",
                 "build\\bicudo_64x.exe",

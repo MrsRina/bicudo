@@ -1,4 +1,4 @@
 #pragma once
 #include "api/client/bicudo.h"
 
-extern game_core* const BICUDO;
+extern game_core* BICUDO;
