@@ -4,16 +4,20 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "compile_program",
+            "label": "compile",
             "type": "shell",
             "command": "g++",
             "args": [
                 "-g",
                 "src\\*.cpp",
+                //"src\\includes\\*.cpp",
+                "src\\api\\client\\*.cpp",
+                "src\\api\\util\\*.cpp",
+                "src\\impl\\instance\\*.cpp",
                 "-o",
                 "build\\bicudo_64x.exe",
-                "-I${workspaceFolder}\\external\\include",
                 "-L${workspaceFolder}\\external\\lib",
+                "-I${workspaceFolder}\\src",
                 "-lglew32",
                 "-lmingw32",
                 "-lSDL2main",
@@ -31,6 +35,15 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "run",
+            "type": "shell",
+            "command": "start",
+            "args": [
+                "${workspaceFolder}//build//bicudo_64x.exe"
+            ],
+            "dependsOn": "compile"
         }
     ]
 }

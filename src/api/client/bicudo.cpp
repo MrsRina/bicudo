@@ -1,4 +1,4 @@
-#include "api/client/bicudo.h"
+#include "bicudo.h"
 #include "api/util/util.h"
 
 std::string game_core::client_name        = "";

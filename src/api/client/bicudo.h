@@ -8,7 +8,6 @@
  **/
 #pragma once
 #include "includes/includes.h"
-#include <SDL2/SDL.h>
 
 /**
  * Main class of game where everything is processed.
