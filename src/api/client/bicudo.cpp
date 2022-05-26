@@ -100,12 +100,12 @@ void game_core::mainloop() {
             this->on_update();
             this->on_render();
             
-            this->elasped_frames++;
+            this->elapsed_frames++;
         }
 
         if (this->delta > 1000) {
-            this->fps = this->elasped_frames;
-            this->elasped_frames = 0;
+            this->fps = this->elapsed_frames;
+            this->elapsed_frames = 0;
             this->delta = 0;
         }
     }
@@ -113,4 +113,16 @@ void game_core::mainloop() {
 
 uint64_t game_core::get_fps() {
     return this->fps;
+}
+
+void game_core::on_event(SDL_Event &sdl_event) {
+
+}
+
+void game_core::on_update() {
+    
+}
+
+void game_core::on_render() {
+
 }

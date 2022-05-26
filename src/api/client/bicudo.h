@@ -26,7 +26,7 @@ private:
     bool is_running;
     
     uint64_t interval, delta, fps;
-    uint64_t previous_ticks, current_ticks, elapsed_ticks, elasped_frames;
+    uint64_t previous_ticks, current_ticks, elapsed_ticks, elapsed_frames;
 
     float render_time;
 
@@ -57,10 +57,8 @@ public:
 
     /* Start of main methods. */
     void refresh();
-
     void init();
     void quit();
-
     void mainloop();
     /* End of main methods. */
 };
