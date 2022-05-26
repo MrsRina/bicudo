@@ -1,6 +1,9 @@
 #pragma once
 #include "api/util/util.h"
 
+#ifndef FONT_RENDERER
+#define FONT_RENDERER
+
 class font_renderer {
 private:
     game_file font_file;
@@ -10,3 +13,5 @@ public:
     void quit();
     /* End of of main methods. */
 };
+
+#endif

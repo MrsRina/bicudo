@@ -16,6 +16,7 @@
                 "src\\api\\render\\*.cpp",
                 "src\\api\\module\\*.cpp",
                 "src\\api\\scene\\*.cpp",
+                "src\\api\\service\\*.cpp",
                 "src\\impl\\instance\\*.cpp",
                 "-o",
                 "build\\bicudo_64x.exe",

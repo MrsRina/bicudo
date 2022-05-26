@@ -1,15 +1,20 @@
 #pragma once
+#include "scene_abstract.h"
 #include "api/feature/feature.h"
-#include "module_abstract.h"
 
-#ifndef MODULE
-#define MODULE
+#ifndef SCENE
+#define SCENE
 
 /**
- * Module feature to create scripts.
+ * Scene in game to create different contexts.
  **/
-class module : public module_abstract, public ifeature {
+class scene : public scene_abstract, public ifeature {
 public:
+    /* Start of main methods. */
+    void disable_all_modules();
+    void enable_all_modules();
+    /* End of main methods. */
+
     /* Start of override methods. */
     void on_start();
     void on_end();

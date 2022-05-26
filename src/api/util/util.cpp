@@ -3,6 +3,9 @@
 
 timer_stamp* util::timing = new timer_stamp();
 
+bool util::debug_scene = false;
+bool util::debug_module = false;
+
 void timer_stamp::start() {
     this->previous_ticks = SDL_GetTicks();
 }

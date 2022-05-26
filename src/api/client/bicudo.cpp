@@ -20,7 +20,7 @@ void game_core::exception() {
 
 void game_core::init_window() {
     const char* name = game_core::client_name.c_str(); 
-    this->sdl_window = SDL_CreateWindow(name, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, game_core::screen_width, game_core::screen_height, SDL_VIDEO_OPENGL);
+    this->sdl_window = SDL_CreateWindow(name, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, game_core::screen_width, game_core::screen_height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
     
     // Set default OPENGL attributs to works with SDL2.
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -85,6 +85,7 @@ void game_core::mainloop() {
 
     this->current_ticks = SDL_GetTicks();
     this->previous_ticks = SDL_GetTicks();
+    this->is_running = true;
 
     while (this->is_running) {
         while (SDL_PollEvent(&sdl_event)) {
@@ -99,8 +100,11 @@ void game_core::mainloop() {
 
             this->on_update();
             this->on_render();
-            
+
             this->elapsed_frames++;
+
+            // Swap buffers and flip.
+            SDL_GL_SwapWindow(this->sdl_window);
         }
 
         if (this->delta > 1000) {
@@ -116,7 +120,13 @@ uint64_t game_core::get_fps() {
 }
 
 void game_core::on_event(SDL_Event &sdl_event) {
-
+    switch (sdl_event.type) {
+        case SDL_QUIT: {
+            this->is_running = false;
+            util::log("Starting game shutdown!");
+            break;
+        }
+    }
 }
 
 void game_core::on_update() {
@@ -124,5 +134,6 @@ void game_core::on_update() {
 }
 
 void game_core::on_render() {
-
+    glClearColor(0.5, 0.5, 0.5, 0.5);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

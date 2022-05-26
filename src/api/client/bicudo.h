@@ -9,6 +9,9 @@
 #pragma once
 #include "includes/includes.h"
 
+#ifndef GAME_CORE
+#define GAME_CORE
+
 /**
  * Main class of game where everything is processed.
  **/
@@ -62,3 +65,5 @@ public:
     void mainloop();
     /* End of main methods. */
 };
+
+#endif

@@ -34,6 +34,10 @@ struct game_file {
  **/
 struct util {
     static timer_stamp* timing;
+
+    static bool debug_scene;
+    static bool debug_module;
+
     static void log(std::string string);
 
     struct file {
