@@ -40,10 +40,20 @@ struct util {
 
     static void log(std::string string);
 
+    /**
+     * Simple load and exists.
+     **/
     struct file {
         bool exists(const std::string &path);
 
         void load(game_file &_game_file);
         void close(game_file &_game_file);
+    };
+
+    /**
+     * Enum to visibility of something.
+     **/
+    enum visibility {
+        LOW_PRIORITY, VISIBLE
     };
 };

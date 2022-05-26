@@ -8,7 +8,7 @@ void module::on_end() {
 
 }
 
-void module::on_event(SDL_Event sdl_event) {
+void module::on_event(SDL_Event &sdl_event) {
 
 }
 

@@ -44,7 +44,10 @@
         "new": "cpp",
         "stdexcept": "cpp",
         "cinttypes": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "thread": "cpp",
+        "chrono": "cpp",
+        "ratio": "cpp"
     },
     "terminal.integrated.tabs.enableAnimation": false,
     "workbench.reduceMotion": "off",

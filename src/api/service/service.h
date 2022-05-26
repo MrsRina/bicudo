@@ -33,11 +33,30 @@ public:
         }
     }
 
+    bool contains(T element) {
+        for (T elements : this->element_list) {
+            if (elements == element) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     std::vector<T> &get_element_list() {
         return this->element_list;
     }
-
     /* End of main methods. */
+
+    /* Start of abstract methods. */
+    virtual void on_start() {
+        util::log(this->get_name() + " service start.");
+    }
+
+    virtual void on_end() {
+        util::log(this->get_name() + " service end.");
+    }
+    /* End of abstract methods. */
 };
 
 #endif

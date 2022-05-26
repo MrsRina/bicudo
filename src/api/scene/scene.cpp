@@ -8,7 +8,7 @@ void scene::on_end() {
 
 }
 
-void scene::on_event(SDL_Event sdl_event) {
+void scene::on_event(SDL_Event &sdl_event) {
 
 }
 

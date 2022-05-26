@@ -52,6 +52,43 @@ void game_core::refresh() {
     this->interval = 1000 / 60;
 }
 
+void game_core::refresh_features() {
+    for (int i = 0; i < this->buffer_update_iterator; i++) {
+        auto features = this->buffer_update[i];
+        
+        if (features != nullptr && !features->is_alive()) {
+            delete features;
+        }
+    }
+
+    // Swap buffer after safe delete all.
+    this->refresh_feature_buffers();
+}
+
+void game_core::refresh_feature_buffers() {
+    std::array<ifeature*, FEATURE_BUFFER_LIMIT> buffer_copy;
+    uint32_t buffer_copy_iterator = 0;
+
+    // Clean the render buffer.
+    this->buffer_render.fill(0);
+    this->buffer_render_iterator = 0;
+
+    // Pass the concurrent buffers to copy and visual buffer.
+    for (ifeature* features : this->buffer_update) {
+        if (features != nullptr) {
+            buffer_copy[buffer_copy_iterator++] = features;
+
+            if (features->get_visibility() == util::visibility::VISIBLE) {
+                this->buffer_render[this->buffer_render_iterator++] = features;
+            }
+        }
+    }
+
+    // Swap update buffer to copy.
+    this->buffer_update = buffer_copy;
+    this->buffer_update_iterator = buffer_copy_iterator;
+}
+
 void game_core::init() {
     util::log("Powered by Bicudo!");
     util::log("Game start!");
@@ -74,6 +111,7 @@ void game_core::init() {
     this->init_window();
     this->init_context();
     this->init_services();
+    this->refresh_feature_buffers();
 }
 
 void game_core::quit() {
@@ -126,14 +164,35 @@ void game_core::on_event(SDL_Event &sdl_event) {
             util::log("Starting game shutdown!");
             break;
         }
+
+        default: {
+            // Call all features every event.
+            for (ifeature* features : this->buffer_update) {
+                if (features != nullptr) {
+                    features->on_event(sdl_event);
+                }
+            }
+
+            break;
+        }
     }
 }
 
 void game_core::on_update() {
-    
+    for (ifeature* &features : this->buffer_update) {
+        if (features != nullptr) {
+            features->on_update(this->delta);
+        }
+    }
 }
 
 void game_core::on_render() {
     glClearColor(0.5, 0.5, 0.5, 0.5);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    for (ifeature* features : this->buffer_render) {
+        if (features != nullptr) {
+            features->on_render(this->render_time);
+        }
+    }
 }

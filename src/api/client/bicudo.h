@@ -8,6 +8,9 @@
  **/
 #pragma once
 #include "includes/includes.h"
+#include "api/feature/feature.h"
+
+static const uint32_t FEATURE_BUFFER_LIMIT = 2048;
 
 #ifndef GAME_CORE
 #define GAME_CORE
@@ -16,7 +19,7 @@
  * Main class of game where everything is processed.
  **/
 class game_core {
-private:
+protected:
     /* Main SDL variables. */
     SDL_Window* sdl_window;
     SDL_GLContext sdl_gl_context;
@@ -27,6 +30,7 @@ private:
 
     /* The context of all. */
     bool is_running;
+    bool should_refresh_features;
     
     uint64_t interval, delta, fps;
     uint64_t previous_ticks, current_ticks, elapsed_ticks, elapsed_frames;
@@ -44,6 +48,13 @@ private:
     void on_update();
     void on_render();
     /* End of main methods. */
+
+    /* Instead use vector, using an array to be called every tick is cool. */
+    std::array<ifeature*, FEATURE_BUFFER_LIMIT> buffer_update;
+    std::array<ifeature*, FEATURE_BUFFER_LIMIT> buffer_render;
+
+    /* The iterator for handler features in buffers. */
+    uint32_t buffer_update_iterator, buffer_render_iterator;
 public:
     /* The static variables used in many parts of game. */
     static uint16_t screen_width, screen_height;
@@ -55,11 +66,17 @@ public:
     /* End of static methods. */
 
     /* Start of setters and getters. */
+    void set_should_refresh_features(bool should);
+    bool if_should_refresh_features();
+    
     uint64_t get_fps();
     /* End of setters and getters. */
 
     /* Start of main methods. */
     void refresh();
+    void refresh_feature_buffers();
+    void refresh_features();
+
     void init();
     void quit();
     void mainloop();
