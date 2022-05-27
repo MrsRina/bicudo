@@ -1,5 +1,30 @@
 #include "bicudo.h"
 #include "api/util/util.h"
+#include "instance.h"
+
+void update_task(task* raw_task) {
+    uint64_t previous_ticks = SDL_GetTicks();
+    uint64_t current_ticks = SDL_GetTicks();
+    uint8_t interval = 16;
+    uint16_t delta = 0;
+
+    while (raw_task->get_atomic_boolean_state()) {
+        current_ticks = SDL_GetTicks() - previous_ticks;
+
+        if (current_ticks > interval) {
+            previous_ticks = SDL_GetTicks();
+            delta += interval;
+
+            // Call main object into this thread.
+            BICUDO->set_locked_delta(delta);
+            BICUDO->mainloop_locked_update();
+
+            if (delta > 1000) {
+                delta = 0;
+            }
+        }
+    }
+}
 
 std::string game_core::client_name        = "";
 std::string game_core::client_version_str = "";
@@ -131,6 +156,8 @@ void game_core::mainloop() {
     this->previous_ticks = SDL_GetTicks();
     this->is_running = true;
 
+    // Initialize the physic task.
+
     while (this->is_running) {
         while (SDL_PollEvent(&sdl_event)) {
             this->on_event(sdl_event);
@@ -141,10 +168,9 @@ void game_core::mainloop() {
         if (this->current_ticks > this->interval) {
             this->previous_ticks = SDL_GetTicks();
             this->delta += this->current_ticks;
-
+    
             this->on_update();
             this->on_render();
-
             this->elapsed_frames++;
 
             // Swap buffers and flip.
@@ -157,6 +183,10 @@ void game_core::mainloop() {
             this->delta = 0;
         }
     }
+}
+
+void game_core::set_locked_delta(uint64_t delta_val) {
+    this->locked_delta = delta_val;
 }
 
 uint64_t game_core::get_fps() {
@@ -184,8 +214,16 @@ void game_core::on_event(SDL_Event &sdl_event) {
     }
 }
 
-void game_core::on_update() {
+void game_core::mainloop_locked_update() {
     for (ifeature* &features : this->buffer_update) {
+        if (features != nullptr) {
+            features->on_locked_update(this->delta);
+        }
+    }
+}
+
+void game_core::on_update() {
+        for (ifeature* &features : this->buffer_update) {
         if (features != nullptr) {
             features->on_update(this->delta);
         }

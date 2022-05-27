@@ -16,6 +16,9 @@
 
 static const uint32_t FEATURE_BUFFER_LIMIT = 2048;
 
+/* The update task. */
+void update_task(task* raw_task);
+
 #ifndef GAME_CORE
 #define GAME_CORE
 
@@ -36,7 +39,7 @@ protected:
     bool is_running;
     bool should_refresh_features;
     
-    uint64_t interval, delta, fps;
+    uint64_t interval, delta, locked_delta, fps;
     uint64_t previous_ticks, current_ticks, elapsed_ticks, elapsed_frames;
 
     float render_time;
@@ -77,13 +80,14 @@ public:
     /* Start of setters and getters. */
     void set_should_refresh_features(bool should);
     bool if_should_refresh_features();
+
+    void set_locked_delta(uint64_t delta_val);
     
     uint64_t get_fps();
 
     module_service &get_module_manager();
     scene_service &get_scene_manager();
     task_service &get_task_manager();
-
     /* End of setters and getters. */
 
     /* Start of main methods. */
@@ -94,6 +98,7 @@ public:
     void init();
     void quit();
     void mainloop();
+    void mainloop_locked_update();
     /* End of main methods. */
 };
 

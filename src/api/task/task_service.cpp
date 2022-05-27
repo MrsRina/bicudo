@@ -6,6 +6,7 @@ void task_service::start(const std::string &task_name) {
 }
 
 void task_service::end(task* raw_task) {
+    raw_task->set_atomic_boolean_state = false;
     this->remove(raw_task);
     delete raw_task;
     raw_task = nullptr;
@@ -71,7 +72,7 @@ void task_service::on_end() {
     service::on_end();
 
     for (task* &task : this->element_list) {
-        if (!task->get_atomic_boolean_state()) {
+        if (task->get_atomic_boolean_state()) {
             task->set_atomic_boolean_state(false);
         }
     }
