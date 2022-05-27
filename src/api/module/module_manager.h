@@ -9,7 +9,7 @@ class module_manager : public service<module*>, public ifeature {
 public:
     /* Start of main methods. */
     module* get_module_by_name(const std::string &module_name);
-    module* get_module_by_feature_id(const std::string &feature_id);
+    module* get_module_by_feature_id(uint32_t feature_id);
     /* End of main methods. */    
 
     /* Start of override methods. */
