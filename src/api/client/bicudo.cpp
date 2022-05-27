@@ -157,14 +157,17 @@ void game_core::mainloop() {
     this->is_running = true;
 
     // Initialize the physic task.
-
     while (this->is_running) {
+        // Update input and events unsynchronized.
         while (SDL_PollEvent(&sdl_event)) {
             this->on_event(sdl_event);
         }
 
+        // Get the difference from previous tick.
         this->current_ticks = SDL_GetTicks() - this->previous_ticks;
 
+        // If the difference is not less than interval tick,
+        // we update and render this moment tick.
         if (this->current_ticks > this->interval) {
             this->previous_ticks = SDL_GetTicks();
             this->delta += this->current_ticks;
@@ -175,12 +178,13 @@ void game_core::mainloop() {
 
             // Swap buffers and flip.
             SDL_GL_SwapWindow(this->sdl_window);
-        }
-
-        if (this->delta > 1000) {
-            this->fps = this->elapsed_frames;
-            this->elapsed_frames = 0;
-            this->delta = 0;
+        
+            // Reset delta and get the game fps.
+            if (this->delta > 1000) {
+                this->fps = this->elapsed_frames;
+                this->elapsed_frames = 0;
+                this->delta = 0;
+            }
         }
     }
 }
