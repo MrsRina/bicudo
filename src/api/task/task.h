@@ -1,6 +1,9 @@
 #pragma once
 #include "includes/includes.h"
 
+#ifndef TASK
+#define TASK
+
 /**
  *  Thread talking and object multi-threading safe.
  **/
@@ -33,3 +36,5 @@ public:
     void end();
     /* End of main methods. */
 };
+
+#endif

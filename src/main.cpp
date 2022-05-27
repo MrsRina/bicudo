@@ -1,4 +1,4 @@
-#include "impl/instance/bicudo.h"
+#include "api/client/instance.h"
 
 int main(int argc, char** argv) {
     game_core::edit_client_details("Bicudo", "1.0");

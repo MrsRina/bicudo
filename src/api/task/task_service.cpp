@@ -1,17 +1,17 @@
-#include "task_manager.h"
+#include "task_service.h"
 
-void task_manager::start(const std::string &task_name) {
+void task_service::start(const std::string &task_name) {
     task* raw_task = new task(task_name, this->previous_id_task++);
     this->add(raw_task);
 }
 
-void task_manager::end(task* raw_task) {
+void task_service::end(task* raw_task) {
     this->remove(raw_task);
     delete raw_task;
     raw_task = nullptr;
 }
 
-bool task_manager::is_task_done(const std::string &task_name) {
+bool task_service::is_task_done(const std::string &task_name) {
     task* raw_task = nullptr;
     bool flag = false;
 
@@ -32,7 +32,7 @@ bool task_manager::is_task_done(const std::string &task_name) {
     return flag;
 }
 
-bool task_manager::is_task_done(uint32_t id) {
+bool task_service::is_task_done(uint32_t id) {
     task* raw_task = nullptr;
     bool flag = false;
 
@@ -53,7 +53,7 @@ bool task_manager::is_task_done(uint32_t id) {
     return flag;
 }
 
-bool task_manager::is_task_done(task* raw_task) {
+bool task_service::is_task_done(task* raw_task) {
     bool flag = this->contains(raw_task);
 
     if (flag) {
@@ -61,4 +61,18 @@ bool task_manager::is_task_done(task* raw_task) {
     }
 
     return flag;
+}
+
+void task_service::on_start() {
+    service::on_start();
+}
+
+void task_service::on_end() {
+    service::on_end();
+
+    for (task* &task : this->element_list) {
+        if (!task->get_atomic_boolean_state()) {
+            task->set_atomic_boolean_state(false);
+        }
+    }
 }

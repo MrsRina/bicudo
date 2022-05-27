@@ -10,6 +10,10 @@
 #include "includes/includes.h"
 #include "api/feature/feature.h"
 
+#include "api/module/module_service.h"
+#include "api/scene/scene_service.h"
+#include "api/task/task_service.h"
+
 static const uint32_t FEATURE_BUFFER_LIMIT = 2048;
 
 #ifndef GAME_CORE
@@ -55,6 +59,11 @@ protected:
 
     /* The iterator for handler features in buffers. */
     uint32_t buffer_update_iterator, buffer_render_iterator;
+
+    /* Services. */
+    module_service service_module_manager;
+    scene_service service_scene_manager;
+    task_service service_task_manager;
 public:
     /* The static variables used in many parts of game. */
     static uint16_t screen_width, screen_height;
@@ -70,6 +79,11 @@ public:
     bool if_should_refresh_features();
     
     uint64_t get_fps();
+
+    module_service &get_module_manager();
+    scene_service &get_scene_manager();
+    task_service &get_task_manager();
+
     /* End of setters and getters. */
 
     /* Start of main methods. */

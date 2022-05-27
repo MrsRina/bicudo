@@ -38,7 +38,9 @@ void game_core::init_context() {
 }
 
 void game_core::init_services() {
-
+    this->service_module_manager.on_start();
+    this->service_scene_manager.on_start();
+    this->service_task_manager.on_start();
 }
 
 void game_core::refresh() {
@@ -74,7 +76,7 @@ void game_core::refresh_feature_buffers() {
     this->buffer_render_iterator = 0;
 
     // Pass the concurrent buffers to copy and visual buffer.
-    for (ifeature* features : this->buffer_update) {
+    for (ifeature* &features : this->buffer_update) {
         if (features != nullptr) {
             buffer_copy[buffer_copy_iterator++] = features;
 
@@ -115,6 +117,10 @@ void game_core::init() {
 }
 
 void game_core::quit() {
+    this->service_module_manager.on_end();
+    this->service_scene_manager.on_end();
+    this->service_task_manager.on_end();
+
     util::log("Game quit!");
 }
 
@@ -167,7 +173,7 @@ void game_core::on_event(SDL_Event &sdl_event) {
 
         default: {
             // Call all features every event.
-            for (ifeature* features : this->buffer_update) {
+            for (ifeature* &features : this->buffer_update) {
                 if (features != nullptr) {
                     features->on_event(sdl_event);
                 }
@@ -190,7 +196,7 @@ void game_core::on_render() {
     glClearColor(0.5, 0.5, 0.5, 0.5);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    for (ifeature* features : this->buffer_render) {
+    for (ifeature* &features : this->buffer_render) {
         if (features != nullptr) {
             features->on_render(this->render_time);
         }

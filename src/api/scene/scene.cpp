@@ -25,7 +25,7 @@ void scene::on_render(float render_time) {
 }
 
 void scene::disable_all_modules() {
-
+    
 }
 
 void scene::enable_all_modules() {
