@@ -11,8 +11,22 @@
 template<typename T>
 class service {
 protected:
+    /* List with allelements in. */
     std::vector<T> element_list;
+
+    /* Name of this service. */
+    std::string name;
 public:
+    /* Start of setters and getters. */
+    void set_name(const std::string &service_name) {
+        this->name = service_name;
+    }
+
+    std::string get_name() {
+        return this->name;
+    }
+    /* End of setters and getters. */
+
     /* Start of main methods. */
     void add(T element) {
         this->element_list = element;
