@@ -34,11 +34,5 @@ void util::file::load(game_file &game_file) {
 }
 
 void util::file::close(game_file &_game_file) {
-    if (_game_file.data1 != nullptr) {
-        delete _game_file.data1;
-    }
 
-    if (_game_file.data2 != nullptr) {
-        delete _game_file.data2;
-    }
 }

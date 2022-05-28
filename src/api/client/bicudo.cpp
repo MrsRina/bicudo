@@ -1,6 +1,7 @@
 #include "bicudo.h"
 #include "api/util/util.h"
 #include "instance.h"
+#include <thread>
 
 void update_task(task* raw_task, int arg) {
     uint64_t previous_ticks = SDL_GetTicks();

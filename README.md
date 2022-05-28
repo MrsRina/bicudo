@@ -6,8 +6,8 @@ Hello, the project is not finished yet.
 
 Simple game base with modules system (most like scripts) with dynamic interactions,
 works for 2D and 3D (require a minimal change into matrix proj and OpenGL setup).
-The project only works for window and uses mingw32, consider having mingw installed in default path for
-windows (C:MinGW/).
+The project only works for window and uses mingw32, consider having mingw64 installed in default path for
+windows (C:mingw64/).
 
 For compile and debug in VS Code: 
 - 1 Move/copy include/ folder in external/ folder into MinGW/.
@@ -21,7 +21,7 @@ Or look into build folder where the exe is created.
 
 # disclaimer
 
-The libs of Glew do not come by default for mingw .lib (only works with Microsft),
+The libs of Glew does not come by default for mingw .a,
 but I compiled to mingw so it works, you can use for different projects <3.
 
 wooohuu!
