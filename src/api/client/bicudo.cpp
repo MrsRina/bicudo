@@ -2,13 +2,13 @@
 #include "api/util/util.h"
 #include "instance.h"
 
-void update_task(task* raw_task) {
+void update_task(task* raw_task, int arg) {
     uint64_t previous_ticks = SDL_GetTicks();
     uint64_t current_ticks = SDL_GetTicks();
     uint8_t interval = 16;
     uint16_t delta = 0;
 
-    while (raw_task->get_atomic_boolean_state()) {
+    while (!raw_task->get_atomic_boolean_state()) {
         current_ticks = SDL_GetTicks() - previous_ticks;
 
         if (current_ticks > interval) {
@@ -105,7 +105,7 @@ void game_core::refresh_feature_buffers() {
         if (features != nullptr) {
             buffer_copy[buffer_copy_iterator++] = features;
 
-            if (features->get_visibility() == util::visibility::VISIBLE) {
+            if (features->get_visibility() == util::visibility::VISIBLE && features->is_alive()) {
                 this->buffer_render[this->buffer_render_iterator++] = features;
             }
         }
@@ -156,7 +156,10 @@ void game_core::mainloop() {
     this->previous_ticks = SDL_GetTicks();
     this->is_running = true;
 
-    // Initialize the physic task.
+    // Initialize the locked task.
+    //this->service_task_manager.start("locked-update", update_task, 0);
+    std::thread t(update_task, 0);
+
     while (this->is_running) {
         // Update input and events unsynchronized.
         while (SDL_PollEvent(&sdl_event)) {
@@ -197,6 +200,40 @@ uint64_t game_core::get_fps() {
     return this->fps;
 }
 
+ifeature* game_core::get_feature_by_id(uint32_t feature_id) {
+    for (ifeature* &features : this->buffer_update) {
+        if (features != nullptr && features->get_feature_id() == feature_id) {
+            return features;
+        }
+    }
+
+    return NULL;
+}
+
+void game_core::registry_feature(ifeature* feature) {
+    if (feature == NULL) {
+        return;
+    }
+
+    this->previous_feature_id_used++;
+    this->buffer_update[this->buffer_update_iterator++] = feature;
+
+    if (feature->get_visibility() == util::visibility::VISIBLE) {
+        this->buffer_render[this->buffer_render_iterator++] = feature;
+    }
+
+    feature->set_feature_id(this->previous_feature_id_used);
+}
+
+void game_core::remove_feature(uint32_t feature_id) {
+    ifeature* feature = this->get_feature_by_id(feature_id);
+
+    if (feature != NULL) {
+        feature->set_alive_state(false);
+        this->should_refresh_features = true;
+    }
+}
+
 void game_core::on_event(SDL_Event &sdl_event) {
     switch (sdl_event.type) {
         case SDL_QUIT: {
@@ -227,7 +264,12 @@ void game_core::mainloop_locked_update() {
 }
 
 void game_core::on_update() {
-        for (ifeature* &features : this->buffer_update) {
+    if (this->should_refresh_features) {
+        this->refresh_features();
+        this->should_refresh_features = false;
+    }
+
+    for (ifeature* &features : this->buffer_update) {
         if (features != nullptr) {
             features->on_update(this->delta);
         }

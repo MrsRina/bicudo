@@ -44,6 +44,11 @@ protected:
 
     float render_time;
 
+    /* Services. */
+    module_service service_module_manager;
+    scene_service service_scene_manager;
+    task_service service_task_manager;
+
     /* Start of setup methods. */
     void init_window();
     void init_context();
@@ -62,11 +67,9 @@ protected:
 
     /* The iterator for handler features in buffers. */
     uint32_t buffer_update_iterator, buffer_render_iterator;
-
-    /* Services. */
-    module_service service_module_manager;
-    scene_service service_scene_manager;
-    task_service service_task_manager;
+    
+    /* Registry new ids from this. */
+    uint32_t previous_feature_id_used;
 public:
     /* The static variables used in many parts of game. */
     static uint16_t screen_width, screen_height;
@@ -78,11 +81,12 @@ public:
     /* End of static methods. */
 
     /* Start of setters and getters. */
+    ifeature* get_feature_by_id(uint32_t feature_id);
+    
     void set_should_refresh_features(bool should);
     bool if_should_refresh_features();
 
     void set_locked_delta(uint64_t delta_val);
-    
     uint64_t get_fps();
 
     module_service &get_module_manager();
@@ -91,6 +95,9 @@ public:
     /* End of setters and getters. */
 
     /* Start of main methods. */
+    void registry_feature(ifeature* feature);
+    void remove_feature(uint32_t feature_id);
+
     void refresh();
     void refresh_feature_buffers();
     void refresh_features();

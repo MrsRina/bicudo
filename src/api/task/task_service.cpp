@@ -1,30 +1,35 @@
 #include "task_service.h"
 
-void task_service::start(const std::string &task_name) {
-    task* raw_task = new task(task_name, this->previous_id_task++);
-    this->add(raw_task);
-}
-
 void task_service::end(task* raw_task) {
-    raw_task->set_atomic_boolean_state = false;
+    raw_task->set_atomic_boolean_state(true);
     this->remove(raw_task);
     delete raw_task;
     raw_task = nullptr;
 }
 
-bool task_service::is_task_done(const std::string &task_name) {
-    task* raw_task = nullptr;
-    bool flag = false;
-
-    for (uint32_t i = 0; i < this->element_list.size(); i++) {
-        task* tasks = this->element_list.at(i);
-
-        if (tasks != nullptr && tasks->get_name() == task_name && tasks->get_atomic_boolean_state()) {
-            raw_task = tasks;
-            flag = true;
-            break;
+task* task_service::get_task_by_name(const std::string &task_name) {
+    for (task* &tasks : this->element_list) {
+        if (tasks->get_name() == task_name) {
+            return tasks;
         }
     }
+
+    return NULL;
+}
+
+task* task_service::get_task_by_id(uint32_t task_id) {
+    for (task* &tasks : this->element_list) {
+        if (tasks->get_id() == task_id) {
+            return tasks;
+        }
+    }
+
+    return NULL;
+}
+
+bool task_service::is_task_done(const std::string &task_name) {
+    task* raw_task = this->get_task_by_name(task_name);
+    bool flag = raw_task != NULL && raw_task->get_atomic_boolean_state();
 
     if (flag) {
         this->end(raw_task);
@@ -34,18 +39,8 @@ bool task_service::is_task_done(const std::string &task_name) {
 }
 
 bool task_service::is_task_done(uint32_t id) {
-    task* raw_task = nullptr;
-    bool flag = false;
-
-    for (uint32_t i = 0; i < this->element_list.size(); i++) {
-        task* tasks = this->element_list.at(i);
-
-        if (tasks != nullptr && tasks->get_id() == id && tasks->get_atomic_boolean_state()) {
-            raw_task = tasks;
-            flag = true;
-            break;
-        }
-    }
+    task* raw_task = this->get_task_by_id(id);
+    bool flag = raw_task != NULL && raw_task->get_atomic_boolean_state();
 
     if (flag) {
         this->end(raw_task);
@@ -72,8 +67,6 @@ void task_service::on_end() {
     service::on_end();
 
     for (task* &task : this->element_list) {
-        if (task->get_atomic_boolean_state()) {
-            task->set_atomic_boolean_state(false);
-        }
+        task->set_atomic_boolean_state(true);
     }
 }
