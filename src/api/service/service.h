@@ -17,6 +17,12 @@ protected:
     /* Name of this service. */
     std::string name;
 public:
+    service(const std::string &service_name) {
+        this->set_name(service_name);
+    }
+
+    ~service() {}
+
     /* Start of setters and getters. */
     void set_name(const std::string &service_name) {
         this->name = service_name;

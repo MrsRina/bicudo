@@ -45,9 +45,9 @@ protected:
     float render_time;
 
     /* Services. */
-    module_service service_module_manager;
-    scene_service service_scene_manager;
-    task_service service_task_manager;
+    module_service service_module_manager = module_service("Module");
+    scene_service service_scene_manager = scene_service("Scene");
+    task_service service_task_manager = task_service("Task");
 
     /* Start of setup methods. */
     void init_window();

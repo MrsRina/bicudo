@@ -43,13 +43,51 @@
             }
         },
         {
-            "label": "run",
+            "label": "compile_log",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-m32",
+                "src\\*.cpp",
+                //"src\\includes\\*.cpp",
+                "src\\api\\client\\*.cpp",
+                "src\\api\\util\\*.cpp",
+                "src\\api\\render\\*.cpp",
+                "src\\api\\module\\*.cpp",
+                "src\\api\\scene\\*.cpp",
+                "src\\api\\service\\*.cpp",
+                "src\\api\\task\\*.cpp",
+                "src\\api\\feature\\*.cpp",
+                //"src\\impl\\instance\\*.cpp",
+                "-o",
+                "build\\bicudo_64x.exe",
+                "-L${workspaceFolder}\\external\\lib",
+                "-I${workspaceFolder}\\src",
+                "-lglew32",
+                "-lmingw32",
+                "-lSDL2main",
+                "-lSDL2",
+                "-lopengl32"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "run_log",
             "type": "shell",
             "command": "start",
             "args": [
                 "${workspaceFolder}//build//bicudo_64x.exe"
             ],
-            "dependsOn": "compile"
+            "dependsOn": "compile_log"
         }
     ]
 }

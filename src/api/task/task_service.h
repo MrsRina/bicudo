@@ -13,6 +13,9 @@ protected:
     /* The previous id used. */
     uint32_t previous_id_task;
 public:
+    task_service(const std::string &service_name) : service(service_name) {   
+    }
+
     /* Start of main methods. */
     template<typename callback, typename... args>
     task* start(const std::string &task_name, callback&& __f, args&&... __args) {

@@ -15,7 +15,7 @@ bool timer_stamp::end_if(uint32_t ms) {
 }
 
 void util::log(std::string string) {
-    std::cout << string.c_str() << "/n";
+    std::cout << string.c_str() << "\n";
 }
 
 bool util::file::exists(const std::string &path) {

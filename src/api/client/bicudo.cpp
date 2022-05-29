@@ -50,7 +50,6 @@ void game_core::init_window() {
     // Set default OPENGL attributs to works with SDL2.
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
     // As you can see, we are using OpenGL 4, "minimum supported version" is 3.
@@ -63,6 +62,7 @@ void game_core::init_context() {
 }
 
 void game_core::init_services() {
+    // Call the first methods.
     this->service_module_manager.on_start();
     this->service_scene_manager.on_start();
     this->service_task_manager.on_start();
@@ -135,9 +135,9 @@ void game_core::init() {
 
     util::log("Initializing window, context and services.");
 
+    this->init_services();
     this->init_window();
     this->init_context();
-    this->init_services();
     this->refresh_feature_buffers();
 }
 
@@ -157,7 +157,7 @@ void game_core::mainloop() {
     this->is_running = true;
 
     // Initialize the locked task.
-    this->service_task_manager.start("locked-update", update_task, 0);
+    //this->service_task_manager->start("locked-update", update_task, 0);
 
     while (this->is_running) {
         // Update input and events unsynchronized.
@@ -284,4 +284,16 @@ void game_core::on_render() {
             features->on_render(this->render_time);
         }
     }
+}
+
+module_service &game_core::get_module_manager() {
+    return this->service_module_manager;
+}
+
+scene_service &game_core::get_scene_manager() {
+    return this->service_scene_manager;
+}
+
+task_service &game_core::get_task_manager() {
+    return this->service_task_manager;
 }
