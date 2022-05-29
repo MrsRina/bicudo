@@ -1,5 +1,13 @@
 #include "scene_service.h"
 
+void scene_service::on_start() {
+    service::on_start();
+}
+
+void scene_service::on_end() {
+    service::on_end();
+}
+
 scene* scene_service::get_current_scene() {
     return this->current_scene;
 }
@@ -10,6 +18,8 @@ scene* scene_service::get_scene_by_name(const std::string &name) {
             return scenes;
         }
     }
+
+    return NULL;
 }
 
 scene* scene_service::get_scene_by_feature_id(uint32_t feature_id) {

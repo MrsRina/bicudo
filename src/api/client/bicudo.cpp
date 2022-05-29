@@ -1,9 +1,8 @@
 #include "bicudo.h"
 #include "api/util/util.h"
 #include "instance.h"
-#include <thread>
 
-void update_task(task* raw_task, int arg) {
+void update_task(task* raw_task) {
     uint64_t previous_ticks = SDL_GetTicks();
     uint64_t current_ticks = SDL_GetTicks();
     uint8_t interval = 16;
@@ -158,8 +157,7 @@ void game_core::mainloop() {
     this->is_running = true;
 
     // Initialize the locked task.
-    //this->service_task_manager.start("locked-update", update_task, 0);
-    std::thread t(update_task, 0);
+    this->service_task_manager.start("locked-update", update_task, 0);
 
     while (this->is_running) {
         // Update input and events unsynchronized.

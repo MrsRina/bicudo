@@ -29,11 +29,11 @@ public:
 
     /* Start of main methods. */
     void add(T element) {
-        this->element_list = element;
+        this->element_list.push_back(element);
     }
 
     void remove(T element) {
-        uint32_t index = NULL;
+        int32_t index = -1;
 
         for (uint32_t i = 0; i < this->element_list.size(); i++) {
             if (this->element_list.at(i) == element) {
@@ -42,7 +42,7 @@ public:
             }
         }
 
-        if (index != NULL) {
+        if (index != -1) {
             this->element_list.erase(this->element_list.begin() + index);
         }
     }

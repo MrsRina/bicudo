@@ -36,7 +36,7 @@ void scene_abstract::remove(uint32_t feature_id) {
         return;
     }
 
-    uint32_t index = NULL;
+    int32_t index = -1;
 
     for (uint32_t i = 0; i < this->feature_ids.size(); i++) {
         if (this->feature_ids.at(i) == feature_id) {
@@ -45,7 +45,7 @@ void scene_abstract::remove(uint32_t feature_id) {
         }
     }
 
-    if (index != NULL) {
+    if (index != -1) {
         this->feature_ids.erase(this->feature_ids.begin() + index);
 
         if (util::debug_scene) {

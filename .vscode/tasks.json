@@ -8,7 +8,7 @@
             "type": "shell",
             "command": "g++",
             "args": [
-                "-g",
+                "-m32",
                 "src\\*.cpp",
                 //"src\\includes\\*.cpp",
                 "src\\api\\client\\*.cpp",
@@ -17,6 +17,8 @@
                 "src\\api\\module\\*.cpp",
                 "src\\api\\scene\\*.cpp",
                 "src\\api\\service\\*.cpp",
+                "src\\api\\task\\*.cpp",
+                "src\\api\\feature\\*.cpp",
                 //"src\\impl\\instance\\*.cpp",
                 "-o",
                 "build\\bicudo_64x.exe",

@@ -33,10 +33,10 @@ public:
     /* End of setter and getter. */
 
     /* Start of abstract methods. */
-    virtual void on_event(SDL_Event &sdl_event);
-    virtual void on_locked_update(uint64_t delta);
-    virtual void on_update(uint64_t delta);
-    virtual void on_render(float render_time);
+    virtual void on_event(SDL_Event &sdl_event) {}
+    virtual void on_locked_update(uint64_t delta) {}
+    virtual void on_update(uint64_t delta) {}
+    virtual void on_render(float render_time) {}
     /* End of abstract methods. */
 };
 
