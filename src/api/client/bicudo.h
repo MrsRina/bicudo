@@ -19,8 +19,8 @@ static const uint32_t FEATURE_BUFFER_LIMIT = 2048;
 /* The update task. */
 void update_task(task* raw_task);
 
-#ifndef GAME_CORE
-#define GAME_CORE
+#ifndef GAME_CORE_H
+#define GAME_CORE_H
 
 /**
  * Main class of game where everything is processed.

@@ -2,8 +2,8 @@
 #include "includes/includes.h"
 #include "api/util/util.h"
 
-#ifndef SERVICE
-#define SERVICE
+#ifndef SERVICE_H
+#define SERVICE_H
 
 /**
  * Build service list.

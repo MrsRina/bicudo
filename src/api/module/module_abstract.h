@@ -1,8 +1,8 @@
 #pragma once
 #include "includes/includes.h"
 
-#ifndef MODULE_ABSTRACT
-#define MODULE_ABSTRACT
+#ifndef MODULE_ABSTRACT_H
+#define MODULE_ABSTRACT_H
 
 /**
  * Nameable module to states and settings in.

@@ -1,8 +1,8 @@
 #pragma once
 #include "includes/includes.h"
 
-#ifndef FEATURE
-#define FEATURE
+#ifndef FEATURE_H
+#define FEATURE_H
 
 /**
  * Feature class to every synchronized object in game.

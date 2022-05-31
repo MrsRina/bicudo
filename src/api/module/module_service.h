@@ -2,8 +2,8 @@
 #include "module.h"
 #include "api/service/service.h"
 
-#ifndef MODULE_SERVICE
-#define MODULE_SERVICE
+#ifndef MODULE_SERVICE_H
+#define MODULE_SERVICE_H
 
 /**
  * Management for scripts in game.

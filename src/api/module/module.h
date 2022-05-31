@@ -2,8 +2,8 @@
 #include "api/feature/feature.h"
 #include "module_abstract.h"
 
-#ifndef MODULE
-#define MODULE
+#ifndef MODULE_H
+#define MODULE_H
 
 /**
  * Module feature to create scripts.

@@ -1,8 +1,8 @@
 #pragma once
 #include "includes/includes.h"
 
-#ifndef TASK
-#define TASK
+#ifndef TASK_H
+#define TASK_H
 
 /**
  *  Thread talking and object multi-threading safe.

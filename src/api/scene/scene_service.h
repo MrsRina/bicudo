@@ -2,8 +2,8 @@
 #include "api/service/service.h"
 #include "scene.h"
 
-#ifndef SCENE_SERVICE
-#define SCENE_SERVICE
+#ifndef SCENE_SERVICE_H
+#define SCENE_SERVICE_H
 
 /**
  * Management service for scene in game.

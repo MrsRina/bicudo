@@ -2,8 +2,8 @@
 #include "task.h"
 #include "api/service/service.h"
 
-#ifndef TASK_SERVICE
-#define TASK_SERVICE
+#ifndef TASK_SERVICE_H
+#define TASK_SERVICE_H
 
 /**
  * Task manager to create threads and acess data from.

@@ -2,8 +2,8 @@
 #include "scene_abstract.h"
 #include "api/feature/feature.h"
 
-#ifndef SCENE
-#define SCENE
+#ifndef SCENE_H
+#define SCENE_H
 
 /**
  * Scene in game to create different contexts.

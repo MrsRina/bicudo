@@ -1,6 +1,6 @@
 #pragma once
 
-#ifndef TESSELLATOR
-#define TESSELLATOR
+#ifndef TESSELLATOR_H
+#define TESSELLATOR_H
 
 #endif

@@ -1,8 +1,8 @@
 #pragma once
 #include "includes/includes.h"
 
-#ifndef SCENE_ABSTRACT
-#define SCENE_ABSTRACT
+#ifndef SCENE_ABSTRACT_H
+#define SCENE_ABSTRACT_H
 
 /**
  * Nameable abstract scene.
