@@ -2,6 +2,8 @@
 
 Hello, the project is not finished yet.
 
+The game base is writen in C++ and uses SDL2 + OpenGL 3+.
+
 # details
 
 Simple game base with modules system (most like scripts) with dynamic interactions,
