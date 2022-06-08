@@ -44,17 +44,28 @@ void game_core::exception() {
 }
 
 void game_core::init_window() {
+    if (SDL_Init(SDL_INIT_EVERYTHING)) {
+        game_core::exception();
+    }
+
     const char* name = game_core::client_name.c_str(); 
     this->sdl_window = SDL_CreateWindow(name, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, game_core::screen_width, game_core::screen_height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
-    
+
+    // As you can see, we are using OpenGL 3, "minimum supported version" is 3.
+    this->sdl_gl_context = SDL_GL_CreateContext(this->sdl_window);
+
+    // Init glew.
+    glewExperimental = true;
+
+    if (glewInit()) {
+        game_core::exception();
+    }
+
     // Set default OPENGL attributs to works with SDL2.
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-
-    // As you can see, we are using OpenGL 4, "minimum supported version" is 3.
-    
-    this->sdl_gl_context = SDL_GL_CreateContext(this->sdl_window);
 }
 
 void game_core::init_context() {
@@ -120,23 +131,11 @@ void game_core::init() {
     util::log("Powered by Bicudo!");
     util::log("Game start!");
     util::log("Initializing SDL2.");
-    
-    if (SDL_Init(SDL_INIT_VIDEO)) {
-        game_core::exception();
-    }
-
     util::log("Initializing OpenGL.");
-
-    glewExperimental = true;
-
-    if (glewInit()) {
-        game_core::exception();
-    }
-
     util::log("Initializing window, context and services.");
 
-    this->init_services();
     this->init_window();
+    this->init_services();
     this->init_context();
     this->refresh_feature_buffers();
 }
@@ -242,8 +241,9 @@ void game_core::on_event(SDL_Event &sdl_event) {
         }
 
         default: {
-            // Call all features every event.
-            for (ifeature* &features : this->buffer_update) {
+            for (uint32_t i = 0; i < this->buffer_update_iterator; i++) {
+                ifeature* features = this->buffer_update[i];
+
                 if (features != nullptr) {
                     features->on_event(sdl_event);
                 }
@@ -255,9 +255,11 @@ void game_core::on_event(SDL_Event &sdl_event) {
 }
 
 void game_core::mainloop_locked_update() {
-    for (ifeature* &features : this->buffer_update) {
+    for (uint32_t i = 0; i < this->buffer_update_iterator; i++) {
+        ifeature* features = this->buffer_update[i];
+
         if (features != nullptr) {
-            features->on_locked_update(this->delta);
+            features->on_locked_update(this->locked_delta);
         }
     }
 }
@@ -268,7 +270,9 @@ void game_core::on_update() {
         this->should_refresh_features = false;
     }
 
-    for (ifeature* &features : this->buffer_update) {
+    for (uint32_t i = 0; i < this->buffer_update_iterator; i++) {
+        ifeature* features = this->buffer_update[i];
+
         if (features != nullptr) {
             features->on_update(this->delta);
         }
@@ -276,10 +280,14 @@ void game_core::on_update() {
 }
 
 void game_core::on_render() {
+    glViewport(0, 0, this->screen_width, this->screen_width);
+
     glClearColor(0.5, 0.5, 0.5, 0.5);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    for (ifeature* &features : this->buffer_render) {
+    for (uint32_t i = 0; i < this->buffer_render_iterator; i++) {
+        ifeature* features = this->buffer_render[i];
+
         if (features != nullptr) {
             features->on_render(this->render_time);
         }

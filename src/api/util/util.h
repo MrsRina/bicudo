@@ -50,6 +50,17 @@ struct util {
         void close(game_file &_game_file);
     };
 
+    struct color {
+        uint8_t r, g, b, a;
+
+        color(uint8_t red, uint8 green, uint8 blue, uint8 alpha = 255) {
+            this->r = red;
+            this->g = green;
+            this->b = blue;
+            this->a = alpha;
+        }
+    };
+
     /**
      * Enum to visibility of something.
      **/
