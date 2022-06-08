@@ -15,6 +15,7 @@ bool timer_stamp::end_if(uint32_t ms) {
 }
 
 void util::log(std::string string) {
+    string = "[MAIN] " + string;
     std::cout << string.c_str() << "\n";
 }
 
