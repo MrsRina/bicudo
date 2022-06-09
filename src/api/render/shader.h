@@ -7,12 +7,14 @@
 
 struct fx {
 	GLuint program;
+	bool compiled;
 };
 
-class shader {
+struct shader {
+	static GLuint compile(GLuint &shader, GLuint shader_mode, const char* shader_str);
+	static GLuint compile_fx(fx &shader_fx);
+
 	struct file {
-		void load(fx);
+		static bool load(fx &shader_fx, const char* vsh_path, const char* fsh_path);
 	};
 };
-
-#endif

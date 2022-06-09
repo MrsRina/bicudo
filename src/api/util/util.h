@@ -12,24 +12,6 @@ struct timer_stamp {
 };
 
 /**
- * File struct to manipule in game.
- **/
-struct game_file {
-    std::string tag, filename, filedir;
-    bool loaded;
-
-    void* data1;
-    void* data2;
-
-    game_file(const std::string &_filename, const std::string &_filedir) {
-        this->filename = _filename;
-        this->filedir = _filedir;
-    }
-
-    game_file() {}
-};
-
-/**
  * Util to make easy some actions/events and reduce code writing.
  **/
 struct util {
@@ -44,10 +26,11 @@ struct util {
      * Simple load and exists.
      **/
     struct file {
-        bool exists(const std::string &path);
+        static const uint8_t TO_STRING;
+        static const uint8_t TO_BYTE;
 
-        void load(game_file &_game_file);
-        void close(game_file &_game_file);
+        bool exists(const char* path);
+        void* load(game_file &_game_file, uint8_t mode = TO_STRING);
     };
 
     struct color {
@@ -59,6 +42,14 @@ struct util {
             this->b = blue;
             this->a = alpha;
         }
+
+        void set(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
+        void set(uint8_t red, uint8_t green, uint8_t blue);
+
+        float redf();
+        float greenf();
+        float bluef();
+        float alphaf();
     };
 
     /**
