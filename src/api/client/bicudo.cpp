@@ -1,6 +1,7 @@
 #include "bicudo.h"
 #include "api/util/util.h"
 #include "instance.h"
+#include "api/render/shader.h"
 
 void update_task(task* raw_task) {
     uint64_t previous_ticks = SDL_GetTicks();
@@ -77,6 +78,9 @@ void game_core::init_services() {
     this->service_module_manager.on_start();
     this->service_scene_manager.on_start();
     this->service_task_manager.on_start();
+
+    // Init static components.
+    shader::init();
 }
 
 void game_core::refresh() {

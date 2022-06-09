@@ -6,7 +6,7 @@
 
 class font_renderer {
 private:
-    game_file font_file;
+    int h;
 public:
     /* Start of main methods. */
     void init(const std::string &font_name_or_path);

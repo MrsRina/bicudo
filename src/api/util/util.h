@@ -26,11 +26,11 @@ struct util {
      * Simple load and exists.
      **/
     struct file {
-        static const uint8_t TO_STRING;
-        static const uint8_t TO_BYTE;
+        static const uint8_t TO_STRING = 0;
+        static const uint8_t TO_BYTE = 1;
 
-        bool exists(const char* path);
-        void* load(game_file &_game_file, uint8_t mode = TO_STRING);
+        static bool exists(const char* path);
+        static void* load(const char* path, uint8_t mode = TO_STRING);
     };
 
     struct color {

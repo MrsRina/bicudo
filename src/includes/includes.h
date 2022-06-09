@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>
 #include <array>
 #include <thread>
 #include <atomic>

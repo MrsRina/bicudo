@@ -48,9 +48,9 @@ float util::color::alphaf() {
     return (float) this->a / 255.0;
 }
 
-bool util::file::exists(const std::string &path) {
-    FILE* f = fopen(path.c_str(), "r");
-    bool flag = _file != nullptr;
+bool util::file::exists(const char* path) {
+    FILE* f = fopen(path, "r");
+    bool flag = f != nullptr;
 
     if (flag) {
         fclose(f);
@@ -68,12 +68,13 @@ void* util::file::load(const char* path, uint8_t mode) {
             std::string string_buffer;
 
             while (getline(ifs, string_buffer)) {
-                strning_builder += "\n" + string_buffer;
+                string_builder += "\n" + string_buffer;
             }
 
             ifs.close();
 
-            return &string_builder;
+            void* data = static_cast<void>(&string_builder);
+            return data;
         }
     } else if (mode == util::file::TO_BYTE) {
 
