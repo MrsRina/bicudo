@@ -10,7 +10,6 @@
             "args": [
                 "-m32",
                 "src\\*.cpp",
-                //"src\\includes\\*.cpp",
                 "src\\api\\client\\*.cpp",
                 "src\\api\\util\\*.cpp",
                 "src\\api\\render\\*.cpp",
@@ -19,7 +18,7 @@
                 "src\\api\\service\\*.cpp",
                 "src\\api\\task\\*.cpp",
                 "src\\api\\feature\\*.cpp",
-                //"src\\impl\\instance\\*.cpp",
+                "src\\impl\\scripts\\*.cpp",
                 "-o",
                 "build\\bicudo_64x.exe",
                 "-L${workspaceFolder}\\external\\lib",
@@ -49,7 +48,6 @@
             "args": [
                 "-m32",
                 "src\\*.cpp",
-                //"src\\includes\\*.cpp",
                 "src\\api\\client\\*.cpp",
                 "src\\api\\util\\*.cpp",
                 "src\\api\\render\\*.cpp",
@@ -58,7 +56,7 @@
                 "src\\api\\service\\*.cpp",
                 "src\\api\\task\\*.cpp",
                 "src\\api\\feature\\*.cpp",
-                //"src\\impl\\instance\\*.cpp",
+                "src\\impl\\scripts\\*.cpp",
                 "-o",
                 "build\\bicudo_64x.exe",
                 "-L${workspaceFolder}\\external\\lib",
@@ -83,11 +81,9 @@
         {
             "label": "run_log",
             "type": "shell",
-            "command": "start",
-            "args": [
-                "${workspaceFolder}//build//bicudo_64x.exe"
-            ],
-            "dependsOn": "compile_log"
+            "command": "start ${workspaceFolder}/task.cmd",
+            "dependsOn": "compile_log",
+            "problemMatcher": []
         }
     ]
 }

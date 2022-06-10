@@ -12,6 +12,15 @@ struct timer_stamp {
 };
 
 /**
+ * Used in game to get files resource.
+ **/
+struct game_resource {
+    float data1, data2;
+    void* ptr;
+    std::string str;
+};
+
+/**
  * Util to make easy some actions/events and reduce code writing.
  **/
 struct util {
@@ -30,7 +39,7 @@ struct util {
         static const uint8_t TO_BYTE = 1;
 
         static bool exists(const char* path);
-        static void* load(const char* path, uint8_t mode = TO_STRING);
+        static game_resource load(const char* path, uint8_t mode = TO_STRING);
     };
 
     struct color {
@@ -50,6 +59,13 @@ struct util {
         float greenf();
         float bluef();
         float alphaf();
+    };
+
+    /**
+     * Math utils.
+     **/
+    struct math {
+        static void ortho2d(float* mat, float left, float right, float bottom, float top);
     };
 
     /**

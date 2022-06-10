@@ -3,8 +3,37 @@
 
 fx shader::fx_default = fx();
 
+void fx::use() {
+	glUseProgram(this->program);
+}
+
+void fx::end() {
+	glUseProgram(0);
+}
+
+void fx::set_mat4x4(const std::string &name, float* mat4x4) {
+	glUniformMatrix4fv(glGetUniformLocation(this->program, name.c_str()), 1, GL_FALSE, mat4x4);
+}
+
+void fx::set_bool(const std::string &name, bool val) {
+	glUniform1i(glGetUniformLocation(this->program, name.c_str()), (int) val);
+}
+
+void fx::set_int(const std::string &name, int32_t val) {
+	glUniform1i(glGetUniformLocation(this->program, name.c_str()), val);
+}
+
+void fx::set_float(const std::string &name, float val) {
+	glUniform1f(glGetUniformLocation(this->program, name.c_str()), val);
+}
+
 void shader::init() {
 	shader::load(shader::fx_default, "data/fx/fx_default.vsh", "data/fx/fx_default.fsh");
+}
+
+void shader::context() {
+	glGetFloatv(GL_VIEWPORT, mat2x2_viewport);
+	util::math::ortho2d(mat4x4_ortho2d, 0.0f, mat2x2_viewport[2], mat2x2_viewport[3], 0.0f);
 }
 
 bool shader::compile(GLuint &shader, GLuint shader_mode, const char* shader_str) {
@@ -58,11 +87,11 @@ bool shader::load(fx &shader_fx, const char* vsh_path, const char* fsh_path) {
 	shader_fx.compiled = false;
 	GLuint vertex_shader, fragment_shader;
 
-	util::log(std::string(vsh_path) + " ...");
-	bool vertex_shader_status = shader::compile(vertex_shader, GL_VERTEX_SHADER, static_cast<std::string>(util::file::load(vsh_path)).c_str()));
+	util::log("Shader FX loading (...) " + std::string(vsh_path));
+	bool vertex_shader_status = shader::compile(vertex_shader, GL_VERTEX_SHADER, util::file::load(vsh_path).str.c_str());
 
-	util::log(std::string(fsh_path) + " ...");
-	bool vertex_fragment_status = shader::compile(fragment_shader, GL_FRAGMENT_SHADER, static_cast<std::string>(util::file::load(fsh_path)).c_str());
+	util::log("Shader FX loading (...) " + std::string(fsh_path));
+	bool vertex_fragment_status = shader::compile(fragment_shader, GL_FRAGMENT_SHADER, util::file::load(fsh_path).str.c_str());
 
 	if (vertex_shader_status && vertex_fragment_status) {
 		shader_fx.program = glCreateProgram();
@@ -74,6 +103,10 @@ bool shader::load(fx &shader_fx, const char* vsh_path, const char* fsh_path) {
 
 		glDeleteShader(vertex_shader);
 		glDeleteShader(fragment_shader);
+
+		if (shader_fx.compiled) {
+			util::log("Shader compile.");
+		}
 	}
 
 	return shader_fx.compiled;

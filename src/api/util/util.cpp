@@ -59,7 +59,9 @@ bool util::file::exists(const char* path) {
     return flag;
 }
 
-void* util::file::load(const char* path, uint8_t mode) {
+game_resource util::file::load(const char* path, uint8_t mode) {
+    game_resource resource;
+
     if (mode == util::file::TO_STRING) {
         std::ifstream ifs(path);
         std::string string_builder;
@@ -72,13 +74,43 @@ void* util::file::load(const char* path, uint8_t mode) {
             }
 
             ifs.close();
-
-            void* data = static_cast<void>(&string_builder);
-            return data;
+            resource.str = string_builder;
         }
     } else if (mode == util::file::TO_BYTE) {
 
     }
 
-    return nullptr;
+    return resource;
+}
+
+void util::math::ortho2d(float* mat, float left, float right, float bottom, float top) {
+    const float zNear = -1.0f;
+    const float zFar = 1.0f;
+    const float inv_z = 1.0f / (zFar - zNear);
+    const float inv_y = 1.0f / (top - bottom);
+    const float inv_x = 1.0f / (right - left);
+
+    // first column
+    *mat++ = (2.0f * inv_x);
+    *mat++ = (0.0f);
+    *mat++ = (0.0f);
+    *mat++ = (0.0f);
+
+    // second
+    *mat++ = (0.0f);
+    *mat++ = (2.0 * inv_y);
+    *mat++ = (0.0f);
+    *mat++ = (0.0f);
+
+    // third
+    *mat++ = (0.0f);
+    *mat++ = (0.0f);
+    *mat++ = (-2.0f * inv_z);
+    *mat++ = (0.0f);
+
+    // fourth
+    *mat++ = (-(right + left) * inv_x);
+    *mat++ = (-(top + bottom) * inv_y);
+    *mat++ = (-(zFar + zNear) * inv_z);
+    *mat++ = (1.0f);
 }
