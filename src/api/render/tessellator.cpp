@@ -2,6 +2,7 @@
 
 GLuint draw::immediate::attribute_material = 0;
 GLuint draw::immediate::attribute_vertex = 0;
+GLuint draw::immediate::draw_mode        = 0;
 
 GLuint draw::immediate::buffer_vertex   = 0;
 GLuint draw::immediate::buffer_material = 0;
@@ -97,12 +98,17 @@ void draw::immediate::draw() {
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * iterator_vertex, linked_vertex_data, GL_DYNAMIC_DRAW);
 
     glBindBuffer(GL_ARRAY_BUFFER, buffer_material);
-    glVertexAttribPointer(GL_ARRAY_BUFFER, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+    glVertexAttribPointer(GL_ARRAY_BUFFER, flag_texture ? 2 : 4, GL_FLOAT, GL_FALSE, 0, (void*) 0);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * iterator_material, linked_material_data, GL_DYNAMIC_DRAW);
 
     glDrawArrays(draw_mode, 0, size_of_draw);
     
     if (flag_texture) {
         glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    if (!flag_ptr) {
+        delete linked_vertex_data;
+        delete linked_material_data;
     }
 }

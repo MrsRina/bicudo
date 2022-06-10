@@ -12,7 +12,7 @@ void main() {
 	if (u_set_texture) {
 		fragcolor = texture2D(u_active_texture, varying_fragcolor.xy);
 
-		if (u_texture_color_filter) {
+		if (u_set_texture_color_filter) {
 			
 		}
 	}

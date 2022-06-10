@@ -14,7 +14,7 @@
 #include "api/scene/scene_service.h"
 #include "api/task/task_service.h"
 
-static const uint32_t FEATURE_BUFFER_LIMIT = 10;
+static const uint32_t FEATURE_BUFFER_LIMIT = 256;
 
 /* The update task. */
 void update_task(task* raw_task);

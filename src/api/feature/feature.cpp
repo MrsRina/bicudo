@@ -1,11 +1,13 @@
 #include "feature.h"
 #include "api/util/util.h"
+#include "api/client/instance.h"
 
 ifeature::ifeature() {
     // Constructor.
     
     // for default a low priority can be cool (no render).
     this->set_visibility_flag(util::visibility::LOW_PRIORITY);
+    BICUDO->registry_feature(this);
 }
 
 ifeature::~ifeature() {
