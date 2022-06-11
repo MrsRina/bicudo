@@ -7,7 +7,6 @@ ifeature::ifeature() {
     
     // for default a low priority can be cool (no render).
     this->set_visibility_flag(util::visibility::LOW_PRIORITY);
-    BICUDO->registry_feature(this);
 }
 
 ifeature::~ifeature() {

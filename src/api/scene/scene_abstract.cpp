@@ -1,6 +1,14 @@
 #include "scene_abstract.h"
 #include "api/util/util.h"
 
+void scene_abstract::on_start() {
+
+}
+
+void scene_abstract::on_end() {
+    
+}
+
 void scene_abstract::set_name(const std::string &module_name) {
     this->name = module_name;
 }

@@ -8,7 +8,7 @@
 /**
  * Task manager to create threads and acess data from.
  **/
-class task_service : public service<task*> {
+class task_service : public service {
 protected:
     /* The previous id used. */
     uint32_t previous_id_task;
@@ -16,20 +16,13 @@ public:
     task_service(const std::string &service_name) : service(service_name) {   
     }
 
-    /* Start of main methods. */
-    template<typename callback, typename... args>
-    task* start(const std::string &task_name, callback&& __f, args&&... __args) {
-        if (this->get_task_by_name(task_name) != NULL) {
-            return NULL;
-        } 
-    
-        task* raw_task = new task(task_name, this->previous_id_task++);
-        this->add(raw_task);
-        std::thread thread_release(__f, raw_task);
-        
-        return raw_task;
-    }
+    /* Start of main static methods. */
+    static task* run(const std::string &task_name);
+    static void stop(const std::string &task_name);
+    /* End of main static methods. */
 
+    /* Start of main methods. */
+    task* start(const std::string &task_name);
     void end(task* raw_task);
 
     bool is_task_done(const std::string &task_name);
@@ -39,7 +32,7 @@ public:
 
     /* Start of setters and getters. */
     task* get_task_by_name(const std::string &task_name);
-    task* get_task_by_id(uint32_t task_id);
+    task* get_task_by_feature_id(uint32_t task_id);
     /* End of setters and getters. */
 
     /* Start of override methods. */

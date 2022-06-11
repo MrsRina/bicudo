@@ -12,15 +12,15 @@ void scene::on_event(SDL_Event &sdl_event) {
 
 }
 
-void scene::on_locked_update(uint64_t delta) {
+void scene::on_locked_update() {
     
 }
 
-void scene::on_update(uint64_t delta) {
+void scene::on_update() {
 
 }
 
-void scene::on_render(float render_time) {
+void scene::on_render() {
     
 }
 

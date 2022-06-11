@@ -3,26 +3,30 @@
 #include "instance.h"
 #include "api/render/shader.h"
 
-void update_task(task* raw_task) {
-    uint64_t previous_ticks = SDL_GetTicks();
-    uint64_t current_ticks = SDL_GetTicks();
-    uint8_t interval = 16;
-    uint16_t delta = 0;
+void update_task(task* atomic_task) {
+    if (atomic_task == nullptr) {
+        return;
+    }
 
-    while (!raw_task->get_atomic_boolean_state()) {
-        current_ticks = SDL_GetTicks() - previous_ticks;
+    uint64_t previous_ticks = SDL_GetTicks64();
+    uint64_t current_ticks = SDL_GetTicks64();
+    uint8_t interval = 16;
+
+    while (!atomic_task->get_atomic_boolean_state()) {
+        if (atomic_task == nullptr) {
+            break;
+        }
+
+        current_ticks = SDL_GetTicks64() - previous_ticks;
 
         if (current_ticks > interval) {
-            previous_ticks = SDL_GetTicks();
-            delta += interval;
+            previous_ticks = SDL_GetTicks64();
+
+            // Set the locked dt.
+            util::timing->locked_delta_time = current_ticks;
 
             // Call main object into this thread.
-            BICUDO->set_locked_delta(delta);
             BICUDO->mainloop_locked_update();
-
-            if (delta > 1000) {
-                delta = 0;
-            }
         }
     }
 }
@@ -44,6 +48,31 @@ void game_core::exception() {
     game_core::internal_flag = -1;
 }
 
+void game_core::display(gui* new_gui) {
+    BICUDO->set_concurrent_display_gui(new_gui);
+}
+
+void game_core::set_concurrent_display_gui(gui* new_gui) {
+    bool phase_remove_gui = (new_gui == nullptr && this->concurrent_display_gui != nullptr) ||
+                            (new_gui != nullptr && this->concurrent_display_gui != nullptr && this->concurrent_display_gui->get_name() != new_gui->get_name());
+
+    if (phase_remove_gui) {
+        this->concurrent_display_gui->on_end();
+            
+        delete this->concurrent_display_gui;
+        this->concurrent_display_gui = nullptr;
+    }
+
+    if (new_gui != nullptr && phase_remove_gui) {
+        this->concurrent_display_gui = new_gui;
+        this->concurrent_display_gui->on_start();
+    }
+}
+
+gui* game_core::get_concurrent_gui() {
+    return this->concurrent_display_gui;
+}
+
 void game_core::init_window() {
     if (SDL_Init(SDL_INIT_EVERYTHING)) {
         game_core::exception();
@@ -62,7 +91,7 @@ void game_core::init_window() {
         game_core::exception();
     }
 
-    // Set default OPENGL attributs to works with SDL2.
+    // Set default OpenGL attributs to works with SDL2.
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
@@ -94,43 +123,6 @@ void game_core::refresh() {
     this->interval = 1000 / 60;
 }
 
-void game_core::refresh_features() {
-    for (int i = 0; i < this->buffer_update_iterator; i++) {
-        auto features = this->buffer_update[i];
-        
-        if (features != nullptr && !features->is_alive()) {
-            delete features;
-        }
-    }
-
-    // Swap buffer after safe delete all.
-    this->refresh_feature_buffers();
-}
-
-void game_core::refresh_feature_buffers() {
-    std::array<ifeature*, FEATURE_BUFFER_LIMIT> buffer_copy;
-    uint32_t buffer_copy_iterator = 0;
-
-    // Clean the render buffer.
-    this->buffer_render.fill(0);
-    this->buffer_render_iterator = 0;
-
-    // Pass the concurrent buffers to copy and visual buffer.
-    for (ifeature* &features : this->buffer_update) {
-        if (features != nullptr) {
-            buffer_copy[buffer_copy_iterator++] = features;
-
-            if (features->get_visibility() == util::visibility::VISIBLE && features->is_alive()) {
-                this->buffer_render[this->buffer_render_iterator++] = features;
-            }
-        }
-    }
-
-    // Swap update buffer to copy.
-    this->buffer_update = buffer_copy;
-    this->buffer_update_iterator = buffer_copy_iterator;
-}
-
 void game_core::init() {
     util::log("Powered by Bicudo!");
     util::log("Game start!");
@@ -141,10 +133,12 @@ void game_core::init() {
     this->init_window();
     this->init_services();
     this->init_context();
-    this->refresh_feature_buffers();
 }
 
 void game_core::quit() {
+    // Set gui to none.
+    game_core::display(nullptr);
+
     this->service_module_manager.on_end();
     this->service_scene_manager.on_end();
     this->service_task_manager.on_end();
@@ -155,13 +149,19 @@ void game_core::quit() {
 void game_core::mainloop() {
     SDL_Event sdl_event;
 
-    this->current_ticks = SDL_GetTicks();
-    this->previous_ticks = SDL_GetTicks();
+    this->current_ticks = SDL_GetTicks64();
+    this->previous_ticks = SDL_GetTicks64();
     this->is_running = true;
 
-    // Initialize the locked task.
-    //this->service_task_manager->start("locked-update", update_task, 0);
+    // The concurrent delta time for get the FPS.
+    uint64_t concurrent_dt = SDL_GetTicks64();
 
+    // Initialize the locked task.
+    std::thread thread_locked_update(update_task, task_service::run("locked-update"));
+
+    /*
+     * The game mainloop.
+     */
     while (this->is_running) {
         // Update input and events unsynchronized.
         while (SDL_PollEvent(&sdl_event)) {
@@ -169,13 +169,13 @@ void game_core::mainloop() {
         }
 
         // Get the difference from previous tick.
-        this->current_ticks = SDL_GetTicks() - this->previous_ticks;
+        this->current_ticks = SDL_GetTicks64() - this->previous_ticks;
 
         // If the difference is not less than interval tick,
         // we update and render this moment tick.
         if (this->current_ticks > this->interval) {
-            this->previous_ticks = SDL_GetTicks();
-            this->delta += this->current_ticks;
+            this->previous_ticks = SDL_GetTicks64();
+            concurrent_dt += current_ticks;
     
             this->on_update();
             this->on_render();
@@ -185,55 +185,17 @@ void game_core::mainloop() {
             SDL_GL_SwapWindow(this->sdl_window);
         
             // Reset delta and get the game fps.
-            if (this->delta > 1000) {
+            if (concurrent_dt > 1000) {
                 this->fps = this->elapsed_frames;
                 this->elapsed_frames = 0;
-                this->delta = 0;
+                concurrent_dt = 0;
             }
         }
     }
 }
 
-void game_core::set_locked_delta(uint64_t delta_val) {
-    this->locked_delta = delta_val;
-}
-
 uint64_t game_core::get_fps() {
     return this->fps;
-}
-
-ifeature* game_core::get_feature_by_id(uint32_t feature_id) {
-    for (ifeature* &features : this->buffer_update) {
-        if (features != nullptr && features->get_feature_id() == feature_id) {
-            return features;
-        }
-    }
-
-    return NULL;
-}
-
-void game_core::registry_feature(ifeature* feature) {
-    if (feature == NULL) {
-        return;
-    }
-
-    this->previous_feature_id_used++;
-    this->buffer_update[this->buffer_update_iterator++] = feature;
-
-    if (feature->get_visibility() == util::visibility::VISIBLE) {
-        this->buffer_render[this->buffer_render_iterator++] = feature;
-    }
-
-    feature->set_feature_id(this->previous_feature_id_used);
-}
-
-void game_core::remove_feature(uint32_t feature_id) {
-    ifeature* feature = this->get_feature_by_id(feature_id);
-
-    if (feature != NULL) {
-        feature->set_alive_state(false);
-        this->should_refresh_features = true;
-    }
 }
 
 void game_core::on_event(SDL_Event &sdl_event) {
@@ -245,56 +207,40 @@ void game_core::on_event(SDL_Event &sdl_event) {
         }
 
         default: {
-            for (uint32_t i = 0; i < this->buffer_update_iterator; i++) {
-                ifeature* features = this->buffer_update[i];
-
-                if (features != nullptr) {
-                    features->on_event(sdl_event);
-                }
-            }
-
             break;
         }
     }
 }
 
 void game_core::mainloop_locked_update() {
-    for (uint32_t i = 0; i < this->buffer_update_iterator; i++) {
-        ifeature* features = this->buffer_update[i];
+    this->service_scene_manager.on_locked_update();
+    this->service_module_manager.on_locked_update();
 
-        if (features != nullptr) {
-            features->on_locked_update(this->locked_delta);
-        }
+    if (this->concurrent_display_gui != nullptr) {
+        this->concurrent_display_gui->on_locked_update();
     }
 }
 
 void game_core::on_update() {
-    if (this->should_refresh_features) {
-        this->refresh_features();
-        this->should_refresh_features = false;
-    }
+    this->service_scene_manager.on_update();
+    this->service_module_manager.on_update();
 
-    for (uint32_t i = 0; i < this->buffer_update_iterator; i++) {
-        ifeature* features = this->buffer_update[i];
-
-        if (features != nullptr) {
-            features->on_update(this->delta);
-        }
+    if (this->concurrent_display_gui != nullptr) {
+        this->concurrent_display_gui->on_update();
     }
 }
 
 void game_core::on_render() {
-    glViewport(0, 0, this->screen_width, this->screen_width);
+    shader::context();
 
     glClearColor(0.5, 0.5, 0.5, 0.5);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    for (uint32_t i = 0; i < this->buffer_render_iterator; i++) {
-        ifeature* features = this->buffer_render[i];
+    this->service_scene_manager.on_render();
+    this->service_module_manager.on_render();
 
-        if (features != nullptr) {
-            features->on_render(this->render_time);
-        }
+    if (this->concurrent_display_gui != nullptr) {
+        this->concurrent_display_gui->on_render();
     }
 }
 

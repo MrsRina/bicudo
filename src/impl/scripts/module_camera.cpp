@@ -21,15 +21,15 @@ void module_camera::on_event(SDL_Event &sdl_event) {
 
 }
 
-void module_camera::on_locked_update(uint64_t delta) {
+void module_camera::on_locked_update() {
 
 }
 
-void module_camera::on_update(uint64_t delta) {
+void module_camera::on_update() {
 
 }
 
-void module_camera::on_render(float render_time) {
+void module_camera::on_render() {
     draw::immediate::batch(GL_TRIANGLES, 6);
     draw::immediate::vertex(0.0f, 0);
     draw::immediate::vertex(0.0f, 0);

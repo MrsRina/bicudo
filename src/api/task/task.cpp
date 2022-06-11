@@ -19,14 +19,6 @@ std::string task::get_name() {
     return this->name;
 }
 
-void task::set_id(uint32_t task_id) {
-    this->id = task_id;
-}
-
-uint32_t task::get_id() {
-    return this->id;
-}
-
 void task::set_atomic_boolean_state(bool state) {
     this->atomic_boolean = state;
 }

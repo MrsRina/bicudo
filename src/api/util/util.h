@@ -5,7 +5,8 @@
  * Timer stamp to help in game.
  **/
 struct timer_stamp {
-    uint32_t previous_ticks;
+    uint64_t previous_ticks, delta;
+    float delta_time, locked_delta_time;
 
     void start();
     bool end_if(uint32_t ms);

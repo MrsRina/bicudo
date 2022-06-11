@@ -8,7 +8,7 @@
 /**
  * Management service for scene in game.
  **/
-class scene_service : public service<scene*> {
+class scene_service : public service {
 protected:
     /* Works with this scene only. */
     scene* current_scene = NULL;
@@ -24,14 +24,15 @@ public:
     /* Start of main methods. */
     void start_scene(scene* raw_scene);
     void end_scene(scene* raw_scene);
-
-    scene* get_scene_by_name(const std::string &scene_name);
-    scene* get_scene_by_feature_id(uint32_t feature_id);
     /* End of main methods. */
-
+    
     /* Start of override methods. */
     void on_start();
     void on_end();
+    void on_event(SDL_Event &sdl_event);
+    void on_locked_update();
+    void on_update();
+    void on_render();
     /* End of override methods. */
 };
 

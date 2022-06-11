@@ -3,6 +3,9 @@
 
 fx shader::fx_default = fx();
 
+float shader::mat4x4_ortho2d[16];
+float shader::mat2x2_viewport[4];
+
 void fx::use() {
 	glUseProgram(this->program);
 }

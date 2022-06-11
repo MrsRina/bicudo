@@ -1,39 +1,11 @@
 #include "scene_service.h"
 
-void scene_service::on_start() {
-    service::on_start();
-}
-
-void scene_service::on_end() {
-    service::on_end();
-}
-
 scene* scene_service::get_current_scene() {
     return this->current_scene;
 }
 
-scene* scene_service::get_scene_by_name(const std::string &name) {
-    for (scene* &scenes : this->element_list) {
-        if (scenes->get_name() == name) {
-            return scenes;
-        }
-    }
-
-    return NULL;
-}
-
-scene* scene_service::get_scene_by_feature_id(uint32_t feature_id) {
-    for (scene* &scenes : this->element_list) {
-        if (scenes->get_feature_id() == feature_id) {
-            return scenes;
-        }
-    }
-
-    return NULL;
-}
-
 void scene_service::start_scene(scene* raw_scene) {
-    if (raw_scene == NULL && this->current_scene != NULL) {
+    if (raw_scene == nullptr && this->current_scene != nullptr) {
         this->end_scene(this->current_scene);
         return;
     }
@@ -46,13 +18,47 @@ void scene_service::start_scene(scene* raw_scene) {
 }
 
 void scene_service::end_scene(scene* raw_scene) {
-    if (this->current_scene == NULL) {
+    if (this->current_scene == nullptr) {
         return;
     }
 
     this->current_scene->on_end();
     this->current_scene->set_visibility_flag(util::visibility::LOW_PRIORITY);
-    this->current_scene = NULL;
+
+    delete this->current_scene;
+    this->current_scene = nullptr;
 
     util::log(raw_scene->get_name() + " unset to current scene.");
+}
+
+void scene_service::on_start() {
+    service::on_start();
+}
+
+void scene_service::on_end() {
+    service::on_end();
+}
+
+void scene_service::on_event(SDL_Event &sdl_event) {
+    if (this->current_scene != nullptr) {
+        this->current_scene->on_event(sdl_event);
+    }
+}
+
+void scene_service::on_locked_update() {
+    if (this->current_scene != nullptr) {
+        this->current_scene->on_locked_update();
+    }
+}
+
+void scene_service::on_update() {
+    if (this->current_scene != nullptr) {
+        this->current_scene->on_update();
+    }
+}
+
+void scene_service::on_render() {
+    if (this->current_scene != nullptr) {
+        this->current_scene->on_render();
+    }
 }

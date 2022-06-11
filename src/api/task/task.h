@@ -1,5 +1,6 @@
 #pragma once
 #include "includes/includes.h"
+#include "api/feature/feature.h"
 
 #ifndef TASK_H
 #define TASK_H
@@ -7,7 +8,7 @@
 /**
  *  Thread talking and object multi-threading safe.
  **/
-class task {
+class task : private ifeature {
 protected:
     /* Task name. */
     std::string name;
@@ -24,9 +25,6 @@ public:
     /* Start of setters and getters. */
     void set_name(const std::string &task_name);
     std::string get_name();
-
-    void set_id(uint32_t id);
-    uint32_t get_id();
 
     void set_atomic_boolean_state(bool state);
     bool get_atomic_boolean_state();
