@@ -3,6 +3,7 @@
 Hello, the project is not finished yet.
 
 The game base is writen in C++ and uses SDL2 + OpenGL 3+.
+Its a Minecraft clone game.
 
 # details
 
