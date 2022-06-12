@@ -5,6 +5,9 @@
 #ifndef GUI_H
 #define GUI_H
 
+/**
+ * Gui to display any render context.
+ **/
 class gui : public ifeature {
 protected:
     std::string name;

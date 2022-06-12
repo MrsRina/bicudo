@@ -5,6 +5,9 @@
 #ifndef PHYSIC_SERVICE_H
 #define PHYSIC_SERVICE_H
 
+/**
+ * Manage all rigid objects to apply physic.
+ **/
 class physic_service : public service {
 public:
     /* Start of override methods. */

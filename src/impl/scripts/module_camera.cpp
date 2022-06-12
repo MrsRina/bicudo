@@ -1,5 +1,6 @@
 #include "module_camera.h"
 #include "api/render/tessellator.h"
+#include "api/util/util.h"
 
 module_camera *module_camera::instance = nullptr;
 
@@ -10,7 +11,7 @@ void module_camera::set_pos(double pos_x, double pos_y, double pos_z) {
 }
 
 void module_camera::on_start() {
-
+    this->set_visibility_flag(util::visibility::LOW_PRIORITY);
 }
 
 void module_camera::on_end() {

@@ -6,7 +6,7 @@
 #define TASK_H
 
 /**
- *  Thread talking and object multi-threading safe.
+ * Thread talking and object multi-threading safe.
  **/
 class task : private ifeature {
 protected:
