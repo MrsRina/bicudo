@@ -2,18 +2,18 @@
 
 #include "api/scene/scene.h"
 
-#ifndef PHYSIC_SCENE_H
-#define PHYSIC_SCENE_H
+#ifndef SCENE_PHYSIC_H
+#define SCENE_PHYSIC_H
 
-class physic_scene : public scene {
+class scene_physic : public scene {
 public:
-    static physic_scene *instance;
+    static scene_physic *instance;
 
-    physic_scene() {
+    scene_physic() {
         instance = this;
     }
 
-    ~physic_scene() {
+    ~scene_physic() {
         instance = nullptr;
     }
 
