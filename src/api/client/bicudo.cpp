@@ -2,6 +2,7 @@
 #include "api/util/util.h"
 #include "instance.h"
 #include "api/render/shader.h"
+#include "api/render/tessellator.h"
 
 void update_task(task* atomic_task) {
     if (atomic_task == nullptr) {
@@ -49,28 +50,33 @@ void game_core::exception() {
 }
 
 void game_core::display(gui* new_gui) {
-    BICUDO->set_concurrent_display_gui(new_gui);
+    BICUDO->set_guiscreen(new_gui);
 }
 
-void game_core::set_concurrent_display_gui(gui* new_gui) {
-    bool phase_remove_gui = (new_gui == nullptr && this->concurrent_display_gui != nullptr) ||
-                            (new_gui != nullptr && this->concurrent_display_gui != nullptr && this->concurrent_display_gui->get_name() != new_gui->get_name());
+void game_core::set_guiscreen(gui* new_gui) {
+    if (this->guiscreen != nullptr && new_gui != nullptr && this->guiscreen->get_name() == new_gui->get_name()) {
+        delete new_gui;
+        return;
+    }
+
+    bool phase_remove_gui = (new_gui == nullptr && this->guiscreen != nullptr) ||
+                            (new_gui != nullptr && this->guiscreen != nullptr && this->guiscreen->get_name() != new_gui->get_name());
 
     if (phase_remove_gui) {
-        this->concurrent_display_gui->on_end();
+        this->guiscreen->on_end();
             
-        delete this->concurrent_display_gui;
-        this->concurrent_display_gui = nullptr;
+        delete this->guiscreen;
+        this->guiscreen = nullptr;
     }
 
     if (new_gui != nullptr && phase_remove_gui) {
-        this->concurrent_display_gui = new_gui;
-        this->concurrent_display_gui->on_start();
+        this->guiscreen = new_gui;
+        this->guiscreen->on_start();
     }
 }
 
-gui* game_core::get_concurrent_gui() {
-    return this->concurrent_display_gui;
+gui* game_core::get_guiscreen() {
+    return this->guiscreen;
 }
 
 void game_core::init_window() {
@@ -99,7 +105,11 @@ void game_core::init_window() {
 }
 
 void game_core::init_context() {
+    this->game_context->on_start();
 
+    // Init static components.
+    shader::init();
+    draw::immediate::init();
 }
 
 void game_core::init_services() {
@@ -107,9 +117,6 @@ void game_core::init_services() {
     this->service_module_manager.on_start();
     this->service_scene_manager.on_start();
     this->service_task_manager.on_start();
-
-    // Init static components.
-    shader::init();
 }
 
 void game_core::refresh() {
@@ -216,17 +223,18 @@ void game_core::mainloop_locked_update() {
     this->service_scene_manager.on_locked_update();
     this->service_module_manager.on_locked_update();
 
-    if (this->concurrent_display_gui != nullptr) {
-        this->concurrent_display_gui->on_locked_update();
+    if (this->guiscreen != nullptr) {
+        this->guiscreen->on_locked_update();
     }
 }
 
 void game_core::on_update() {
+    this->game_context->on_update();
     this->service_scene_manager.on_update();
     this->service_module_manager.on_update();
 
-    if (this->concurrent_display_gui != nullptr) {
-        this->concurrent_display_gui->on_update();
+    if (this->guiscreen != nullptr) {
+        this->guiscreen->on_update();
     }
 }
 
@@ -239,8 +247,8 @@ void game_core::on_render() {
     this->service_scene_manager.on_render();
     this->service_module_manager.on_render();
 
-    if (this->concurrent_display_gui != nullptr) {
-        this->concurrent_display_gui->on_render();
+    if (this->guiscreen != nullptr) {
+        this->guiscreen->on_render();
     }
 }
 
@@ -254,4 +262,12 @@ scene_service &game_core::get_scene_manager() {
 
 task_service &game_core::get_task_manager() {
     return this->service_task_manager;
+}
+
+void game_core::set_game_context(context* raw_game_context) {
+    this->game_context = raw_game_context;
+}
+
+context* game_core::get_game_context() {
+    return this->game_context;
 }

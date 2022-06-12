@@ -1,7 +1,6 @@
 #pragma once
 
 #include "api/module/module.h"
-#include "includes/includes.h"
 
 #ifndef CONTEXT_H
 #define CONTEXT_H
@@ -15,7 +14,7 @@ struct context {
     /* End of main methods. */
 
     /* Start of abstract methods. */
-    virtual void on_end() {};
+    virtual void on_start() {};
     virtual void on_update() {};
     /* End of abstract methods. */
 };

@@ -1,12 +1,14 @@
 #pragma once
 
-#include "includes/includes.h"
-#include "api/util/util.h"
 #include "shader.h"
+#include "api/util/util.h"
 
 #ifndef TESSELLATOR_H
 #define TESSELLATOR_H
 
+/**
+ * Draw shapes, circles or something you want using the tools.
+ **/
 struct draw {
 	/**
 	 * 2D tessellator.

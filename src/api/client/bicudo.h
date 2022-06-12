@@ -7,9 +7,10 @@
  * want to see a girl sad), so I only want your respect.
  **/
 #pragma once
-#include "includes/includes.h"
+
 #include "api/feature/feature.h"
 #include "api/gui/gui.h"
+#include "context.h"
 
 #include "api/module/module_service.h"
 #include "api/scene/scene_service.h"
@@ -63,8 +64,9 @@ protected:
     // To make new ids.
     uint32_t previous_feature_id_used;
     
-    // Gui context in game for inventory or something.
-    gui* concurrent_display_gui;
+    // Gui context in game for inventory and context for facts in game.
+    gui* guiscreen;
+    context* game_context;
 public:
     /* The static variables used in many parts of game. */
     static uint16_t screen_width, screen_height;
@@ -77,8 +79,11 @@ public:
     /* End of static methods. */
 
     /* Start of setters and getters. */
-    void set_concurrent_display_gui(gui* new_gui);
-    gui* get_concurrent_gui();
+    void set_guiscreen(gui* new_gui);
+    gui* get_guiscreen();
+
+    void set_game_context(context* raw_game_context);
+    context* get_game_context();
 
     uint64_t get_fps();
 

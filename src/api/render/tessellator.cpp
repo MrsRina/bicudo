@@ -1,8 +1,8 @@
 #include "tessellator.h"
 
 GLuint draw::immediate::attribute_material = 0;
-GLuint draw::immediate::attribute_vertex = 0;
-GLuint draw::immediate::draw_mode        = 0;
+GLuint draw::immediate::attribute_vertex   = 0;
+GLuint draw::immediate::draw_mode          = 0;
 
 GLuint draw::immediate::buffer_vertex   = 0;
 GLuint draw::immediate::buffer_material = 0;
