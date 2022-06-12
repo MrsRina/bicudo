@@ -182,7 +182,9 @@ void game_core::mainloop() {
         // we update and render this moment tick.
         if (this->current_ticks > this->interval) {
             this->previous_ticks = SDL_GetTicks64();
-            concurrent_dt += current_ticks;
+            concurrent_dt += this->current_ticks;
+
+            util::timing->delta_time = this->current_ticks;
     
             this->on_update();
             this->on_render();
