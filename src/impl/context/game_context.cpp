@@ -1,7 +1,7 @@
 #include "game_context.h"
 #include "api/client/instance.h"
 #include "impl/scripts/module_camera.h"
-#inclued "impl/scenes/scene_physic.h"
+#include "impl/scenes/scene_physic.h"
 
 void game_context::on_start() {
 	this->load_module("module-camera", "Controls camera in gaame.", new module_camera());	
