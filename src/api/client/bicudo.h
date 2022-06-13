@@ -75,7 +75,12 @@ public:
     /* Start of static methods. */
     static void edit_client_details(const std::string &name, const std::string &version_str);
     static void exception();
-    static void display(gui* new_gui);
+
+    static void display_scene(scene* scene);
+    static void display_guiscreen(gui* new_gui);
+
+    static gui* get_display_guiscreen();
+    static scene* get_display_scene();
     /* End of static methods. */
 
     /* Start of setters and getters. */

@@ -13,7 +13,7 @@ struct draw {
 	/**
 	 * 2D tessellator.
 	 **/
-	struct immediate {
+	class immediate {
 		protected:
 			static GLuint attribute_vertex, attribute_material, draw_mode;
 

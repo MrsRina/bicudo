@@ -4,11 +4,11 @@
 #include "impl/scenes/scene_physic.h"
 
 void game_context::on_start() {
-	this->load_module("module-camera", "Controls camera in gaame.", new module_camera());	
+	this->add_module("module-camera", "Controls camera in gaame.", new module_camera());	
 }
 
 void game_context::on_update() {
-	if (BICUDO->get_scene_manager().get_current_scene() == nullptr || BICUDO->get_scene_manager.get_current_scene().get_name() != "physic-scene") {
-		BICUDO->get_scene_manager().start_scene(new scene_physic());
+	if (game_core::get_display_scene() == nullptr || game_core::get_display_scene()->get_name() != "scene-physic") {
+		game_core::display_scene(new scene_physic());
 	}
 }

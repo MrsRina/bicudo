@@ -11,6 +11,9 @@ public:
 
     scene_physic() {
         instance = this;
+
+        // Registry this scene.
+        this->registry("scene-physic", "Scene to work with physic.");
     }
 
     ~scene_physic() {

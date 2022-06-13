@@ -5,6 +5,11 @@ scene* scene_service::get_current_scene() {
 }
 
 void scene_service::start_scene(scene* raw_scene) {
+    if (this->current_scene != nullptr && raw_scene != nullptr && this->current_scene->get_name() == raw_scene->get_name()) {
+        delete raw_scene;
+        return;
+    }
+
     if (raw_scene == nullptr && this->current_scene != nullptr) {
         this->end_scene(this->current_scene);
         return;

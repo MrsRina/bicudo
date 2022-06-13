@@ -9,6 +9,11 @@ void scene_abstract::on_end() {
     
 }
 
+void scene_abstract::registry(const std::string &scene_name, const std::string &scene_description) {
+    this->name = scene_name;
+    this->description = scene_description;
+}
+
 void scene_abstract::set_name(const std::string &module_name) {
     this->name = module_name;
 }

@@ -49,8 +49,20 @@ void game_core::exception() {
     game_core::internal_flag = -1;
 }
 
-void game_core::display(gui* new_gui) {
+void game_core::display_guiscreen(gui* new_gui) {
     BICUDO->set_guiscreen(new_gui);
+}
+
+void game_core::display_scene(scene* scene) {
+    BICUDO->get_scene_manager().start_scene(scene);
+}
+
+gui* game_core::get_display_guiscreen() {
+    return BICUDO->get_guiscreen();
+}
+
+scene* game_core::get_display_scene() {
+    return BICUDO->get_scene_manager().get_current_scene();
 }
 
 void game_core::set_guiscreen(gui* new_gui) {
@@ -143,8 +155,8 @@ void game_core::init() {
 }
 
 void game_core::quit() {
-    // Set gui to none.
-    game_core::display(nullptr);
+    game_core::display_guiscreen(nullptr);
+    game_core::display_scene(nullptr);
 
     this->service_module_manager.on_end();
     this->service_scene_manager.on_end();

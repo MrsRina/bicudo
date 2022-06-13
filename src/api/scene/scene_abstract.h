@@ -19,6 +19,7 @@ public:
     void add(uint32_t feature_id);
     void remove(uint32_t feature_id);
     bool contains(uint32_t feature_id);
+    void registry(const std::string &scene_name, const std::string &scene_description);
     /* End of main methods. */
 
     /* Start of setters and getters. */
