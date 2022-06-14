@@ -8,7 +8,7 @@
 /**
  * Module feature to create scripts.
  **/
-class module : public module_abstract, public ifeature {
+class module : public ifeature, public module_abstract {
 public:
     module() {}
     ~module() {}

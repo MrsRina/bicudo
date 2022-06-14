@@ -4,7 +4,8 @@
 #include "impl/scenes/scene_physic.h"
 
 void game_context::on_start() {
-	this->add_module("module-camera", "Controls camera in game.", (module*) new module_camera());	
+	module_camera* mod_camera = new module_camera();
+	this->add_module("module-camera", "Controls camera in game.", (module*) mod_camera);	
 }
 
 void game_context::on_update() {
