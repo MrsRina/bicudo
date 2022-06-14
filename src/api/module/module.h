@@ -10,6 +10,9 @@
  **/
 class module : public module_abstract, public ifeature {
 public:
+    module() {}
+    ~module() {}
+
     /* Start of override methods. */
     void on_start();
     void on_end();

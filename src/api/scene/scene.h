@@ -10,6 +10,9 @@
  **/
 class scene : public scene_abstract, public ifeature {
 public:
+    scene() : ifeature() {}
+    ~scene() {}
+
     /* Start of main methods. */
     void disable_all_modules();
     void enable_all_modules();

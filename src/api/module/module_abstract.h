@@ -15,6 +15,9 @@ protected:
     /* State to alive context. */
     bool enabled;
 public:
+    module_abstract() {}
+    ~module_abstract() {}
+
     /* Start of setters and getters. */
     void set_name(const std::string &module_name);
     std::string get_name();

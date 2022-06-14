@@ -6,7 +6,8 @@ int main(int argc, char** argv) {
     game_core::edit_client_details("Bicudo", "2.0");
 
     // Init the game context.
-    BICUDO->set_game_context((context*) new game_context());
+    game_context* game_cont = new game_context();
+    BICUDO->set_game_context((context*) game_cont);
     
     // init, run loop and at end shutdown.
     BICUDO->init();

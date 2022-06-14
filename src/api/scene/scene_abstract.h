@@ -15,6 +15,9 @@ private:
     /* Ids from features. */
     std::vector<uint32_t> feature_ids;
 public:
+    scene_abstract() {}
+    ~scene_abstract() {}
+
     /* Start of main methods. */
     void add(uint32_t feature_id);
     void remove(uint32_t feature_id);
