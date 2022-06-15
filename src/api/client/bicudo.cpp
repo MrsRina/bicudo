@@ -196,7 +196,7 @@ void game_core::mainloop() {
     uint64_t concurrent_dt = SDL_GetTicks64();
 
     // Initialize the locked task.
-    std::thread thread_locked_update(update_task, task_service::run("locked-update"));
+    std::thread thread_locked_update(update_task, game_core::task_start("locked-update"));
 
     /*
      * The game mainloop.
@@ -244,7 +244,7 @@ void game_core::on_event(SDL_Event &sdl_event) {
         case SDL_QUIT: {
             this->is_stopping_run = true;
             
-            task_service::stop("locked-update");
+            game_core::task_stop("locked-update");
             util::log("Starting game shutdown!");
 
             break;
