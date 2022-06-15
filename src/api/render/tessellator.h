@@ -7,9 +7,25 @@
 #define TESSELLATOR_H
 
 /**
+ * Material to stuff.
+ **/
+struct material {
+	util::color color;
+	util::texture texture;
+
+	float* uv_coordinates;
+};
+
+/**
  * Draw shapes, circles or something you want using the tools.
  **/
 struct draw {
+	struct shape {
+		static void square();
+		static void square_outline();
+		static void circle();
+	};
+
 	/**
 	 * 2D tessellator.
 	 **/

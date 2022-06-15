@@ -43,6 +43,9 @@ struct util {
         static game_resource load(const char* path, uint8_t mode = TO_STRING);
     };
 
+    /**
+     * Color data.
+     **/
     struct color {
         uint8_t r, g, b, a;
 
