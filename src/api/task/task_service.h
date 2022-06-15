@@ -12,22 +12,18 @@ class task_service : public service {
 protected:
     /* The previous id used. */
     uint32_t previous_id_task;
-public:
-    task_service(const std::string &service_name) : service(service_name) {   
-    }
+    uint8_t iterator_queue;
 
-    /* Start of main static methods. */
-    static task* run(const std::string &task_name);
-    static void stop(const std::string &task_name);
-    /* End of main static methods. */
+    /* Flag to delete objects after the thread disabled. */
+    std::atomic<bool> atomic_boolean_pass_to_queue;
+    std::array<std::string, 32> queue;
+public:
+    task_service(const std::string &service_name) : service(service_name) {}
 
     /* Start of main methods. */
-    task* start(const std::string &task_name);
+    void start(const std::string &task_name);
+    bool done(const std::string &task_name);
     void end(task* raw_task);
-
-    bool is_task_done(const std::string &task_name);
-    bool is_task_done(uint32_t task_id);
-    bool is_task_done(task* raw_task);
     /* End of main methods. */
 
     /* Start of setters and getters. */
@@ -38,6 +34,7 @@ public:
     /* Start of override methods. */
     void on_start();
     void on_end();
+    void on_update();
     /* End of override methods. */
 };
 

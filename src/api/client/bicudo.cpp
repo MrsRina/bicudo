@@ -13,7 +13,7 @@ void update_task(task* atomic_task) {
     uint64_t current_ticks = SDL_GetTicks64();
     uint8_t interval = 16;
 
-    while (!atomic_task->get_atomic_boolean_state()) {
+    while (!atomic_task->set_atomic_boolean_state()) {
         if (atomic_task == nullptr) {
             break;
         }
@@ -30,6 +30,8 @@ void update_task(task* atomic_task) {
             BICUDO->mainloop_locked_update();
         }
     }
+
+    atomic_task->set_atomic_boolean_end_state(true);
 }
 
 std::string game_core::client_name        = "";
@@ -89,6 +91,22 @@ void game_core::set_guiscreen(gui* new_gui) {
 
 gui* game_core::get_guiscreen() {
     return this->guiscreen;
+}
+
+void game_core::task_start(const std::string &name) {
+    BICUDO->get_scene_manager().start(name);
+}
+
+void game_core::task_stop(const std::string &name) {
+    task* raw_task = BICUDO->get_task_manager().get_task_by_name(name);
+
+    if (raw_task != nullptr) {
+        BICUDO->get_scene_manager().end(raw_task);
+    }
+}
+
+bool game_core::task_done(const std::string &name) {
+    return BICUDO->get_task_manager().done(name);
 }
 
 void game_core::init_window() {
@@ -170,6 +188,8 @@ void game_core::mainloop() {
 
     this->current_ticks = SDL_GetTicks64();
     this->previous_ticks = SDL_GetTicks64();
+
+    this->is_stopping_run = false;
     this->is_running = true;
 
     // The concurrent delta time for get the FPS.
@@ -222,8 +242,11 @@ uint64_t game_core::get_fps() {
 void game_core::on_event(SDL_Event &sdl_event) {
     switch (sdl_event.type) {
         case SDL_QUIT: {
-            this->is_running = false;
+            this->is_stopping_run = true;
+            
+            task_service::stop("locked-update");
             util::log("Starting game shutdown!");
+
             break;
         }
 
@@ -243,6 +266,10 @@ void game_core::mainloop_locked_update() {
 }
 
 void game_core::on_update() {
+    if (this->is_stopping_run) {
+        this->is_running = !this->service_task_manager.is_task_done("locked-update");
+    }
+
     this->game_context->on_update();
     this->service_scene_manager.on_update();
     this->service_module_manager.on_update();

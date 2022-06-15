@@ -27,6 +27,14 @@ bool task::get_atomic_boolean_state() {
     return this->atomic_boolean;
 }
 
+void task::set_atomic_boolean_end_state(bool state) {
+    this->atomic_boolean_end_state = state;
+}
+
+bool task::get_atomic_boolean_end_state() {
+    return this->atomic_boolean_end_state;
+}
+
 void task::end() {
     if (!this->atomic_boolean) {
         this->atomic_boolean = true;

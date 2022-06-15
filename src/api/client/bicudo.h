@@ -38,7 +38,7 @@ protected:
     static std::string client_version_str;
 
     /* The context of all. */
-    bool is_running;
+    bool is_running, is_stopping_run;
     bool should_refresh_features;
     
     uint64_t interval, fps;
@@ -81,6 +81,10 @@ public:
 
     static gui* get_display_guiscreen();
     static scene* get_display_scene();
+
+    static bool task_done(const std::string &name);
+    static void task_stop(const std::string &name);
+    static void task(const std::string &name);
     /* End of static methods. */
 
     /* Start of setters and getters. */
