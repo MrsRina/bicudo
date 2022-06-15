@@ -17,8 +17,8 @@ protected:
     uint32_t id;
 
     /* If task is done, so we can pass boolean data into threads. */
-    std::atomic<bool> atomic_boolean_end;
-    std::atomic<bool> atomic_boolean;
+    std::atomic<bool> atomic_boolean_end = false;
+    std::atomic<bool> atomic_boolean = false;
 public:
     task(const std::string &task_name, uint32_t next_task_id);
     ~task();
@@ -31,7 +31,7 @@ public:
     bool get_atomic_boolean_state();
 
     void set_atomic_boolean_end_state(bool state);
-    boll get_atomic_boolean_end_state();
+    bool get_atomic_boolean_end_state();
     /* End of setters and getters. */
 
     /* Start of main methods. */

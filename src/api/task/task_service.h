@@ -21,9 +21,10 @@ public:
     task_service(const std::string &service_name) : service(service_name) {}
 
     /* Start of main methods. */
-    void start(const std::string &task_name);
+    task* start(const std::string &task_name);
     bool done(const std::string &task_name);
     void end(task* raw_task);
+    void refresh();
     /* End of main methods. */
 
     /* Start of setters and getters. */

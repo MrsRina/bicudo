@@ -1,27 +1,26 @@
 #include "task_service.h"
 #include "api/client/instance.h"
 
-void task_service::stop(const std::string &task_name) {
-    task* raw_task = BICUDO->get_task_manager().get_task_by_name(task_name);
-
-    if (raw_task == nullptr) {
-        return;
-    }
-
-    raw_task->set_atomic_boolean_end_state(true);
-}
-
-void task_service::start(const std::string &task_name) {
+task* task_service::start(const std::string &task_name) {
     if (this->get_task_by_name(task_name) != nullptr) {
         return nullptr;
     }
 
     task* raw_task = new task(task_name, this->previous_id_task++);
     this->add((ifeature*) raw_task);
+
+    return raw_task;
 }
 
 void task_service::end(task* raw_task) {
+    if (raw_task == nullptr) {
+        return;
+    }
+
     raw_task->set_atomic_boolean_state(true);
+}
+
+void task_service::refresh() {
     this->atomic_boolean_pass_to_queue = true;
 }
 
@@ -76,24 +75,26 @@ void task_service::on_end() {
 }
 
 void task_service::on_update() {
-    if (this->atomic_boolean_end_state) {
+    if (this->atomic_boolean_pass_to_queue) {
         this->atomic_boolean_pass_to_queue = false;
 
-        if (this->queue.size() < 32) {
+        if (this->iterator_queue < 32) {
+            util::log("Iterator found.");
+            
             this->iterator_queue = 0;
             this->render_list.clear();
 
-            for (ifeature* featuers : this->update_list) {
+            for (ifeature* features : this->update_list) {
                 task* tasks = (task*) features;
 
-                if (tasks.get_atomic_boolean_end_state()) {
+                if (tasks->get_atomic_boolean_end_state()) {
                     this->queue[this->iterator_queue++] = tasks->get_name();
 
                     delete tasks;
                     continue;
                 }
 
-                this->render_list.push_back(tasks);
+                this->render_list.push_back(features);
             }
 
             this->update_list = this->render_list;

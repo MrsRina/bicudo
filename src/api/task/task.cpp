@@ -1,4 +1,5 @@
 #include "task.h"
+#include "api/client/instance.h"
 
 task::task(const std::string &task_name, uint32_t next_task_id) {
     this->name = task_name;
@@ -28,11 +29,16 @@ bool task::get_atomic_boolean_state() {
 }
 
 void task::set_atomic_boolean_end_state(bool state) {
-    this->atomic_boolean_end_state = state;
+    this->atomic_boolean_end = state;
+
+    if (state) {
+        BICUDO->get_task_manager().refresh();
+        util::log("Task " + this->get_name() + " shutdown.");
+    }
 }
 
 bool task::get_atomic_boolean_end_state() {
-    return this->atomic_boolean_end_state;
+    return this->atomic_boolean_end;
 }
 
 void task::end() {

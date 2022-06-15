@@ -21,8 +21,8 @@ public:
     /* End of setters & getters. */
 
     /* Start of main methods. */
-    void start_scene(scene* raw_scene);
-    void end_scene(scene* raw_scene);
+    void start(scene* raw_scene);
+    void end(scene* raw_scene);
     /* End of main methods. */
     
     /* Start of override methods. */

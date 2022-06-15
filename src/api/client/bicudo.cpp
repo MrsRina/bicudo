@@ -13,7 +13,7 @@ void update_task(task* atomic_task) {
     uint64_t current_ticks = SDL_GetTicks64();
     uint8_t interval = 16;
 
-    while (!atomic_task->set_atomic_boolean_state()) {
+    while (!atomic_task->get_atomic_boolean_state()) {
         if (atomic_task == nullptr) {
             break;
         }
@@ -56,7 +56,7 @@ void game_core::display_guiscreen(gui* new_gui) {
 }
 
 void game_core::display_scene(scene* scene) {
-    BICUDO->get_scene_manager().start_scene(scene);
+    BICUDO->get_scene_manager().start(scene);
 }
 
 gui* game_core::get_display_guiscreen() {
@@ -93,16 +93,12 @@ gui* game_core::get_guiscreen() {
     return this->guiscreen;
 }
 
-void game_core::task_start(const std::string &name) {
-    BICUDO->get_scene_manager().start(name);
+task* game_core::task(const std::string &name) {
+    return BICUDO->get_task_manager().start(name);
 }
 
 void game_core::task_stop(const std::string &name) {
-    task* raw_task = BICUDO->get_task_manager().get_task_by_name(name);
-
-    if (raw_task != nullptr) {
-        BICUDO->get_scene_manager().end(raw_task);
-    }
+    BICUDO->get_task_manager().end(BICUDO->get_task_manager().get_task_by_name(name));
 }
 
 bool game_core::task_done(const std::string &name) {
@@ -196,7 +192,7 @@ void game_core::mainloop() {
     uint64_t concurrent_dt = SDL_GetTicks64();
 
     // Initialize the locked task.
-    std::thread thread_locked_update(update_task, game_core::task_start("locked-update"));
+    std::thread thread_locked_update(update_task, game_core::task("locked-update"));
 
     /*
      * The game mainloop.
@@ -267,10 +263,11 @@ void game_core::mainloop_locked_update() {
 
 void game_core::on_update() {
     if (this->is_stopping_run) {
-        this->is_running = !this->service_task_manager.is_task_done("locked-update");
+        this->is_running = !game_core::task_done("locked-update");
     }
 
     this->game_context->on_update();
+    this->service_task_manager.on_update();
     this->service_scene_manager.on_update();
     this->service_module_manager.on_update();
 

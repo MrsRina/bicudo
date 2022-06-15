@@ -4,14 +4,14 @@ scene* scene_service::get_current_scene() {
     return this->current_scene;
 }
 
-void scene_service::start_scene(scene* raw_scene) {
+void scene_service::start(scene* raw_scene) {
     if (this->current_scene != nullptr && raw_scene != nullptr && this->current_scene->get_name() == raw_scene->get_name()) {
         delete raw_scene;
         return;
     }
 
     if (raw_scene == nullptr && this->current_scene != nullptr) {
-        this->end_scene(this->current_scene);
+        this->end(this->current_scene);
         return;
     }
 
@@ -22,7 +22,7 @@ void scene_service::start_scene(scene* raw_scene) {
     util::log(raw_scene->get_name() + " set to current scene.");
 }
 
-void scene_service::end_scene(scene* raw_scene) {
+void scene_service::end(scene* raw_scene) {
     if (this->current_scene == nullptr) {
         return;
     }

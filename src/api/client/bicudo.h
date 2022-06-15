@@ -84,7 +84,7 @@ public:
 
     static bool task_done(const std::string &name);
     static void task_stop(const std::string &name);
-    static void task(const std::string &name);
+    static task* task(const std::string &name);
     /* End of static methods. */
 
     /* Start of setters and getters. */
