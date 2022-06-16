@@ -5,7 +5,7 @@
  * Timer stamp to help in game.
  **/
 struct timer_stamp {
-    uint64_t previous_ticks, delta;
+    uint64_t previous_ticks, delta, locked_delta;
     float delta_time, locked_delta_time;
 
     void start();
@@ -41,6 +41,16 @@ struct util {
 
         static bool exists(const char* path);
         static game_resource load(const char* path, uint8_t mode = TO_STRING);
+    };
+
+    /**
+     * Texture data.
+     **/
+    struct texture {
+        GLuint id;
+
+        uint32_t w;
+        uint32_t h;
     };
 
     /**

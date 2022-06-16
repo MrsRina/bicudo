@@ -24,7 +24,8 @@ void update_task(task* atomic_task) {
             previous_ticks = SDL_GetTicks64();
 
             // Set the locked dt.
-            util::timing->locked_delta_time = current_ticks;
+            util::timing->locked_delta += current_ticks;
+            util::timing->locked_delta_time = 1.0f / current_ticks;
 
             // Call main object into this thread.
             BICUDO->mainloop_locked_update();
@@ -135,7 +136,7 @@ void game_core::init_context() {
 
     // Init static components.
     shader::init();
-    draw::immediate::init();
+    draw::init();
 }
 
 void game_core::init_services() {
@@ -152,7 +153,7 @@ void game_core::refresh() {
     game_core::screen_width = sdl_display_mode.w;
     game_core::screen_height = sdl_display_mode.h;
 
-    // We still not have a setting manager to here, load a fps, but I want to use 60.
+    // There is no setting manager yet.
     this->interval = 1000 / 60;
 }
 
@@ -174,7 +175,6 @@ void game_core::quit() {
 
     this->service_module_manager.on_end();
     this->service_scene_manager.on_end();
-    this->service_task_manager.on_end();
 
     util::log("Game quit!");
 }
@@ -212,7 +212,8 @@ void game_core::mainloop() {
             this->previous_ticks = SDL_GetTicks64();
             concurrent_dt += this->current_ticks;
 
-            util::timing->delta_time = this->current_ticks;
+            util::timing->delta += this->current_ticks;
+            util::timing->delta_time = 1.0f / this->current_ticks;
     
             this->on_update();
             this->on_render();
@@ -238,10 +239,14 @@ uint64_t game_core::get_fps() {
 void game_core::on_event(SDL_Event &sdl_event) {
     switch (sdl_event.type) {
         case SDL_QUIT: {
-            this->is_stopping_run = true;
-            
-            game_core::task_stop("locked-update");
-            util::log("Starting game shutdown!");
+            // Calling on_end service task method automatically put off the locked-update task (multi-thread)
+            // and others tasks (threads).
+            if (!this->is_stopping_run) {
+                this->is_stopping_run = true;
+                this->service_task_manager.on_end();
+
+                util::log("Starting game shutdown!");
+            }
 
             break;
         }
@@ -277,6 +282,7 @@ void game_core::on_update() {
 }
 
 void game_core::on_render() {
+    glViewport(0, 0, this->screen_width, this->screen_height);
     shader::context();
 
     glClearColor(0.5, 0.5, 0.5, 0.5);

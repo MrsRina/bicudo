@@ -78,9 +78,7 @@ void task_service::on_update() {
     if (this->atomic_boolean_pass_to_queue) {
         this->atomic_boolean_pass_to_queue = false;
 
-        if (this->iterator_queue < 32) {
-            util::log("Iterator found.");
-            
+        if (this->iterator_queue < 32) {            
             this->iterator_queue = 0;
             this->render_list.clear();
 

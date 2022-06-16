@@ -10,3 +10,4 @@
 #include <array>
 #include <thread>
 #include <atomic>
+#include <math.h>

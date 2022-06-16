@@ -61,9 +61,13 @@
     "explorer.compactFolders": true,
     "explorer.autoReveal": false,
     "cSpell.words": [
+        "alphaf",
         "Bicudo",
+        "bluef",
         "fragcolor",
+        "greenf",
         "ifeature",
+        "redf",
         "tessellator"
     ]
 }

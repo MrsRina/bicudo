@@ -37,6 +37,11 @@ void shader::init() {
 void shader::context() {
 	glGetFloatv(GL_VIEWPORT, mat2x2_viewport);
 	util::math::ortho2d(mat4x4_ortho2d, 0.0f, mat2x2_viewport[2], mat2x2_viewport[3], 0.0f);
+
+	fx_default.use();
+	fx_default.set_mat4x4("u_matrix", mat4x4_ortho2d);
+	fx_default.set_float("u_viewport_height", mat2x2_viewport[3]);
+	fx_default.end();
 }
 
 bool shader::compile(GLuint &shader, GLuint shader_mode, const char* shader_str) {
