@@ -18,8 +18,6 @@ protected:
     std::atomic<bool> atomic_boolean_pass_to_queue;
     std::array<std::string, 32> queue;
 public:
-    task_service(const std::string &service_name) : service(service_name) {}
-
     /* Start of main methods. */
     task* start(const std::string &task_name);
     bool done(const std::string &task_name);

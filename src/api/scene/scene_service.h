@@ -13,8 +13,6 @@ protected:
     /* Works with this scene only. */
     scene* current_scene = NULL;
 public:
-    scene_service(const std::string &service_name) : service(service_name) {}
-
     /* Start of setters & getters. */
     // void set_current_scene(scene* raw_scene);
     scene* get_current_scene();

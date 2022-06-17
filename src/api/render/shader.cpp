@@ -36,7 +36,7 @@ void shader::init() {
 
 void shader::context() {
 	glGetFloatv(GL_VIEWPORT, mat2x2_viewport);
-	util::math::ortho2d(mat4x4_ortho2d, 0.0f, mat2x2_viewport[2], mat2x2_viewport[3], 0.0f);
+	math::ortho2d(mat4x4_ortho2d, 0.0f, mat2x2_viewport[2], mat2x2_viewport[3], 0.0f);
 
 	fx_default.use();
 	fx_default.set_mat4x4("u_matrix", mat4x4_ortho2d);

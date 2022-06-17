@@ -10,8 +10,6 @@
  **/
 class module_service : public service {
 public:
-    module_service(const std::string &service_name) : service(service_name) {}
-
     /* Start of main methods. */
     module* get_module_by_name(const std::string &module_name);
     module* get_module_by_feature_id(uint32_t feature_id);

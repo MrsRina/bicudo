@@ -2,6 +2,58 @@
 #include "includes/includes.h"
 
 /**
+ * Math utils.
+ **/
+struct math {
+    static void ortho2d(float* mat, float left, float right, float bottom, float top);
+
+    /**
+     * Vector to directional or color.
+     **/
+    struct vec2 {
+        float x, y;
+
+        vec2() {}
+        vec2(float x, float y) {
+            this->x = x;
+            this->y = y;
+        }
+
+        vec2 operator -= (vec2 vec) {
+            return vec2(this->x - vec.x, this->y - vec.y);
+        }
+
+        vec2 operator - (vec2 vec) {
+            return vec2(this->x - vec.x, this->y - vec.y);
+        }
+
+        vec2 operator + (vec2 vec) {
+            return vec2(this->x + vec.x, this->y + vec.y);
+        }
+
+        vec2 operator += (vec2 vec) {
+            return vec2(this->x + vec.x, this->y + vec.y);
+        }
+
+        vec2 operator *= (float n) {
+            return vec2(this->x * n, this->y * n);
+        }
+
+        vec2 operator *= (int n) {
+            return vec2(this->x * n, this->y * n);
+        }
+
+        vec2 operator * (float n) {
+            return vec2(this->x * n, this->y * n);
+        }
+
+        vec2 operator * (int n) {
+            return vec2(this->x * n, this->y * n);
+        }
+    };
+};
+
+/**
  * Timer stamp to help in game.
  **/
 struct timer_stamp {
@@ -73,13 +125,6 @@ struct util {
         float greenf();
         float bluef();
         float alphaf();
-    };
-
-    /**
-     * Math utils.
-     **/
-    struct math {
-        static void ortho2d(float* mat, float left, float right, float bottom, float top);
     };
 
     /**

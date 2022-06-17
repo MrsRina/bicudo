@@ -82,7 +82,7 @@ game_resource util::file::load(const char* path, uint8_t mode) {
     return resource;
 }
 
-void util::math::ortho2d(float* mat, float left, float right, float bottom, float top) {
+void math::ortho2d(float* mat, float left, float right, float bottom, float top) {
     const float zNear = -1.0f;
     const float zFar = 1.0f;
     const float inv_z = 1.0f / (zFar - zNear);

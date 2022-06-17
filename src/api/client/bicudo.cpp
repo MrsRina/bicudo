@@ -140,10 +140,16 @@ void game_core::init_context() {
 }
 
 void game_core::init_services() {
+    this->service_module_manager.set_name("Module");
+    this->service_scene_manager.set_name("Service");
+    this->service_task_manager.set_name("Task");
+    this->service_physic_manager.set_name("Physic");
+
     // Call the first methods.
     this->service_module_manager.on_start();
     this->service_scene_manager.on_start();
     this->service_task_manager.on_start();
+    this->service_physic_manager.on_start();
 }
 
 void game_core::refresh() {
@@ -260,6 +266,7 @@ void game_core::on_event(SDL_Event &sdl_event) {
 void game_core::mainloop_locked_update() {
     this->service_scene_manager.on_locked_update();
     this->service_module_manager.on_locked_update();
+    this->service_physic_manager.on_locked_update();
 
     if (this->guiscreen != nullptr) {
         this->guiscreen->on_locked_update();
@@ -275,6 +282,7 @@ void game_core::on_update() {
     this->service_task_manager.on_update();
     this->service_scene_manager.on_update();
     this->service_module_manager.on_update();
+    this->service_physic_manager.on_update();
 
     if (this->guiscreen != nullptr) {
         this->guiscreen->on_update();
@@ -306,6 +314,10 @@ scene_service &game_core::get_scene_manager() {
 
 task_service &game_core::get_task_manager() {
     return this->service_task_manager;
+}
+
+physic_service &game_core::get_physic_manager() {
+    return this->service_physic_manager;
 }
 
 void game_core::set_game_context(context* raw_game_context) {
