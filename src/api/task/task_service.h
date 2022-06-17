@@ -6,7 +6,7 @@
 #define TASK_SERVICE_H
 
 /**
- * Task manager to create threads and acess data from.
+ * Task manager to create threads and access data from.
  **/
 class task_service : public service {
 protected:

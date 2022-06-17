@@ -3,7 +3,7 @@
 
 void physic_service::update_gravity() {
     for (ifeature* &features : this->update_list) {
-        rigid* rigid_object = (rigid*) features;
+        rigid2d* rigid_object = (rigid2d*) features;
         rigid_object->motion += this->gravity;
     }
 }
@@ -40,4 +40,5 @@ void physic_service::on_update() {
 }
 
 void physic_service::on_render() {
+
 }

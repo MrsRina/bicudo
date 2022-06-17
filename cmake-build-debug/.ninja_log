@@ -1,0 +1,9 @@
+# ninja log v5
+112	1505	6772047457463615	CMakeFiles/bicudo.dir/src/api/client/context.cpp.obj	3d5fe519672d1a14
+6	1308	6772047347933174	CMakeFiles/bicudo.dir/src/main.cpp.obj	1d23cb8b304403d5
+1	695	6772051922142864	build.ninja	f097738ef4d9ffe8
+8	111	6772047443520552	CMakeFiles/bicudo.dir/CMakeFiles/3.22.3/CompilerIdCXX/CMakeCXXCompilerId.cpp.obj	91d2b0c77956c50
+12	1399	6772047456406448	CMakeFiles/bicudo.dir/src/api/gui/gui.cpp.obj	83ff9a6e6d49f068
+2	971	6772051922142864	build.ninja	f097738ef4d9ffe8
+22	2317	6772051946433483	CMakeFiles/bicudo.dir/src/api/module/module_abstract.cpp.obj	833747d3e7124301
+12	5893	6772051982187371	CMakeFiles/bicudo.dir/external/include/glm/detail/glm.cpp.obj	1b591efaacfcb0eb

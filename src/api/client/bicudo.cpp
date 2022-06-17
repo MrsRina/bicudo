@@ -20,12 +20,12 @@ void update_task(task* atomic_task) {
 
         current_ticks = SDL_GetTicks64() - previous_ticks;
 
-        if (current_ticks > interval) {
+        if (std::isgreater(current_ticks, interval)) {
             previous_ticks = SDL_GetTicks64();
 
             // Set the locked dt.
             util::timing->locked_delta += current_ticks;
-            util::timing->locked_delta_time = 1.0f / current_ticks;
+            util::timing->locked_delta_time = current_ticks / 100.0f;
 
             // Call main object into this thread.
             BICUDO->mainloop_locked_update();
@@ -50,22 +50,6 @@ void game_core::edit_client_details(const std::string &name, const std::string &
 
 void game_core::exception() {
     game_core::internal_flag = -1;
-}
-
-void game_core::display_guiscreen(gui* new_gui) {
-    BICUDO->set_guiscreen(new_gui);
-}
-
-void game_core::display_scene(scene* scene) {
-    BICUDO->get_scene_manager().start(scene);
-}
-
-gui* game_core::get_display_guiscreen() {
-    return BICUDO->get_guiscreen();
-}
-
-scene* game_core::get_display_scene() {
-    return BICUDO->get_scene_manager().get_current_scene();
 }
 
 void game_core::set_guiscreen(gui* new_gui) {
@@ -214,12 +198,12 @@ void game_core::mainloop() {
 
         // If the difference is not less than interval tick,
         // we update and render this moment tick.
-        if (this->current_ticks > this->interval) {
+        if (std::isgreater(this->current_ticks, this->interval)) {
             this->previous_ticks = SDL_GetTicks64();
             concurrent_dt += this->current_ticks;
 
             util::timing->delta += this->current_ticks;
-            util::timing->delta_time = 1.0f / this->current_ticks;
+            util::timing->delta_time = this->current_ticks / 100.0f;
     
             this->on_update();
             this->on_render();

@@ -4,7 +4,7 @@
 /**
  * Math utils.
  **/
-struct math {
+namespace math {
     static void ortho2d(float* mat, float left, float right, float bottom, float top);
 
     /**
@@ -19,8 +19,9 @@ struct math {
             this->y = y;
         }
 
-        vec2 operator -= (vec2 vec) {
-            return vec2(this->x - vec.x, this->y - vec.y);
+        void operator -= (vec2 vec) {
+            this->x -= vec.x;
+            this->y -= vec.y;
         }
 
         vec2 operator - (vec2 vec) {
@@ -31,16 +32,19 @@ struct math {
             return vec2(this->x + vec.x, this->y + vec.y);
         }
 
-        vec2 operator += (vec2 vec) {
-            return vec2(this->x + vec.x, this->y + vec.y);
+        void operator += (vec2 vec) {
+            this->x += vec.x;
+            this->y += vec.y;
         }
 
-        vec2 operator *= (float n) {
-            return vec2(this->x * n, this->y * n);
+        void operator *= (float n) {
+            this->x *= n;
+            this->y *= n;
         }
 
-        vec2 operator *= (int n) {
-            return vec2(this->x * n, this->y * n);
+        void operator *= (int n) {
+            this->x *= n;
+            this->y *= n;
         }
 
         vec2 operator * (float n) {
@@ -76,7 +80,7 @@ struct game_resource {
 /**
  * Util to make easy some actions/events and reduce code writing.
  **/
-struct util {
+namespace util {
     static timer_stamp* timing;
 
     static bool debug_scene;

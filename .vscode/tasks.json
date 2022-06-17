@@ -9,6 +9,7 @@
             "command": "g++",
             "args": [
                 "-m32",
+                "-O2",
                 "src\\*.cpp",
                 "src\\api\\client\\*.cpp",
                 "src\\api\\util\\*.cpp",
@@ -57,6 +58,7 @@
             "command": "g++",
             "args": [
                 "-m32",
+                "-O2",
                 "src\\*.cpp",
                 "src\\api\\client\\*.cpp",
                 "src\\api\\util\\*.cpp",

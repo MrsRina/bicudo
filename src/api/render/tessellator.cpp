@@ -108,14 +108,12 @@ void draw::shape::rect(float x, float y, float w, float h, material &material_da
 }
 
 void draw::shape::circle(float x, float y, float radius, material &material_data) {
-    float w = radius, h = radius, r = radius / 2.0f;
-
     draw::immediate::get_fx().use();
     draw::immediate::get_fx().set_bool("u_set_radius", true);
     draw::immediate::get_fx().set_float("u_radius_dist", radius);
     draw::immediate::get_fx().end();
 
-    draw::shape::rect(x, y, w, h, material_data);
+    draw::shape::rect(x, y, radius, radius, material_data);
 
     draw::immediate::get_fx().use();
     draw::immediate::get_fx().set_bool("u_radius", false);
