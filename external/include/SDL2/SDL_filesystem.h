@@ -85,7 +85,7 @@ extern DECLSPEC char *SDLCALL SDL_GetBasePath(void);
  * application. This directory is unique per user, per application.
  *
  * This function will decide the appropriate location in the native
- * filesystem, create the directory if necessary, and return a string of the
+ * filesystem, create_task the directory if necessary, and return a string of the
  * absolute path to the directory in UTF-8 encoding.
  *
  * On Windows, the string might look like:

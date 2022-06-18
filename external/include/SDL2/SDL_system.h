@@ -106,7 +106,7 @@ extern DECLSPEC ID3D11Device* SDLCALL SDL_RenderGetD3D11Device(SDL_Renderer * re
  * Get the DXGI Adapter and Output indices for the specified display index.
  *
  * The DXGI Adapter and Output indices can be passed to `EnumAdapters` and
- * `EnumOutputs` respectively to get the objects required to create a DX10 or
+ * `EnumOutputs` respectively to get the objects required to create_task a DX10 or
  * DX11 device and swap chain.
  *
  * Before SDL 2.0.4 this function did not return a value. Since SDL 2.0.4 it

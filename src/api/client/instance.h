@@ -9,8 +9,14 @@ namespace bicudo {
 
     void set_scene(scene* new_scene);
     scene* current_scene();
+    scene_service &service_scene();
 
-    task* create(const std::string &task_name);
-    void stop(const std::string &task_name);
-    bool is_done(const std::string &task_name);
+    module_service &service_module();
+
+    task* create_task(const std::string &task_name);
+    void stop_task(const std::string &task_name);
+    bool is_task_done(const std::string &task_name);
+    task_service &service_task();
+
+    physic_service &service_physic();
 };

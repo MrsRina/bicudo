@@ -190,7 +190,7 @@ extern DECLSPEC int SDLCALL SDL_GetRenderDriverInfo(int index,
  *
  * \param width the width of the window
  * \param height the height of the window
- * \param window_flags the flags used to create the window (see
+ * \param window_flags the flags used to create_task the window (see
  *                     SDL_CreateWindow())
  * \param window a pointer filled with the window, or NULL on error
  * \param renderer a pointer filled with the renderer, or NULL on error
@@ -230,9 +230,9 @@ extern DECLSPEC SDL_Renderer * SDLCALL SDL_CreateRenderer(SDL_Window * window,
 /**
  * Create a 2D software rendering context for a surface.
  *
- * Two other API which can be used to create SDL_Renderer:
+ * Two other API which can be used to create_task SDL_Renderer:
  * SDL_CreateRenderer() and SDL_CreateWindowAndRenderer(). These can _also_
- * create a software renderer, but they are intended to be used with an
+ * create_task a software renderer, but they are intended to be used with an
  * SDL_Window as the final destination and not an SDL_Surface.
  *
  * \param surface the SDL_Surface structure representing the surface where
@@ -574,7 +574,7 @@ extern DECLSPEC void * SDLCALL SDL_GetTextureUserData(SDL_Texture * texture);
  * This is a fairly slow function, intended for use with static textures that
  * do not change often.
  *
- * If the texture is intended to be updated often, it is preferred to create
+ * If the texture is intended to be updated often, it is preferred to create_task
  * the texture as streaming and use the locking functions referenced below.
  * While this function will work with streaming textures, for optimization
  * reasons you may not get the pixels back if you lock the texture afterward.
@@ -762,7 +762,7 @@ extern DECLSPEC SDL_bool SDLCALL SDL_RenderTargetSupported(SDL_Renderer *rendere
  * render targets are supported.
  *
  * The default render target is the window for which the renderer was created.
- * To stop rendering to a texture and render to the window again, call this
+ * To stop_task rendering to a texture and render to the window again, call this
  * function with a NULL `texture`.
  *
  * \param renderer the rendering context
@@ -1806,11 +1806,11 @@ extern DECLSPEC int SDLCALL SDL_RenderFlush(SDL_Renderer * renderer);
  * If not NULL, `texw` and `texh` will be filled with the width and height
  * values suitable for the provided texture. In most cases, both will be 1.0,
  * however, on systems that support the GL_ARB_texture_rectangle extension,
- * these values will actually be the pixel width and height used to create the
+ * these values will actually be the pixel width and height used to create_task the
  * texture, so this factor needs to be taken into account when providing
  * texture coordinates to OpenGL.
  *
- * You need a renderer to create an SDL_Texture, therefore you can only use
+ * You need a renderer to create_task an SDL_Texture, therefore you can only use
  * this function with an implicit OpenGL context from SDL_CreateRenderer(),
  * not with your own OpenGL context. If you need control over your OpenGL
  * context, you need to write your own texture-loading methods.

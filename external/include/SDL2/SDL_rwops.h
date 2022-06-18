@@ -152,12 +152,12 @@ typedef struct SDL_RWops
 /**
  *  \name RWFrom functions
  *
- *  Functions to create SDL_RWops structures from various data streams.
+ *  Functions to create_task SDL_RWops structures from various data streams.
  */
 /* @{ */
 
 /**
- * Use this function to create a new SDL_RWops structure for reading from
+ * Use this function to create_task a new SDL_RWops structure for reading from
  * and/or writing to a named file.
  *
  * The `mode` string is treated roughly the same as in a call to the C
@@ -227,7 +227,7 @@ extern DECLSPEC SDL_RWops *SDLCALL SDL_RWFromFP(FILE * fp, SDL_bool autoclose);
 #else
 
 /**
- * Use this function to create an SDL_RWops structure from a standard I/O file
+ * Use this function to create_task an SDL_RWops structure from a standard I/O file
  * pointer (stdio.h's `FILE*`).
  *
  * This function is not available on Windows, since files opened in an

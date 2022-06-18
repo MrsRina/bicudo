@@ -102,7 +102,7 @@ typedef int (SDLCALL * SDL_ThreadFunction) (void *data);
  *
  *  We'll always use the caller's _beginthread() and _endthread() APIs to
  *  start a new thread. This way, if it's the SDL2.DLL which uses this API,
- *  then the RTL of SDL2.DLL will be used to create the new thread, and if it's
+ *  then the RTL of SDL2.DLL will be used to create_task the new thread, and if it's
  *  the application, then the RTL of the application will be used.
  *
  *  So, in short:
@@ -374,7 +374,7 @@ extern DECLSPEC void SDLCALL SDL_WaitThread(SDL_Thread * thread, int *status);
  * thread more than once.
  *
  * If a thread has already exited when passed to SDL_DetachThread(), it will
- * stop waiting for a call to SDL_WaitThread() and clean up immediately. It is
+ * stop_task waiting for a call to SDL_WaitThread() and clean up immediately. It is
  * not safe to detach a thread that might be used with SDL_WaitThread().
  *
  * You may not call SDL_WaitThread() on a thread that has been detached. Use

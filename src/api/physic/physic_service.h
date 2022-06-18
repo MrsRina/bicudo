@@ -6,7 +6,7 @@
 #define PHYSIC_SERVICE_H
 
 /**
- * Manage all rigid objects to apply physic.
+ * Manage all abstract_rigid objects to apply physic.
  **/
 class physic_service : public service {
 protected:

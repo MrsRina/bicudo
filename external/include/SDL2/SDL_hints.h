@@ -1062,7 +1062,7 @@ extern "C" {
  *
  *  When polling for events, SDL_PumpEvents is used to gather new events from devices.
  *  If a device keeps producing new events between calls to SDL_PumpEvents, a poll loop will
- *  become stuck until the new events stop.
+ *  become stuck until the new events stop_task.
  *  This is most noticable when moving a high frequency mouse.
  *
  *  By default, poll sentinels are enabled.
@@ -1949,12 +1949,12 @@ extern "C" {
 #define SDL_HINT_AUDIO_INCLUDE_MONITORS "SDL_AUDIO_INCLUDE_MONITORS"
 
 /**
- *  \brief  A variable that forces X11 windows to create as a custom type.
+ *  \brief  A variable that forces X11 windows to create_task as a custom type.
  *
  *  This is currently only used for X11 and ignored elsewhere.
  *
  *  During SDL_CreateWindow, SDL uses the _NET_WM_WINDOW_TYPE X11 property
- *  to report to the window manager the type of window it wants to create.
+ *  to report to the window manager the type of window it wants to create_task.
  *  This might be set to various things if SDL_WINDOW_TOOLTIP or
  *  SDL_WINDOW_POPUP_MENU, etc, were specified. For "normal" windows that
  *  haven't set a specific type, this hint can be used to specify a custom
@@ -1977,7 +1977,7 @@ extern "C" {
  *  program.
  *
  *  However, it's not unreasonable in some cases to have the program continue
- *  to live on, perhaps to create new windows later.
+ *  to live on, perhaps to create_task new windows later.
  *
  *  Changing this hint to "0" will cause SDL to not send an SDL_QUIT event
  *  when the final window is requesting to close. Note that in this case,

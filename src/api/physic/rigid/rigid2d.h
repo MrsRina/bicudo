@@ -1,15 +1,15 @@
 #pragma once
 #include "api/feature/feature.h"
 #include "api/util/util.h"
-#include "rigid.h"
+#include "abstract_rigid.h"
 
 #ifndef RIGID2D_H
 #define RIGID2D_H
 
 /**
- * Rigid class to all rigid objects.
+ * Rigid class to all abstract_rigid objects.
  **/
-class rigid2d : public rigid {
+class rigid2d : public abstract_rigid {
 public:
     math::vec2 current_pos;
     math::vec2 previous_pos;
@@ -23,17 +23,9 @@ public:
 
     ~rigid2d() {}
 
-    /* Start of setters and getters. */
-    void set_pos(float x, float y);
-    
-    float get_x();
-    float get_y();
-    /* End of setters and getters. */
-
     /* Start of override methods. */
-    void on_event(SDL_Event &sdl_event);
-    void on_locked_update();
-    void on_update();
+    void on_update_gravity();
+    void on_update_position();
     /* End of override methods. */
 };
 

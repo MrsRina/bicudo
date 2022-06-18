@@ -282,7 +282,7 @@ extern DECLSPEC SDL_bool SDLCALL SDL_GetRelativeMouseMode(void);
  *
  * Cursors created with this function must be freed with SDL_FreeCursor().
  *
- * If you want to have a color cursor, or create your cursor from an
+ * If you want to have a color cursor, or create_task your cursor from an
  * SDL_Surface, you should use SDL_CreateColorCursor(). Alternately, you can
  * hide the cursor and draw your own as part of your game's rendering, but it
  * will be bound to the framerate.

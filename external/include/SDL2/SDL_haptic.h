@@ -953,7 +953,7 @@ extern DECLSPEC int SDLCALL SDL_JoystickIsHaptic(SDL_Joystick * joystick);
  * device will also get unallocated and you'll be unable to use force feedback
  * on that device.
  *
- * \param joystick the SDL_Joystick to create a haptic device from
+ * \param joystick the SDL_Joystick to create_task a haptic device from
  * \returns a valid haptic device identifier on success or NULL on failure;
  *          call SDL_GetError() for more information.
  *
@@ -1062,9 +1062,9 @@ extern DECLSPEC int SDLCALL SDL_HapticEffectSupported(SDL_Haptic * haptic,
 /**
  * Create a new haptic effect on a specified device.
  *
- * \param haptic an SDL_Haptic device to create the effect on
+ * \param haptic an SDL_Haptic device to create_task the effect on
  * \param effect an SDL_HapticEffect structure containing the properties of
- *               the effect to create
+ *               the effect to create_task
  * \returns the ID of the effect on success or a negative error code on
  *          failure; call SDL_GetError() for more information.
  *
@@ -1133,8 +1133,8 @@ extern DECLSPEC int SDLCALL SDL_HapticRunEffect(SDL_Haptic * haptic,
  *
  * *
  *
- * \param haptic the SDL_Haptic device to stop the effect on
- * \param effect the ID of the haptic effect to stop
+ * \param haptic the SDL_Haptic device to stop_task the effect on
+ * \param effect the ID of the haptic effect to stop_task
  * \returns 0 on success or a negative error code on failure; call
  *          SDL_GetError() for more information.
  *
@@ -1149,7 +1149,7 @@ extern DECLSPEC int SDLCALL SDL_HapticStopEffect(SDL_Haptic * haptic,
 /**
  * Destroy a haptic effect on the device.
  *
- * This will stop the effect if it's running. Effects are automatically
+ * This will stop_task the effect if it's running. Effects are automatically
  * destroyed when the device is closed.
  *
  * \param haptic the SDL_Haptic device to destroy the effect on
@@ -1258,7 +1258,7 @@ extern DECLSPEC int SDLCALL SDL_HapticUnpause(SDL_Haptic * haptic);
 /**
  * Stop all the currently playing effects on a haptic device.
  *
- * \param haptic the SDL_Haptic device to stop
+ * \param haptic the SDL_Haptic device to stop_task
  * \returns 0 on success or a negative error code on failure; call
  *          SDL_GetError() for more information.
  *
@@ -1318,7 +1318,7 @@ extern DECLSPEC int SDLCALL SDL_HapticRumblePlay(SDL_Haptic * haptic, float stre
 /**
  * Stop the simple rumble on a haptic device.
  *
- * \param haptic the haptic device to stop the rumble effect on
+ * \param haptic the haptic device to stop_task the rumble effect on
  * \returns 0 on success or a negative error code on failure; call
  *          SDL_GetError() for more information.
  *

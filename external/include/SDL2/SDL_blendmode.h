@@ -125,7 +125,7 @@ typedef enum
  * calculation.
  *
  * Support for these blend modes varies for each renderer. To check if a
- * specific SDL_BlendMode is supported, create a renderer and pass it to
+ * specific SDL_BlendMode is supported, create_task a renderer and pass it to
  * either SDL_SetRenderDrawBlendMode or SDL_SetTextureBlendMode. They will
  * return with an error if the blend mode is not supported.
  *

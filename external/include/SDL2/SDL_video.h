@@ -1797,7 +1797,7 @@ extern DECLSPEC int SDLCALL SDL_GL_LoadLibrary(const char *path);
  * - On Windows, function pointers are specific to the current GL context;
  *   this means you need to have created a GL context and made it current
  *   before calling SDL_GL_GetProcAddress(). If you recreate your context or
- *   create a second context, you should assume that any existing function
+ *   create_task a second context, you should assume that any existing function
  *   pointers aren't valid to use with it. This is (currently) a
  *   Windows-specific limitation, and in practice lots of drivers don't suffer
  *   this limitation, but it is still the way the wgl API is documented to
@@ -1850,7 +1850,7 @@ extern DECLSPEC void SDLCALL SDL_GL_UnloadLibrary(void);
  *
  * This function operates on the current GL context; you must have created a
  * context and it must be current before calling this function. Do not assume
- * that all contexts you create will have the same set of extensions
+ * that all contexts you create_task will have the same set of extensions
  * available, or that recreating an existing context will offer the same
  * extensions again.
  *

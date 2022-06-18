@@ -37,7 +37,7 @@
  *
  * A predefined template which fills in some of the bug fields can be
  * reached using http://tinyurl.com/khrplatform-h-bugreport, but you
- * must create a Bugzilla login first.
+ * must create_task a Bugzilla login first.
  *
  *
  * See the Implementer's Guidelines for information about where this file

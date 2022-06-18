@@ -78,18 +78,6 @@ gui* game_core::get_guiscreen() {
     return this->guiscreen;
 }
 
-task* game_core::task(const std::string &name) {
-    return BICUDO->get_task_manager().start(name);
-}
-
-void game_core::task_stop(const std::string &name) {
-    BICUDO->get_task_manager().end(BICUDO->get_task_manager().get_task_by_name(name));
-}
-
-bool game_core::task_done(const std::string &name) {
-    return BICUDO->get_task_manager().done(name);
-}
-
 void game_core::init_window() {
     if (SDL_Init(SDL_INIT_EVERYTHING)) {
         game_core::exception();
@@ -160,8 +148,8 @@ void game_core::init() {
 }
 
 void game_core::quit() {
-    game_core::display_guiscreen(nullptr);
-    game_core::display_scene(nullptr);
+    bicudo::set_guiscreen(nullptr);
+    bicudo::set_scene(nullptr);
 
     this->service_module_manager.on_end();
     this->service_scene_manager.on_end();
@@ -182,7 +170,7 @@ void game_core::mainloop() {
     uint64_t concurrent_dt = SDL_GetTicks64();
 
     // Initialize the locked task.
-    std::thread thread_locked_update(update_task, game_core::task("locked-update"));
+    std::thread thread_locked_update(update_task, bicudo::create_task("locked-update"));
 
     /*
      * The game mainloop.
@@ -259,7 +247,7 @@ void game_core::mainloop_locked_update() {
 
 void game_core::on_update() {
     if (this->is_stopping_run) {
-        this->is_running = !game_core::task_done("locked-update");
+        this->is_running = !bicudo::is_task_done("locked-update");
     }
 
     this->game_context->on_update();

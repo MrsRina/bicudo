@@ -9,5 +9,7 @@ void game_context::on_start() {
 }
 
 void game_context::on_update() {
-
+    if (bicudo::current_scene() == nullptr || bicudo::current_scene()->get_name() != "scene-physic") {
+        bicudo::set_scene(new scene_physic());
+    }
 }

@@ -1210,7 +1210,7 @@ extern DECLSPEC int SDLCALL SDL_QueueAudio(SDL_AudioDeviceID dev, const void *da
  *
  * Capture devices will not queue data when paused; if you are expecting to
  * not need captured audio for some length of time, use SDL_PauseAudioDevice()
- * to stop the capture device from queueing more data. This can be useful
+ * to stop_task the capture device from queueing more data. This can be useful
  * during, say, level loading times. When unpaused, capture devices will start
  * queueing data from that point, having flushed any capturable data available
  * while paused.

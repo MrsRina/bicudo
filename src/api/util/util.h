@@ -5,7 +5,7 @@
  * Math utils.
  **/
 namespace math {
-    static void ortho2d(float* mat, float left, float right, float bottom, float top);
+    void ortho2d(float* mat, float left, float right, float bottom, float top);
 
     /**
      * Vector to directional or color.
@@ -80,7 +80,7 @@ struct game_resource {
 /**
  * Util to make easy some actions/events and reduce code writing.
  **/
-namespace util {
+struct util {
     static timer_stamp* timing;
 
     static bool debug_scene;

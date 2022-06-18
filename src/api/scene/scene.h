@@ -6,7 +6,7 @@
 #define SCENE_H
 
 /**
- * Scene in game to create different contexts.
+ * Scene in game to create_task different contexts.
  **/
 class scene : public scene_abstract, public ifeature {
 public:

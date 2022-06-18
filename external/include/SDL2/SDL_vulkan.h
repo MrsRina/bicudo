@@ -130,7 +130,7 @@ extern DECLSPEC void *SDLCALL SDL_Vulkan_GetVkGetInstanceProcAddr(void);
 extern DECLSPEC void SDLCALL SDL_Vulkan_UnloadLibrary(void);
 
 /**
- * Get the names of the Vulkan instance extensions needed to create a surface
+ * Get the names of the Vulkan instance extensions needed to create_task a surface
  * with SDL_Vulkan_CreateSurface.
  *
  * If `pNames` is NULL, then the number of required Vulkan instance extensions

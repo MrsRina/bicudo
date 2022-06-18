@@ -6,7 +6,7 @@
 #define MODULE_H
 
 /**
- * Module feature to create scripts.
+ * Module feature to create_task scripts.
  **/
 class module : public ifeature, public module_abstract {
 public:

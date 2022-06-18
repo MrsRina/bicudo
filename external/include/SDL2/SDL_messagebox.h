@@ -116,7 +116,7 @@ typedef struct
  * messagebox.
  *
  * This function may be called at any time, even before SDL_Init(). This makes
- * it useful for reporting errors like a failure to create a renderer or
+ * it useful for reporting errors like a failure to create_task a renderer or
  * OpenGL context.
  *
  * On X11, SDL rolls its own dialog box with X11 primitives instead of a
@@ -157,7 +157,7 @@ extern DECLSPEC int SDLCALL SDL_ShowMessageBox(const SDL_MessageBoxData *message
  * messagebox.
  *
  * This function may be called at any time, even before SDL_Init(). This makes
- * it useful for reporting errors like a failure to create a renderer or
+ * it useful for reporting errors like a failure to create_task a renderer or
  * OpenGL context.
  *
  * On X11, SDL rolls its own dialog box with X11 primitives instead of a

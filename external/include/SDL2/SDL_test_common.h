@@ -129,7 +129,7 @@ extern "C" {
 /* Function prototypes */
 
 /**
- * \brief Parse command line parameters and create common state.
+ * \brief Parse command line parameters and create_task common state.
  *
  * \param argv Array of command line parameters
  * \param flags Flags indicating which subsystem to initialize (i.e. SDL_INIT_VIDEO | SDL_INIT_AUDIO)
@@ -141,7 +141,7 @@ SDLTest_CommonState *SDLTest_CommonCreateState(char **argv, Uint32 flags);
 /**
  * \brief Process one common argument.
  *
- * \param state The common state describing the test window to create.
+ * \param state The common state describing the test window to create_task.
  * \param index The index of the argument to process in argv[].
  *
  * \returns the number of arguments processed (i.e. 1 for --fullscreen, 2 for --video [videodriver], or -1 on error.
@@ -171,7 +171,7 @@ void SDLTest_CommonLogUsage(SDLTest_CommonState * state, const char *argv0, cons
  *  function are valid until SDLTest_CommonQuit() is called, in which case
  *  those strings' memory is freed and can no longer be used.
  *
- * \param state The common state describing the test window to create.
+ * \param state The common state describing the test window to create_task.
  * \returns a string with usage information
  */
 const char *SDLTest_CommonUsage(SDLTest_CommonState * state);
@@ -179,7 +179,7 @@ const char *SDLTest_CommonUsage(SDLTest_CommonState * state);
 /**
  * \brief Open test window.
  *
- * \param state The common state describing the test window to create.
+ * \param state The common state describing the test window to create_task.
  *
  * \returns SDL_TRUE if initialization succeeded, false otherwise
  */
@@ -188,7 +188,7 @@ SDL_bool SDLTest_CommonInit(SDLTest_CommonState * state);
 /**
  * \brief Easy argument handling when test app doesn't need any custom args.
  *
- * \param state The common state describing the test window to create.
+ * \param state The common state describing the test window to create_task.
  * \param argc argc, as supplied to SDL_main
  * \param argv argv, as supplied to SDL_main
  *
@@ -199,7 +199,7 @@ SDL_bool SDLTest_CommonDefaultArgs(SDLTest_CommonState * state, const int argc, 
 /**
  * \brief Common event handler for test windows.
  *
- * \param state The common state used to create test window.
+ * \param state The common state used to create_task test window.
  * \param event The event to handle.
  * \param done Flag indicating we are done.
  *
@@ -209,7 +209,7 @@ void SDLTest_CommonEvent(SDLTest_CommonState * state, SDL_Event * event, int *do
 /**
  * \brief Close test window.
  *
- * \param state The common state used to create test window.
+ * \param state The common state used to create_task test window.
  *
  */
 void SDLTest_CommonQuit(SDLTest_CommonState * state);
