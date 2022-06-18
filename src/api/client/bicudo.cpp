@@ -230,6 +230,14 @@ void game_core::on_event(SDL_Event &sdl_event) {
         }
 
         default: {
+            this->service_scene_manager.on_event(sdl_event);
+            this->service_module_manager.on_event(sdl_event);
+            this->service_physic_manager.on_event(sdl_event);
+
+            if (this->guiscreen != nullptr) {
+                this->guiscreen->on_event(sdl_event);
+            }
+
             break;
         }
     }

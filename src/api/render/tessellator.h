@@ -29,7 +29,7 @@ namespace draw {
     void init();
 
     /**
-     * Draw shapes using immediate mode.
+     * Draw shapes using mesh mode.
      **/
     namespace shape {
         void rect(float x, float y, float w, float h, material &material_data);
@@ -40,11 +40,12 @@ namespace draw {
     /**
      * 2D tessellator.
      **/
-    class immediate {
+    class mesh {
     protected:
-        static GLuint attribute_vertex, attribute_material, draw_mode;
+        static GLuint attribute_vertex, attribute_material, attribute_material_color;
+        static GLuint draw_mode;
 
-        static GLuint buffer_vertex, buffer_material, buffer_texture;
+        static GLuint buffer_vertex, buffer_material, buffer_texture, bind_texture;
         static GLfloat *linked_vertex_data, *linked_material_data;
 
         static util::color material_color;

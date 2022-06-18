@@ -663,7 +663,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2022.1.2/bin/ninja/win/ninja.exe"
+			"value" : "C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/ninja/win/ninja.exe"
 		},
 		{
 			"name" : "CMAKE_MODULE_LINKER_FLAGS",

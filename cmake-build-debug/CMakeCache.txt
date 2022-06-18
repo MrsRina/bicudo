@@ -113,7 +113,7 @@ CMAKE_INSTALL_PREFIX:PATH=C:/Program Files (x86)/bicudo
 CMAKE_LINKER:FILEPATH=C:/MinGW/bin/ld.exe
 
 //make program
-CMAKE_MAKE_PROGRAM:FILEPATH=C:/Program Files/JetBrains/CLion 2022.1.2/bin/ninja/win/ninja.exe
+CMAKE_MAKE_PROGRAM:FILEPATH=C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/ninja/win/ninja.exe
 
 //Flags used by the linker during the creation of modules during
 // all build types.

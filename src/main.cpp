@@ -1,7 +1,7 @@
 #include "api/client/instance.h"
 #include "impl/context/game_context.h"
 
-int main(int argc, char** argv) {
+int main(int argv, char** argc) {
     // Just to update.
     game_core::edit_client_details("Bicudo", "2.0");
 
