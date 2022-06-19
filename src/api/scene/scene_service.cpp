@@ -32,8 +32,6 @@ void scene_service::end(scene* raw_scene) {
 
     delete this->current_scene;
     this->current_scene = nullptr;
-
-    util::log(raw_scene->get_name() + " unset to current scene.");
 }
 
 void scene_service::on_start() {

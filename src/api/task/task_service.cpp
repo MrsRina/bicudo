@@ -7,6 +7,7 @@ task* task_service::start(const std::string &task_name) {
     }
 
     task* raw_task = new task(task_name, this->previous_id_task++);
+    raw_task->set_atomic_boolean_state(false);
     this->add((ifeature*) raw_task);
 
     return raw_task;
@@ -51,8 +52,6 @@ bool task_service::done(const std::string &task_name) {
 
     for (uint8_t i = 0; i < this->iterator_queue; i++) {
         if (this->queue[i] == task_name) {
-            this->queue[i] = nullptr;
-
             flag = true;
             break;
         }
@@ -81,6 +80,7 @@ void task_service::on_update() {
         if (this->iterator_queue < 32) {            
             this->iterator_queue = 0;
             this->render_list.clear();
+            this->queue.fill(0);
 
             for (ifeature* features : this->update_list) {
                 task* tasks = (task*) features;

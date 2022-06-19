@@ -28,6 +28,10 @@ namespace math {
             return vec2(this->x - vec.x, this->y - vec.y);
         }
 
+        vec2 operator - () {
+            return vec2(-this->x, -this->y);
+        }
+
         vec2 operator + (vec2 vec) {
             return vec2(this->x + vec.x, this->y + vec.y);
         }
@@ -53,6 +57,24 @@ namespace math {
 
         vec2 operator * (int n) {
             return vec2(this->x * n, this->y * n);
+        }
+
+        float operator * (vec2 vec) {
+            return (this->x * vec.x + this->y * vec.y);
+        }
+
+        float length() {
+            return sqrt(this->x * this->x + this->y * this->y);
+        }
+
+        vec2 normalize() {
+            float len = this->length();
+
+            if (len > 0) {
+                len = 1.0f / len;
+            }
+
+            return vec2(this->x * len, this->y * len);
         }
     };
 };

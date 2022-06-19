@@ -20,12 +20,12 @@ void update_task(task* atomic_task) {
 
         current_ticks = SDL_GetTicks64() - previous_ticks;
 
-        if (std::isgreater(current_ticks, interval)) {
+        if (current_ticks > interval) {
             previous_ticks = SDL_GetTicks64();
 
             // Set the locked dt.
             util::timing->locked_delta += current_ticks;
-            util::timing->locked_delta_time = current_ticks / 100.0f;
+            util::timing->locked_delta_time = (float) current_ticks / 100.0f;
 
             // Call main object into this thread.
             BICUDO->mainloop_locked_update();
@@ -208,6 +208,8 @@ void game_core::mainloop() {
             }
         }
     }
+
+    thread_locked_update.join();
 }
 
 uint64_t game_core::get_fps() {
@@ -229,17 +231,25 @@ void game_core::on_event(SDL_Event &sdl_event) {
             break;
         }
 
-        default: {
-            this->service_scene_manager.on_event(sdl_event);
-            this->service_module_manager.on_event(sdl_event);
-            this->service_physic_manager.on_event(sdl_event);
+        case SDL_WINDOWEVENT: {
+            if (sdl_event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+                int32_t w, h;
+                SDL_GetWindowSize(this->sdl_window, &w, &h);
 
-            if (this->guiscreen != nullptr) {
-                this->guiscreen->on_event(sdl_event);
+                screen_width = w;
+                screen_height = h;
             }
 
             break;
         }
+    }
+
+    this->service_scene_manager.on_event(sdl_event);
+    this->service_module_manager.on_event(sdl_event);
+    this->service_physic_manager.on_event(sdl_event);
+
+    if (this->guiscreen != nullptr) {
+        this->guiscreen->on_event(sdl_event);
     }
 }
 

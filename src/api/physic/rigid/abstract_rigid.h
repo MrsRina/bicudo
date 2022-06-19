@@ -13,6 +13,9 @@ class abstract_rigid : public ifeature {
 protected:
     rigid::type type;
 public:
+    math::vec2 center;
+    bool no_gravity = false;
+
     /* Start of setters and getters. */
     void set_type(rigid::type val_type);
     rigid::type get_type();
