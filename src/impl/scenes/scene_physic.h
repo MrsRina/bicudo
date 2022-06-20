@@ -20,12 +20,12 @@ public:
         instance = nullptr;
     }
 
-    void on_start();
-    void on_end();
-    void on_event(SDL_Event &sdl_event);
-    void on_locked_update();
-    void on_update();
-    void on_render();
+    void on_start() override;
+    void on_end() override;
+    void on_event(SDL_Event &sdl_event) override;
+    void on_locked_update() override;
+    void on_update() override;
+    void on_render() override;
 };
 
 #endif

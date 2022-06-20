@@ -11,16 +11,20 @@
  **/
 class physic_service : public service {
 protected:
-    uint32_t iterator_vertex_count, iterator_edge_count;
-
     /* Start of methods used in physic engine. */
     void update_pos();
     void update_gravity();
 
     bool rigid2d_detect_collide(rigid2d* &r1, rigid2d* &r2);
-    void process_collision();
+    void rigid2d_positional_correction(rigid2d* &r1, rigid2d* &r2);
+    void rigid2d_resolve_collision(rigid2d* &r1, rigid2d* &r2);
     /* End of methods. */
 public:
+    // Physic configs.
+    bool setting_flag_positional_correction_flag = true;
+    uint8_t setting_iterations_count = 15;
+    float setting_pos_correction_rate = 0.8f;
+
     /* Start of override methods. */
     void on_start() override;
     void on_end() override;

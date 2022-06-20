@@ -9,7 +9,7 @@ rigid2d::rigid2d(math::vec2 center_vec, float val_mass, float val_friction, floa
     this->mass = val_mass;
     this->inertia = 0;
     this->friction = val_friction;
-    this->restitution = val_restitution;
+    this->restituion = val_restitution;
     this->width = w;
     this->height = h;
 
@@ -125,7 +125,7 @@ void rigid2d::update_inertia() {
 
 void rigid2d::move(math::vec2 vec) {
     for (uint8_t i = 0; i < 4; i++) {
-        this->vertex[i] += vec;
+        this->vertex[i] = this->vertex[i] + vec;
     }
 
     this->center += vec;
@@ -166,7 +166,7 @@ void rigid2d::find_support_point(math::vec2 dir, math::vec2 edge) {
 
 bool rigid2d::find_axis_least_penetration(rigid2d *&r, geometry::concurrent_collision_info &collision_info) {
     math::vec2 n, support_point;
-    float best_dist;
+    float best_dist = 99999;
     uint8_t best_index = 0;
     bool flag_has_support = true;
 

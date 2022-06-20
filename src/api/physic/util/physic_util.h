@@ -28,9 +28,9 @@ namespace geometry {
 
     struct {
         float depth;
-        math::vec2 normal = math::vec2(0, 0);
-        math::vec2 start = math::vec2(0, 0);
-        math::vec2 end = math::vec2(0, 0);
+        math::vec2 normal;
+        math::vec2 start;
+        math::vec2 end;
 
         void change_dir() {
             normal *= -1;
@@ -56,7 +56,7 @@ namespace geometry {
 }
 
 namespace rigid {
-    const static math::vec2 GRAVITY = {0.0f, 5.0f};
+    const static math::vec2 GRAVITY = {0.0f, 10.0f};
     const static float INERTIA = 12;
 
     enum type {

@@ -63,6 +63,10 @@ namespace math {
             return (this->x * vec.x + this->y * vec.y);
         }
 
+        float cross(vec2 vec) {
+            return (this->x * vec.x - this->y * vec.y);
+        }
+
         float length() {
             return sqrt(this->x * this->x + this->y * this->y);
         }
