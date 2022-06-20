@@ -186,7 +186,7 @@ void game_core::mainloop() {
 
         // If the difference is not less than interval tick,
         // we update and render this moment tick.
-        if (std::isgreater(this->current_ticks, this->interval)) {
+        if (this->current_ticks > this->interval) {
             this->previous_ticks = SDL_GetTicks64();
             concurrent_dt += this->current_ticks;
 
