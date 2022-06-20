@@ -1,3 +1,0 @@
-C:/Users/Rina/Documents/github/bicudo/cmake-build-debug/CMakeFiles/bicudo.dir
-C:/Users/Rina/Documents/github/bicudo/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Rina/Documents/github/bicudo/cmake-build-debug/CMakeFiles/rebuild_cache.dir
