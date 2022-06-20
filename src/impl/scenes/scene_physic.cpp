@@ -13,14 +13,14 @@ float x, y;
 void scene_physic::on_start() {
     material_shape.color.set(255, 255, 255, 100);
 
-    rigid_object = new rigid2d(math::vec2(200, 200), 100, 100);
-    rigid_object->set_mass(1);
+    rigid_object = new rigid2d(math::vec2(200, 200), 1, 0.8f, 0.2f, 100, 100);
+    rigid_object->update_mass(1);
 
     x = 0, y = 0;
 
-    rigid2d* static_objc = new rigid2d(math::vec2(10, 300), 800, 100);
+    rigid2d* static_objc = new rigid2d(math::vec2(10, 300), 1, 0.8f, 0.2f, 800, 100);
     static_objc->no_gravity = true;
-    static_objc->set_mass(1);
+    static_objc->update_mass(1);
 }
 
 void scene_physic::on_end() {

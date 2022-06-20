@@ -56,7 +56,8 @@ namespace geometry {
 }
 
 namespace rigid {
-    const static math::vec2 gravity = {0.0f, 1000.0f};
+    const static math::vec2 GRAVITY = {0.0f, 1000.0f};
+    const static float INERTIA = 12;
 
     enum type {
         RIGID2D, RIGID3D, CIRCLE, BODY

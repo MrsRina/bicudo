@@ -16,10 +16,16 @@ public:
     float width;
     float height;
 
+    float angular_velocity = 0;
+    float angular_acceleration = 0;
+
+    math::vec2 velocity;
+    math::vec2 acceleration;
+
     math::vec2 vertex[4];
     math::vec2 face_normalized[4];
 
-    rigid2d(math::vec2 center_vec, float w, float h);
+    rigid2d(math::vec2 center_vec, float val_mass, float val_friction, float val_restitution, float w, float h);
     ~rigid2d() {}
 
     /* Start of setters and getters. */
@@ -29,13 +35,10 @@ public:
     void set_pos(math::vec2 center_pos);
     math::vec2 &get_pos();
 
-    void set_mass(float val_mass);
-    float get_mass();
-
+    void update_mass(float delta);
+    void update_inertia();
     void move(math::vec2 vec);
     void rotate(float val_angle);
-
-    void reload();
     /* End of setters and getters. */
 
     /* Start of main methods. */

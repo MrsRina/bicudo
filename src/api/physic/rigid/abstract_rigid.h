@@ -13,7 +13,7 @@ class abstract_rigid : public ifeature {
 protected:
     rigid::type type;
 public:
-    float mass, angle;
+    float mass, angle, friction, restitution, inertia, radius, bound_radius;
     bool no_gravity = false;
 
     math::vec2 center;
