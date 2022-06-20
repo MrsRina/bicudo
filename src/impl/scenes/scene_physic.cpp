@@ -20,7 +20,6 @@ void scene_physic::on_start() {
 
     rigid2d* static_objc = new rigid2d(math::vec2(10, 300), 1, 0.8f, 0.2f, 800, 100);
     static_objc->no_gravity = true;
-    static_objc->update_mass(1);
 }
 
 void scene_physic::on_end() {

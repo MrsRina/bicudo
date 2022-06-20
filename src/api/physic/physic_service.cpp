@@ -16,6 +16,12 @@ void physic_service::update_gravity() {
 }
 
 void physic_service::update_pos() {
+    abstract_rigid* rigid_obj;
+
+    for (ifeature* &features : this->update_list) {
+        rigid_obj = (abstract_rigid *) features;
+        rigid_obj->on_update_position();
+    }
 }
 
 void physic_service::on_start() {
@@ -38,7 +44,6 @@ void physic_service::on_locked_update() {
 
     for (ifeature* &features : this->update_list) {
         rigid_obj = (abstract_rigid*) features;
-        rigid_obj->on_center_calc();
 
         switch (rigid_obj->get_type()) {
             case rigid::type::RIGID2D: {

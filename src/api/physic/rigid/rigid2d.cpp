@@ -47,6 +47,10 @@ void rigid2d::on_update_gravity() {
 void rigid2d::on_update_position() {
     abstract_rigid::on_update_position();
 
+    if (this->no_gravity) {
+        return;
+    }
+
     this->velocity += this->acceleration * util::timing->locked_delta_time;
     this->move(this->velocity * util::timing->locked_delta_time);
 
