@@ -1,3 +1,0 @@
-C:/Users/Diyng/Documents/GitHub/bicudo/cmake-build-debug/CMakeFiles/bicudo.dir
-C:/Users/Diyng/Documents/GitHub/bicudo/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Diyng/Documents/GitHub/bicudo/cmake-build-debug/CMakeFiles/rebuild_cache.dir
