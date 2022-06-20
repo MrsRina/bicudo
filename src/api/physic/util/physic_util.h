@@ -5,29 +5,54 @@
 #define PHYSIC_RIGID_H
 
 namespace geometry {
-    struct vertex {
-        vertex();
+    struct concurrent_collision_info {
+        float depth;
+        math::vec2 normal = math::vec2(0, 0);
+        math::vec2 start = math::vec2(0, 0);
+        math::vec2 end = math::vec2(0, 0);
 
-        math::vec2 position, previous_position, acceleration;
-        float original_length {};
-    };
+        void change_dir() {
+            this->normal *= -1;
+            math::vec2 n = this->start;
+            this->start = this->end;
+            this->end = n;
+        }
 
-    struct edge {
-        edge() {};
-
-        vertex* v1;
-        vertex* v2;
-
-        float original_length;
+        void set(float val_depth, math::vec2 vec_normal, math::vec2 vec_start) {
+            this->depth = val_depth;
+            this->normal = vec_normal;
+            this->start = vec_start;
+            this->end = vec_start + vec_normal * val_depth;
+        }
     };
 
     struct {
         float depth;
-        math::vec2 normal;
+        math::vec2 normal = math::vec2(0, 0);
+        math::vec2 start = math::vec2(0, 0);
+        math::vec2 end = math::vec2(0, 0);
 
-        edge* e;
-        vertex* v;
+        void change_dir() {
+            normal *= -1;
+            math::vec2 n = start;
+            start = end;
+            end = n;
+        }
+
+        void set(float val_depth, math::vec2 vec_normal, math::vec2 vec_start) {
+            depth = val_depth;
+            normal = vec_normal;
+            start = vec_start;
+            end = vec_start + vec_normal * val_depth;
+        }
     } collision_info;
+
+    struct {
+        math::vec2 point;
+        float projection;
+        float dist;
+        bool flag;
+    } support_info;
 }
 
 namespace rigid {

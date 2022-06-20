@@ -11,7 +11,7 @@ namespace math {
      * Vector to directional or color.
      **/
     struct vec2 {
-        float x, y;
+        float x = 0.0f, y = 0.0f;
 
         vec2() {}
         vec2(float x, float y) {
@@ -59,7 +59,7 @@ namespace math {
             return vec2(this->x * n, this->y * n);
         }
 
-        float operator * (vec2 vec) {
+        float dot(vec2 vec) {
             return (this->x * vec.x + this->y * vec.y);
         }
 
@@ -75,6 +75,26 @@ namespace math {
             }
 
             return vec2(this->x * len, this->y * len);
+        }
+
+        float distance(vec2 vec) {
+            float dx = this->x - vec.x;
+            float dy = this->y - vec.y;
+
+            return sqrt(dx * dx + dy * dy);
+        }
+
+        vec2 rotate(vec2 center, float angle) {
+            vec2 temp = center;
+
+            float dx = this->x - center.x;
+            float dy = this->y - center.y;
+
+            center.x = dx * cos(angle) - dy * sin(angle);
+            center.y = dx * sin(angle) + dy * cos(angle);
+
+            center += temp;
+            return center;
         }
     };
 };

@@ -32,6 +32,7 @@ namespace draw {
      * Draw shapes using mesh mode.
      **/
     namespace shape {
+        void shape(math::vec2 &v0, math::vec2 &v1, math::vec2 &v2, math::vec2 &v3, material &material_data);
         void rect(float x, float y, float w, float h, material &material_data);
         void circle(float x, float y, float radius, material &material_data);
         void add_color_to_mesh_material_rgba(util::color &color);

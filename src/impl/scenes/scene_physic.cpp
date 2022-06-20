@@ -14,10 +14,13 @@ void scene_physic::on_start() {
     material_shape.color.set(255, 255, 255, 100);
 
     rigid_object = new rigid2d(math::vec2(200, 200), 100, 100);
+    rigid_object->set_mass(1);
+
     x = 0, y = 0;
 
     rigid2d* static_objc = new rigid2d(math::vec2(10, 300), 800, 100);
     static_objc->no_gravity = true;
+    static_objc->set_mass(1);
 }
 
 void scene_physic::on_end() {
@@ -48,7 +51,7 @@ void scene_physic::on_render() {
 
         if (obj->get_type() == rigid::type::RIGID2D) {
             auto rigid2d_object = (rigid2d *) obj;
-            draw::shape::rect(rigid2d_object->get_vertices()[0]->position.x, rigid2d_object->get_vertices()[0]->position.y, rigid2d_object->width, rigid2d_object->height, material_shape);
+            draw::shape::shape(rigid2d_object->vertex[0], rigid2d_object->vertex[1], rigid2d_object->vertex[2],rigid2d_object->vertex[3],material_shape);
         }
     }
 }

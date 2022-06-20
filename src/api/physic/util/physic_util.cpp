@@ -10,7 +10,3 @@ float rigid::interval_dist(float min_a, float max_a, float min_b, float max_b) {
 
     return 0;
 }
-
-geometry::vertex::vertex() {
-    bicudo::service_physic().add_vertex(this);
-}

@@ -121,6 +121,54 @@ void draw::shape::circle(float x, float y, float radius, material &material_data
     draw::mesh::get_fx().end();
 }
 
+void draw::shape::shape(math::vec2 &v0, math::vec2 &v1, math::vec2 &v2, math::vec2 &v3, material &material_data) {
+    MESH_ITERATOR = 0;
+
+    MESH_RECT_XYZ[MESH_ITERATOR++] = v0.x;
+    MESH_RECT_XYZ[MESH_ITERATOR++] = v0.y;
+    MESH_RECT_XYZ[MESH_ITERATOR++] = 0;
+
+    MESH_RECT_XYZ[MESH_ITERATOR++] = v3.x;
+    MESH_RECT_XYZ[MESH_ITERATOR++] = v3.y;
+    MESH_RECT_XYZ[MESH_ITERATOR++] = 0;
+
+    MESH_RECT_XYZ[MESH_ITERATOR++] = v2.x;
+    MESH_RECT_XYZ[MESH_ITERATOR++] = v2.y;
+    MESH_RECT_XYZ[MESH_ITERATOR++] = 0;
+
+    MESH_RECT_XYZ[MESH_ITERATOR++] = v2.x;
+    MESH_RECT_XYZ[MESH_ITERATOR++] = v2.y;
+    MESH_RECT_XYZ[MESH_ITERATOR++] = 0;
+
+    MESH_RECT_XYZ[MESH_ITERATOR++] = v1.x;
+    MESH_RECT_XYZ[MESH_ITERATOR++] = v1.y;
+    MESH_RECT_XYZ[MESH_ITERATOR++] = 0;
+
+    MESH_RECT_XYZ[MESH_ITERATOR++] = v0.x;
+    MESH_RECT_XYZ[MESH_ITERATOR++] = v0.y;
+    MESH_RECT_XYZ[MESH_ITERATOR++] = 0;
+
+    // Start draw us shape.
+    draw::mesh::batch(GL_TRIANGLES, 6, true);
+
+    if (material_data.texture.id != 0) {
+        draw::mesh::material(material_data.texture);
+        draw::mesh::material(material_data.uv_coordinates, 12);
+    } else {
+        draw::shape::add_color_to_mesh_material_rgba(material_data.color);
+        draw::mesh::material(MESH_MATERIAL_COLOR_RGBA, 24);
+    }
+
+    math::vec2 center = v1 + (v1 - v2);
+
+    draw::mesh::get_fx().use();
+    draw::mesh::get_fx().set_float("u_center_x", center.x);
+    draw::mesh::get_fx().set_float("u_center_y", center.y);
+
+    draw::mesh::vertex(MESH_RECT_XYZ, 18);
+    draw::mesh::draw();
+}
+
 void draw::mesh::init() {
     glGenBuffers(1, &buffer_vertex);
     glGenBuffers(1, &buffer_material);

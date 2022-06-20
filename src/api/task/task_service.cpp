@@ -80,7 +80,6 @@ void task_service::on_update() {
         if (this->iterator_queue < 32) {            
             this->iterator_queue = 0;
             this->render_list.clear();
-            this->queue.fill(0);
 
             for (ifeature* features : this->update_list) {
                 task* tasks = (task*) features;

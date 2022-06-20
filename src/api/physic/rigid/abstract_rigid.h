@@ -13,8 +13,10 @@ class abstract_rigid : public ifeature {
 protected:
     rigid::type type;
 public:
-    math::vec2 center;
+    float mass, angle;
     bool no_gravity = false;
+
+    math::vec2 center;
 
     /* Start of setters and getters. */
     void set_type(rigid::type val_type);
@@ -24,6 +26,7 @@ public:
     /* Start of abstract methods. */
     virtual void on_update_gravity() {}
     virtual void on_update_position() {}
+    virtual void on_center_calc() {}
     /* End of abstract methods. */
 };
 

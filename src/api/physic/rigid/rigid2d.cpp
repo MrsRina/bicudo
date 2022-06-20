@@ -5,43 +5,20 @@ rigid2d::rigid2d(math::vec2 center_vec, float w, float h) {
     this->set_type(rigid::type::RIGID2D);
     this->set_visibility_flag(util::visibility::LOW_PRIORITY);
 
-    this->vertex_count = 4;
-    this->edge_count = 4;
-
     this->center = center_vec;
     this->width = w;
     this->height = h;
 
-    for (uint8_t i = 0; i < this->get_vertex_count(); i++) {
-        this->vertices[i] = new geometry::vertex();
-    }
-
-    for (uint8_t i = 0; i < this->get_edge_count(); i++) {
-        this->edges[i] = new geometry::edge();
-    }
-
     this->reload();
-    BICUDO->get_physic_manager().add((ifeature*)  this);
+    bicudo::service_physic().add((ifeature*) this);
 }
 
 void rigid2d::on_update_gravity() {
     abstract_rigid::on_update_gravity();
-
-    for (uint8_t i = 0; i < this->get_vertex_count(); i++) {
-        this->vertices[i]->acceleration += rigid::gravity;
-    }
 }
 
 void rigid2d::on_update_position() {
     abstract_rigid::on_update_position();
-
-    for (uint8_t i = 0; i < this->get_vertex_count(); i++) {
-        geometry::vertex* v = this->vertices[i];
-        math::vec2 temp = v->position;
-
-        v->position += v->position - v->previous_position + v->acceleration * util::timing->locked_delta_time * util::timing->locked_delta_time;
-        v->previous_position = temp;
-    }
 }
 
 uint8_t rigid2d::get_vertex_count() {
@@ -52,24 +29,11 @@ uint8_t rigid2d::get_edge_count() {
     return this->edge_count;
 }
 
-geometry::vertex** rigid2d::get_vertices() {
-    return this->vertices;
-}
-
-geometry::edge** rigid2d::get_edges() {
-    return this->edges;
-}
-
 void rigid2d::project_to_axis(math::vec2 &axis, float &min, float &max) {
-    float dot_p = axis * this->vertices[0]->position;
-    min = max = dot_p;
+}
 
-    for (uint8_t i = 0; i < this->get_vertex_count(); i++) {
-        dot_p = axis * vertices[i]->position;
-
-        min = std::min(dot_p, min);
-        max = std::max(dot_p, max);
-    }
+void rigid2d::on_center_calc() {
+    abstract_rigid::on_center_calc();
 }
 
 void rigid2d::set_pos(math::vec2 center_pos) {
@@ -82,24 +46,96 @@ math::vec2 &rigid2d::get_pos() {
 }
 
 void rigid2d::reload() {
-    this->vertices[0]->position = math::vec2(this->center.x - this->width / 2.0f, this->center.y - this->height / 2.0f);
-    this->vertices[1]->position = math::vec2(this->center.x + this->width / 2.0f, this->center.y - this->height / 2.0f);
-    this->vertices[2]->position = math::vec2(this->center.x + this->width / 2.0f, this->center.y + this->height / 2.0f);
-    this->vertices[3]->position = math::vec2(this->center.x - this->width / 2.0f, this->center.y + this->height / 2.0f);
+    this->vertex[0] = math::vec2(this->center.x - this->width / 2.0f, this->center.y - this->height / 2.0f);
+    this->vertex[1] = math::vec2(this->center.x + this->width / 2.0f, this->center.y - this->height / 2.0f);
+    this->vertex[2] = math::vec2(this->center.x + this->width / 2.0f, this->center.y + this->height / 2.0f);
+    this->vertex[3] = math::vec2(this->center.x - this->width / 2.0f, this->center.y + this->height / 2.0f);
 
-    this->edges[0]->v1 = this->vertices[0];
-    this->edges[0]->v2 = this->vertices[1];
-    this->edges[0]->original_length = (this->edges[0]->v2->position - this->edges[0]->v1->position).length();
+    this->face_normalized[0] = (this->vertex[1] - this->vertex[2]).normalize();
+    this->face_normalized[1] = (this->vertex[2] - this->vertex[3]).normalize();
+    this->face_normalized[2] = (this->vertex[3] - this->vertex[0]).normalize();
+    this->face_normalized[3] = (this->vertex[0] - this->vertex[1]).normalize();
+}
 
-    this->edges[1]->v1 = this->vertices[1];
-    this->edges[1]->v2 = this->vertices[2];
-    this->edges[1]->original_length = (this->edges[1]->v2->position - this->edges[1]->v1->position).length();
+void rigid2d::set_mass(float val_mass) {
 
-    this->edges[2]->v1 = this->vertices[2];
-    this->edges[2]->v2 = this->vertices[3];
-    this->edges[2]->original_length = (this->edges[2]->v2->position - this->edges[2]->v1->position).length();
+}
 
-    this->edges[3]->v1 = this->vertices[3];
-    this->edges[3]->v2 = this->vertices[0];
-    this->edges[3]->original_length = (this->edges[3]->v2->position - this->edges[3]->v1->position).length();
+float rigid2d::get_mass() {
+    return this->mass;
+}
+
+void rigid2d::move(math::vec2 vec) {
+    for (uint8_t i = 0; i < 4; i++) {
+        this->vertex[i] += vec;
+    }
+
+    this->center += vec;
+}
+
+void rigid2d::rotate(float val_angle) {
+    this->angle += val_angle;
+
+    for (uint8_t i = 0; i < 4; i++) {
+        this->vertex[i] = this->vertex[i].rotate(this->center, angle);
+    }
+
+    this->face_normalized[0] = (this->vertex[1] - this->vertex[2]).normalize();
+    this->face_normalized[1] = (this->vertex[2] - this->vertex[3]).normalize();
+    this->face_normalized[2] = (this->vertex[3] - this->vertex[0]).normalize();
+    this->face_normalized[3] = (this->vertex[0] - this->vertex[1]).normalize();
+}
+
+void rigid2d::find_support_point(math::vec2 dir, math::vec2 edge) {
+    math::vec2 to_edge;
+    float projection;
+
+    geometry::support_info.dist = -99999;
+    geometry::support_info.point = math::vec2(0, 0);
+    geometry::support_info.flag = false;
+
+    for (auto &v : this->vertex) {
+        to_edge = v - edge;
+        projection = to_edge.dot(dir);
+
+        if (projection > 0 && projection > geometry::support_info.dist) {
+            geometry::support_info.point = v;
+            geometry::support_info.dist = projection;
+            geometry::support_info.flag = true;
+        }
+    }
+}
+
+bool rigid2d::find_axis_least_penetration(rigid2d *&r, geometry::concurrent_collision_info &collision_info) {
+    math::vec2 n, support_point;
+    float best_dist;
+    uint8_t best_index = 0;
+    bool flag_has_support = true;
+
+    uint8_t i = 0;
+
+    while (flag_has_support && i < 4) {
+        n = this->face_normalized[i];
+
+        math::vec2 dir = n * -1;
+        math::vec2 edge = this->vertex[i];
+
+        r->find_support_point(dir, edge);
+        flag_has_support = geometry::support_info.flag;
+
+        if (flag_has_support && geometry::support_info.dist < best_dist) {
+            best_dist = geometry::support_info.dist;
+            best_index = i;
+            support_point = geometry::support_info.point;
+        }
+
+        i += 1;
+    }
+
+    if (flag_has_support) {
+        math::vec2 best_vec = this->face_normalized[best_index] * best_dist;
+        collision_info.set(best_dist, this->face_normalized[best_index], support_point + best_vec);
+    }
+
+    return flag_has_support;
 }
