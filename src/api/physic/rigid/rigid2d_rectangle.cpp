@@ -1,0 +1,118 @@
+#include "rigid2d_rectangle.h"
+#include "api/client/instance.h"
+
+rigid2d_rectangle::rigid2d_rectangle(math::vec2 vec_center, float val_mass, float val_friction, float val_restitution) {
+    this->center = vec_center;
+    this->mass = val_mass;
+    this->friction = val_friction;
+    this->restitution = val_restitution;
+
+    this->vertices[0] = math::vec2(this->center.x - this->w / 2.0f, this->center.y - this->h / 2.0f);
+    this->vertices[1] = math::vec2(this->center.x + this->w / 2.0f, this->center.y - this->h / 2.0f);
+    this->vertices[2] = math::vec2(this->center.x + this->w / 2.0f, this->center.y + this->h / 2.0f);
+    this->vertices[3] = math::vec2(this->center.x - this->w / 2.0f, this->center.y + this->h / 2.0f);
+
+    this->edges_normalised[0] = (this->vertices[1] - this->vertices[2]).normalize();
+    this->edges_normalised[1] = (this->vertices[2] - this->vertices[3]).normalize();
+    this->edges_normalised[2] = (this->vertices[3] - this->vertices[0]).normalize();
+    this->edges_normalised[3] = (this->vertices[0] - this->vertices[1]).normalize();
+
+    bicudo::service_physic().add_rigid2d(this);
+}
+
+void rigid2d_rectangle::on_update_position() {
+    rigid2d::on_update_position();
+
+    // [x, y] p = p + v + acc * dt * dt
+    this->velocity += this->acceleration * util::timing.locked_delta_time;
+    this->move(this->velocity * util::timing.locked_delta_time);
+
+    // val_angle = val_angle + angular_v + angular_acc * dt * dt
+    this->angular_velocity += this->angular_acceleration * util::timing.locked_delta_time;
+    this->rotate(this->angular_velocity * util::timing.locked_delta_time);
+}
+
+void rigid2d_rectangle::move(math::vec2 vec_vel) {
+    this->minx = 10000.0f;
+    this->miny = 10000.0f;
+    this->maxx = -10000.0f;
+    this->maxy = -10000.0f;
+
+    for (auto &vertex : this->vertices) {
+        vertex += vec_vel;
+
+        this->minx = std::min(this->minx, vertex.x);
+        this->miny = std::min(this->miny, vertex.y);
+        this->maxx = std::max(this->maxx, vertex.x);
+        this->maxy = std::max(this->maxy, vertex.y);
+    }
+
+    this->center += vec_vel;
+}
+
+void rigid2d_rectangle::rotate(float val_angle) {
+    this->angle += val_angle;
+
+    for (auto &vertex : this->vertices) {
+        vertex = vertex.rotate(this->center, val_angle);
+    }
+
+    this->edges_normalised[0] = (this->vertices[1] - this->vertices[2]).normalize();
+    this->edges_normalised[1] = (this->vertices[2] - this->vertices[3]).normalize();
+    this->edges_normalised[2] = (this->vertices[3] - this->vertices[0]).normalize();
+    this->edges_normalised[3] = (this->vertices[0] - this->vertices[1]).normalize();
+}
+
+void rigid2d_rectangle::find_support_point(math::vec2 dir, math::vec2 edge) {
+    math::vec2 to_edge;
+    float projection;
+
+    geometry::support_info.dist = -99999.0f;
+    geometry::support_info.point = math::vec2(0, 0);
+    geometry::support_info.flag = false;
+
+    for (auto &vertex : this->vertices) {
+        to_edge = vertex - edge;
+        projection = to_edge.dot(dir);
+
+        if (projection > 0 && projection > geometry::support_info.dist) {
+            geometry::support_info.point = vertex;
+            geometry::support_info.dist = projection;
+            geometry::support_info.flag = true;
+        }
+    }
+}
+
+bool rigid2d_rectangle::find_axis_least_penetration(rigid2d_rectangle *&r, geometry::concurrent_collision_info collision_info) {
+    math::vec2 n, support_point;
+    float best_dist = 99999;
+    uint8_t best_index = 0;
+    bool flag_has_support = true;
+
+    math::vec2 dir;
+    math::vec2 edge;
+
+    for (uint8_t i = 0; i < 4; i++) {
+        if (!flag_has_support) {
+            break;
+        }
+
+        n = this->edges_normalised[i];
+        dir = n * -1.0f;
+        edge = this->vertices[i];
+
+        r->find_support_point(dir, edge);
+        flag_has_support = geometry::support_info.flag;
+
+        if (flag_has_support && geometry::support_info.dist < best_dist) {
+            best_dist = geometry::support_info.dist;
+            best_index = i;
+            support_point = geometry::support_info.point;
+        }
+    }
+
+    if (flag_has_support) {
+        math::vec2 best_edge = this->edges_normalised[best_index] * best_dist;
+        collision_info.set(best_dist, this->edges_normalised[best_index], support_point + best_edge);
+    }
+}

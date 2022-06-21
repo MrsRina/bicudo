@@ -39,15 +39,19 @@ void physic_service::on_locked_update() {
 
             switch (rigid_obj->get_type()) {
                 case rigid::type::RIGID2D: {
-                    for (ifeature *&subfeatures: this->update_list) {
+                    for (ifeature* &subfeatures: this->update_list) {
                         if (subfeatures == features) {
+                            continue;
+                        }
+
+                        if (rigid_obj->is_colliding((abstract_rigid*) subfeatures)) {
                             continue;
                         }
 
                         switch (rigid_obj->get_type()) {
                             case rigid::type::RIGID2D: {
-                                auto rigid2d_obj = (rigid2d *) features;
-                                auto sub_rigid2d_obj = (rigid2d *) subfeatures;
+                                auto rigid2d_obj = (rigid_ *) features;
+                                auto sub_rigid2d_obj = (rigid_ *) subfeatures;
 
                                 if (this->rigid2d_detect_collide(rigid2d_obj, sub_rigid2d_obj)) {
                                     this->rigid2d_resolve_collision(rigid2d_obj, sub_rigid2d_obj);
@@ -73,7 +77,7 @@ void physic_service::on_render() {
 
 }
 
-bool physic_service::rigid2d_detect_collide(rigid2d* &r1, rigid2d* &r2) {
+bool physic_service::rigid2d_detect_collide(rigid_* &r1, rigid_* &r2) {
     bool phase1 = false;
     bool phase2 = false;
 
@@ -97,7 +101,7 @@ bool physic_service::rigid2d_detect_collide(rigid2d* &r1, rigid2d* &r2) {
     return phase1 && phase2;
 }
 
-void physic_service::rigid2d_positional_correction(rigid2d* &r1, rigid2d* &r2) {
+void physic_service::rigid2d_positional_correction(rigid_* &r1, rigid_* &r2) {
     float r1_mass = r1->mass;
     float r2_mass = r2->mass;
 
@@ -108,7 +112,7 @@ void physic_service::rigid2d_positional_correction(rigid2d* &r1, rigid2d* &r2) {
     r2->move(correction_amount * r2_mass);
 }
 
-void physic_service::rigid2d_resolve_collision(rigid2d *&r1, rigid2d *&r2) {
+void physic_service::rigid2d_resolve_collision(rigid_ *&r1, rigid_ *&r2) {
     if (r1->mass == 0 && r2->mass == 0) {
         return;
     }
@@ -116,7 +120,6 @@ void physic_service::rigid2d_resolve_collision(rigid2d *&r1, rigid2d *&r2) {
     if (this->setting_flag_positional_correction_flag) {
         this->rigid2d_positional_correction(r1, r2);
     }
-
 
     math::vec2 n = geometry::collision_info.normal;
     math::vec2 v1 = r1->velocity;
@@ -153,4 +156,8 @@ void physic_service::rigid2d_resolve_collision(rigid2d *&r1, rigid2d *&r2) {
 
     r1->velocity = r1->velocity - impulse * r1->mass;
     r2->velocity = r2->velocity + impulse * r2->mass;
+}
+
+void physic_service::add_rigid2d(rigid2d *rigid2d_body) {
+    this->rigid2d_list[this->rigid2d_iterator++] = rigid2d_body;
 }

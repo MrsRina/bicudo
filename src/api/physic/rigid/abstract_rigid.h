@@ -13,7 +13,9 @@ class abstract_rigid : public ifeature {
 protected:
     rigid::type type;
 public:
+    float minx, maxx, miny, maxy;
     float mass, angle, friction, restituion, inertia, radius, bound_radius;
+
     bool no_gravity = false;
 
     math::vec2 center;
@@ -21,6 +23,8 @@ public:
     /* Start of setters and getters. */
     void set_type(rigid::type val_type);
     rigid::type get_type();
+
+    bool is_colliding(abstract_rigid* abstract);
     /* End of setters and getters. */
 
     /* Start of abstract methods. */

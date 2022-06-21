@@ -24,8 +24,8 @@ void update_task(task* atomic_task) {
             previous_ticks = SDL_GetTicks64();
 
             // Set the locked dt.
-            util::timing->locked_delta += current_ticks;
-            util::timing->locked_delta_time = (float) current_ticks / 100.0f;
+            util::timing.locked_delta += current_ticks;
+            util::timing.locked_delta_time = (float) current_ticks / 100.0f;
 
             // Call main object into this thread.
             BICUDO->mainloop_locked_update();
@@ -190,8 +190,8 @@ void game_core::mainloop() {
             this->previous_ticks = SDL_GetTicks64();
             concurrent_dt += this->current_ticks;
 
-            util::timing->delta += this->current_ticks;
-            util::timing->delta_time = this->current_ticks / 100.0f;
+            util::timing.delta += this->current_ticks;
+            util::timing.delta_time = (float) this->current_ticks / 100.0f;
     
             this->on_update();
             this->on_render();

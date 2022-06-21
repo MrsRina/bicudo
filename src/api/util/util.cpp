@@ -1,17 +1,7 @@
 #include "util.h"
 
-timer_stamp* util::timing = new timer_stamp();
-
 bool util::debug_scene = false;
 bool util::debug_module = false;
-
-void timer_stamp::start() {
-    this->previous_ticks = SDL_GetTicks();
-}
-
-bool timer_stamp::end_if(uint32_t ms) {
-    return SDL_GetTicks() - this->previous_ticks > ms; 
-}
 
 void util::log(std::string string) {
     string = "[MAIN] " + string;

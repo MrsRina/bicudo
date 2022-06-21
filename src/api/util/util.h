@@ -104,17 +104,6 @@ namespace math {
 };
 
 /**
- * Timer stamp to help in game.
- **/
-struct timer_stamp {
-    uint64_t previous_ticks, delta, locked_delta;
-    float delta_time, locked_delta_time;
-
-    void start();
-    bool end_if(uint32_t ms);
-};
-
-/**
  * Used in game to get files resource.
  **/
 struct game_resource {
@@ -126,13 +115,27 @@ struct game_resource {
 /**
  * Util to make easy some actions/events and reduce code writing.
  **/
-struct util {
-    static timer_stamp* timing;
+namespace util {
+    /**
+     * Timer stamp to help in game.
+     **/
+    struct {
+        uint64_t previous_ticks, delta, locked_delta;
+        float delta_time, locked_delta_time;
+
+        void start() {
+            previous_ticks = SDL_GetTicks();
+        }
+
+        bool end_if(uint32_t ms) {
+            return SDL_GetTicks() - previous_ticks > ms;
+        }
+    } timing;
 
     static bool debug_scene;
     static bool debug_module;
 
-    static void log(std::string string);
+    void log(std::string string);
 
     /**
      * Simple load and exists.
