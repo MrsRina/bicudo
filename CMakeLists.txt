@@ -32,5 +32,5 @@ file(GLOB_RECURSE SOURCE_FILES
 include_directories(src)
 
 # Add into executable and add libraries.
-add_executable(bicudo ${SOURCE_FILES} src/api/physic/rigid/rigid2d.cpp src/api/physic/rigid/rigid2d.h src/api/physic/rigid/rigid2d_rectangle.cpp src/api/physic/rigid/rigid2d_rectangle.h)
+add_executable(bicudo ${SOURCE_FILES})
 target_link_libraries(bicudo mingw32 glew32 SDL2main SDL2 SDL2_image opengl32)
