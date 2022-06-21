@@ -37,18 +37,9 @@ void scene_abstract::add(uint32_t feature_id) {
     }
 
     this->feature_ids.push_back(feature_id);
-
-    if (util::debug_scene) {
-        util::log(this->get_name() + " feature " + std::to_string(feature_id) + " registered.");
-    }
 }
 
 void scene_abstract::remove(uint32_t feature_id) {
-    if (!this->contains(feature_id)) {
-        util::log(this->get_name() + " feature id " + std::to_string(feature_id) + " not registered.");
-        return;
-    }
-
     int32_t index = -1;
 
     for (uint32_t i = 0; i < this->feature_ids.size(); i++) {
@@ -60,10 +51,6 @@ void scene_abstract::remove(uint32_t feature_id) {
 
     if (index != -1) {
         this->feature_ids.erase(this->feature_ids.begin() + index);
-
-        if (util::debug_scene) {
-            util::log(this->get_name() + " feature " + std::to_string(feature_id) + " removed.");
-        }
     }
 }
 

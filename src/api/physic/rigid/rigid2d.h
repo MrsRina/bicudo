@@ -11,13 +11,19 @@ protected:
     rigid::type type;
 public:
     math::vec2 center, velocity, acceleration;
-    float mass, friction, restitution;
+    float mass, friction, restitution, inertia;
+    float minx, maxx, miny, maxy;
 
     /* Start of setters and getters. */
     rigid::type get_type();
+
+    bool collide_ab_with(rigid2d* &r);
+    bool collide_axis_with(rigid2d* &r);
     /* End of setters and getters. */
 
     /* Start of abstract methods. */
+    virtual void move(math::vec2 vec_vel) {};
+    virtual void rotate(float val_angle) {};
     virtual void on_update_position() {};
     /* End of abstract methods. */
 };

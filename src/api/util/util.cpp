@@ -1,7 +1,10 @@
 #include "util.h"
 
-bool util::debug_scene = false;
-bool util::debug_module = false;
+uint64_t util::timing::previous_ticks = 0;
+uint64_t util::timing::delta = 0;
+uint64_t util::timing::locked_delta = 0;
+float util::timing::delta_time = 0.0f;
+float util::timing::locked_delta_time = 0.0f;
 
 void util::log(std::string string) {
     string = "[MAIN] " + string;

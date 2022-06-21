@@ -60,7 +60,7 @@ namespace rigid {
     const static float INERTIA = 12;
 
     enum type {
-        RIGID2D, RIGID3D, CIRCLE, BODY
+        RIGID2D_RECTANGLE, RIGID3D, CIRCLE, BODY
     };
 
     float interval_dist(float min_a, float max_a, float min_b, float max_b);

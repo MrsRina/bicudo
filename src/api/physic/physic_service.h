@@ -1,6 +1,7 @@
 #pragma once
 
 #include "api/service/service.h"
+#include "api/render/tessellator.h"
 #include "rigid.h"
 
 #ifndef PHYSIC_SERVICE_H
@@ -12,22 +13,20 @@
 class physic_service : public service {
 protected:
     // Rigid list to update collision between 2D.
-    rigid2d* rigid2d_list[256];
-    uint8_t rigid2d_iterator;
+    std::array<rigid2d*, 2048> rigid2d_list;
+    uint32_t rigid2d_iterator;
 
     /* Start of methods used in physic engine. */
     void update_pos();
     void update_gravity();
-
-    bool rigid2d_detect_collide(rigid_* &r1, rigid_* &r2);
-    void rigid2d_positional_correction(rigid_* &r1, rigid_* &r2);
-    void rigid2d_resolve_collision(rigid_* &r1, rigid_* &r2);
     /* End of methods. */
 public:
     // Physic configs.
     bool setting_flag_positional_correction_flag = true;
-    uint8_t setting_iterations_count = 15;
-    float setting_pos_correction_rate = 0.8f;
+    uint8_t setting_iterations_count = 3;
+    float setting_pos_correction_rate = 1.0f;
+
+    material material_rigid2d_objects;
 
     /* Start of main methods. */
     void add_rigid2d(rigid2d* rigid2d_body);

@@ -119,21 +119,18 @@ namespace util {
     /**
      * Timer stamp to help in game.
      **/
-    struct {
-        uint64_t previous_ticks, delta, locked_delta;
-        float delta_time, locked_delta_time;
+    struct timing {
+        static uint64_t previous_ticks, delta, locked_delta;
+        static float delta_time, locked_delta_time;
 
-        void start() {
+        static void start() {
             previous_ticks = SDL_GetTicks();
         }
 
-        bool end_if(uint32_t ms) {
+        static bool end_if(uint32_t ms) {
             return SDL_GetTicks() - previous_ticks > ms;
         }
-    } timing;
-
-    static bool debug_scene;
-    static bool debug_module;
+    };
 
     void log(std::string string);
 

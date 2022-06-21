@@ -1,11 +1,26 @@
 #include "rigid2d_rectangle.h"
 #include "api/client/instance.h"
 
-rigid2d_rectangle::rigid2d_rectangle(math::vec2 vec_center, float val_mass, float val_friction, float val_restitution) {
+rigid2d_rectangle::rigid2d_rectangle(math::vec2 vec_center, float val_mass, float val_friction, float val_restitution, float width, float height) {
+    this->type = rigid::type::RIGID2D_RECTANGLE;
+
     this->center = vec_center;
-    this->mass = val_mass;
     this->friction = val_friction;
     this->restitution = val_restitution;
+    this->w = width;
+    this->h = height;
+    this->mass = val_mass;
+    this->inertia = 0.0f;
+    this->acceleration = math::vec2(0, 0);
+    this->velocity = math::vec2(0, 0);
+    this->angle = 0;
+    this->angular_velocity = 0.0f;
+    this->angular_acceleration = 0.0f;
+
+    if (this->mass != 0.0f) {
+        this->mass = 1.0f / this->mass;
+        this->acceleration = rigid::GRAVITY;
+    }
 
     this->vertices[0] = math::vec2(this->center.x - this->w / 2.0f, this->center.y - this->h / 2.0f);
     this->vertices[1] = math::vec2(this->center.x + this->w / 2.0f, this->center.y - this->h / 2.0f);
@@ -17,6 +32,7 @@ rigid2d_rectangle::rigid2d_rectangle(math::vec2 vec_center, float val_mass, floa
     this->edges_normalised[2] = (this->vertices[3] - this->vertices[0]).normalize();
     this->edges_normalised[3] = (this->vertices[0] - this->vertices[1]).normalize();
 
+    this->update_inertia();
     bicudo::service_physic().add_rigid2d(this);
 }
 
@@ -24,15 +40,17 @@ void rigid2d_rectangle::on_update_position() {
     rigid2d::on_update_position();
 
     // [x, y] p = p + v + acc * dt * dt
-    this->velocity += this->acceleration * util::timing.locked_delta_time;
-    this->move(this->velocity * util::timing.locked_delta_time);
+    this->velocity += this->acceleration * util::timing::locked_delta_time;
+    this->move(this->velocity * util::timing::locked_delta_time);
 
     // val_angle = val_angle + angular_v + angular_acc * dt * dt
-    this->angular_velocity += this->angular_acceleration * util::timing.locked_delta_time;
-    this->rotate(this->angular_velocity * util::timing.locked_delta_time);
+    this->angular_velocity += this->angular_acceleration * util::timing::locked_delta_time;
+    this->rotate(this->angular_velocity * util::timing::locked_delta_time);
 }
 
 void rigid2d_rectangle::move(math::vec2 vec_vel) {
+    rigid2d::move(vec_vel);
+
     this->minx = 10000.0f;
     this->miny = 10000.0f;
     this->maxx = -10000.0f;
@@ -63,7 +81,7 @@ void rigid2d_rectangle::rotate(float val_angle) {
     this->edges_normalised[3] = (this->vertices[0] - this->vertices[1]).normalize();
 }
 
-void rigid2d_rectangle::find_support_point(math::vec2 dir, math::vec2 edge) {
+void rigid2d_rectangle::find_support_point(math::vec2 dir, math::vec2 vert) {
     math::vec2 to_edge;
     float projection;
 
@@ -72,7 +90,7 @@ void rigid2d_rectangle::find_support_point(math::vec2 dir, math::vec2 edge) {
     geometry::support_info.flag = false;
 
     for (auto &vertex : this->vertices) {
-        to_edge = vertex - edge;
+        to_edge = vertex - vert;
         projection = to_edge.dot(dir);
 
         if (projection > 0 && projection > geometry::support_info.dist) {
@@ -83,25 +101,23 @@ void rigid2d_rectangle::find_support_point(math::vec2 dir, math::vec2 edge) {
     }
 }
 
-bool rigid2d_rectangle::find_axis_least_penetration(rigid2d_rectangle *&r, geometry::concurrent_collision_info collision_info) {
+bool rigid2d_rectangle::find_axis_least_penetration(rigid2d_rectangle *&r, geometry::concurrent_collision_info &collision_info) {
     math::vec2 n, support_point;
-    float best_dist = 99999;
     uint8_t best_index = 0;
+    float best_dist = 99999;
     bool flag_has_support = true;
 
     math::vec2 dir;
-    math::vec2 edge;
+    math::vec2 vert;
 
-    for (uint8_t i = 0; i < 4; i++) {
-        if (!flag_has_support) {
-            break;
-        }
+    uint8_t i = 0;
 
+    while (flag_has_support && i < 4) {
         n = this->edges_normalised[i];
         dir = n * -1.0f;
-        edge = this->vertices[i];
+        vert = this->vertices[i];
 
-        r->find_support_point(dir, edge);
+        r->find_support_point(dir, vert);
         flag_has_support = geometry::support_info.flag;
 
         if (flag_has_support && geometry::support_info.dist < best_dist) {
@@ -109,10 +125,54 @@ bool rigid2d_rectangle::find_axis_least_penetration(rigid2d_rectangle *&r, geome
             best_index = i;
             support_point = geometry::support_info.point;
         }
+
+        i++;
     }
 
     if (flag_has_support) {
         math::vec2 best_edge = this->edges_normalised[best_index] * best_dist;
         collision_info.set(best_dist, this->edges_normalised[best_index], support_point + best_edge);
+    }
+
+    return flag_has_support;
+}
+
+math::vec2* rigid2d_rectangle::get_vertices() {
+    return this->vertices;
+}
+
+math::vec2 *rigid2d_rectangle::get_edges_normalised() {
+    return this->edges_normalised;
+}
+
+void rigid2d_rectangle::update_mass(float delta) {
+    float val_mass = 0.0f;
+
+    if (this->mass != 0) {
+        val_mass = 1.0f / this->mass;
+    }
+
+    val_mass += delta;
+
+    if (val_mass <= 0) {
+        this->mass = 0.0f;
+        this->velocity = math::vec2(0.0f, 0.0f);
+        this->acceleration = math::vec2(0.0f, 0.0f);
+        this->angular_velocity = 0.0f;
+        this->angular_acceleration = 0.0f;
+    } else {
+        this->mass = 1 / val_mass;
+        this->acceleration = rigid::GRAVITY;
+    }
+
+    this->update_inertia();
+}
+
+void rigid2d_rectangle::update_inertia() {
+    if (this->mass == 0) {
+        this->inertia = 0.0f;
+    } else {
+        this->inertia = (1.0f / this->mass) * (this->w * this->w + this->h * this->h) / rigid::INERTIA;
+        this->inertia = 1.0f / this->inertia;
     }
 }

@@ -1,9 +1,11 @@
 #pragma once
 
-#include "rigid/abstract_rigid.h"
-#include "rigid/rigid_circle.h"
-#include "rigid/rigid_.h"
-#include "rigid/rigid_body.h"
-#include "rigid/rigid_circle.h"
-#include "rigid/rigid_shape.h"
-#include "rigid/rigid2d.h"
+#ifndef RIGID_H
+#define RIGID_H
+
+#include "rigid/rigid2d_rectangle.h"
+
+bool rigid2d_rect_collide_with_rect(rigid2d_rectangle* r1, rigid2d_rectangle* r2);
+void rigid2d_solve_collide(rigid2d* &r1, rigid2d* &r2);
+
+#endif
