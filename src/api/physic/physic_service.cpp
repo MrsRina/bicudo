@@ -76,3 +76,11 @@ void physic_service::on_render() {
 void physic_service::add_rigid2d(rigid2d *rigid2d_body) {
     this->rigid2d_list[this->rigid2d_iterator++] = rigid2d_body;
 }
+
+std::array<rigid2d*, 2048> &physic_service::get_rigid2d_list() {
+    return this->rigid2d_list;
+}
+
+uint32_t physic_service::get_rigid2d_iterator() {
+    return this->rigid2d_iterator;
+}

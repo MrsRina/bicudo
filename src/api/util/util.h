@@ -8,7 +8,91 @@ namespace math {
     void ortho2d(float* mat, float left, float right, float bottom, float top);
 
     /**
-     * Vector to directional or color.
+     * Vector3D to directional or color.
+     **/
+    struct vec3 {
+        double x = 0.0f, y = 0.0f, z = 0.0f;
+
+        vec3() {}
+        vec3(double x, double y, double z = 0.0f) {
+            this->x = x;
+            this->y = y;
+            this->z = z;
+        }
+
+        void operator -= (vec3 vec) {
+            this->x -= vec.x;
+            this->y -= vec.y;
+            this->z -= vec.z;
+        }
+
+        vec3 operator - (vec3 vec) {
+            return vec3(this->x - vec.x, this->y - vec.y, this->z - vec.z);
+        }
+
+        vec3 operator - () {
+            return vec3(-this->x, -this->y, -this->z);
+        }
+
+        vec3 operator + (vec3 vec) {
+            return vec3(this->x + vec.x, this->y + vec.y, this->z + vec.z);
+        }
+
+        void operator += (vec3 vec) {
+            this->x += vec.x;
+            this->y += vec.y;
+            this->z += vec.z;
+        }
+
+        void operator *= (double n) {
+            this->x *= n;
+            this->y *= n;
+            this->z *= n;
+        }
+
+        void operator *= (int n) {
+            this->x *= n;
+            this->y *= n;
+            this->z *= n;
+        }
+
+        vec3 operator * (double n) {
+            return vec3(this->x * n, this->y * n, this->z * n);
+        }
+
+        vec3 operator * (int n) {
+            return vec3(this->x * n, this->y * n, this->z * n);
+        }
+
+        double dot(vec3 vec) {
+            return (this->x * vec.x + this->y * vec.y + this->z * vec.z);
+        }
+
+        float length() {
+            return sqrt(this->x * this->x + this->y * this->y + this->y * this->y);
+        }
+
+        vec3 normalize() {
+            float len = this->length();
+
+            if (len > 0) {
+                len = 1.0f / len;
+            }
+
+            return vec3(this->x * len, this->y * len, this->z * len);
+        }
+
+        float distance(vec3 vec) {
+            float dx = this->x - vec.x;
+            float dy = this->y - vec.y;
+            float dz = this->z - vec.z;
+
+            return sqrt(dx * dx + dy * dy + dz * dz);
+        }
+    };
+
+    /**
+     * Vector2D to directional or color.
      **/
     struct vec2 {
         float x = 0.0f, y = 0.0f;
@@ -64,7 +148,7 @@ namespace math {
         }
 
         float cross(vec2 vec) {
-            return (this->x * vec.x - this->y * vec.y);
+            return (this->x * vec.y - this->y * vec.x);
         }
 
         float length() {

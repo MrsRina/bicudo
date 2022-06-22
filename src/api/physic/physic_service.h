@@ -25,8 +25,12 @@ public:
     bool setting_flag_positional_correction_flag = true;
     uint8_t setting_iterations_count = 3;
     float setting_pos_correction_rate = 1.0f;
-
     material material_rigid2d_objects;
+
+    /* Start of setters and getters. */
+    std::array<rigid2d*, 2048> &get_rigid2d_list();
+    uint32_t get_rigid2d_iterator();
+    /* End of setters and getters. */
 
     /* Start of main methods. */
     void add_rigid2d(rigid2d* rigid2d_body);

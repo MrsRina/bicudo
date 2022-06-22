@@ -2,6 +2,8 @@
 #include "impl/context/game_context.h"
 
 int main(int argv, char** argc) {
+    std::srand(time(0));
+
     // Just to update.
     game_core::edit_client_details("Bicudo", "2.0");
 
