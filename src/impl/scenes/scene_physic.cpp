@@ -12,10 +12,10 @@ float x, y;
 
 void scene_physic::on_start() {
     for (uint8_t i = 0; i < 30; i++) {
-        rigid2d_rectangle* rigid2d_obj = new rigid2d_rectangle(math::vec2(rand() % 1280, 200 + rand() % 100), rand() % 5, 0.0f, 0.2f, rand() % 75, rand() % 75);
+        rigid2d_rectangle* rigid2d_obj = new rigid2d_rectangle(math::vec2(rand() % 1280, 200 + rand() % 100), rand() % 5, 0.0f, 0.0f, rand() % 75, rand() % 75);
     }
 
-    rigid2d_rectangle* rigid2d_obj = new rigid2d_rectangle(math::vec2(400, 600), 0.0f, 0.0f, 0.2f, 1280, 100);
+    rigid2d_rectangle* rigid2d_obj = new rigid2d_rectangle(math::vec2(400, 600), 0.0f, 0.0f, 0.0f, 1280, 100);
 }
 
 void scene_physic::on_end() {

@@ -10,6 +10,5 @@ float* camera::perspective() {
     float f_n = far - near;
     float r = (float) this->vp.x / this->vp.y;
 
-    glm::lookAt
     return nullptr;
 }

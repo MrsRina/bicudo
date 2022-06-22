@@ -5,8 +5,6 @@
  * Math utils.
  **/
 namespace math {
-    void ortho2d(float* mat, float left, float right, float bottom, float top);
-
     /**
      * Vector3D to directional or color.
      **/
@@ -66,6 +64,14 @@ namespace math {
 
         double dot(vec3 vec) {
             return (this->x * vec.x + this->y * vec.y + this->z * vec.z);
+        }
+
+        vec3 cross(vec3 vec) {
+            return vec3(
+                this->y * vec.z - vec.y * this->z,
+                this->z * vec.x - vec.z * this->x,
+                this->x * vec.y - vec.x * this->y
+            );
         }
 
         float length() {
@@ -185,6 +191,12 @@ namespace math {
             return center;
         }
     };
+
+    float radians(float degress);
+
+    void perspective(float* mat, float fov, float aspect, float z_near, float);
+    void look_at(float* mat, vec3 eye, vec3 center, vec3 up);
+    void ortho2d(float* mat, float left, float right, float bottom, float top);
 };
 
 /**

@@ -75,6 +75,62 @@ game_resource util::file::load(const char* path, uint8_t mode) {
     return resource;
 }
 
+float math::radians(float degress) {
+    return degress * (M_PI / 180.0f);
+}
+
+void math::perspective(float* mat, float fov, float aspect, float z_near, float z_far) {
+    fov = math::radians(fov);
+    float f = tan(fov / 2.0f);
+
+    *mat++ = 1.0f / (aspect * f);
+    *mat++ = 0.0f;
+    *mat++ = 0.0f;
+    *mat++ = 0.0f;
+
+    *mat++ = 0.0f;
+    *mat++ = 1.0f / f;
+    *mat++ = 0.0f;
+    *mat++ = 0.0f;
+
+    *mat++ = 0.0f;
+    *mat++ = 0.0f;
+    *mat++ = -(z_far + z_near) / (z_far - z_near);
+    *mat++ = -1.0f;
+
+    *mat++ = 0.0f;
+    *mat++ = 0.0f;
+    *mat++ = -(2.0f * z_far * z_near) / (z_far - z_near);
+    *mat++ = 0.0f;
+}
+
+void math::look_at(float* mat, math::vec3 eye, math::vec3 center, math::vec3 up) {
+    math::vec3 f = (center - eye).normalize();
+    math::vec3 u = up.normalize();
+    math::vec3 s = (f.cross(u)).normalize();
+    u = s.cross(f);
+
+    *mat++ = s.x;
+    *mat++ = u.y;
+    *mat++ = -f.x;
+    *mat++ = 0.0f;
+
+    *mat++ = s.y;
+    *mat++ = u.y;
+    *mat++ = -f.y;
+    *mat++ = 0.0f;
+
+    *mat++ = s.z;
+    *mat++ = u.y;
+    *mat++ = -f.z;
+    *mat++ = 0.0f;
+
+    *mat++ = -s.dot(eye);
+    *mat++ = -u.dot(eye);
+    *mat++ = f.dot(eye);
+    *mat++ = 1.0f;
+}
+
 void math::ortho2d(float* mat, float left, float right, float bottom, float top) {
     const float zNear = -1.0f;
     const float zFar = 1.0f;
