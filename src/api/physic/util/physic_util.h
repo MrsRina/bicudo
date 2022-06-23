@@ -63,6 +63,14 @@ namespace rigid {
         RIGID2D_RECTANGLE, RIGID3D, CIRCLE, BODY
     };
 
+    /**
+     * FULL = POS ACCELERATION AND ANGULAR ACCELERATION
+     * POS  = POS ACCELERATION
+     **/
+    enum physic {
+        FULL, POS
+    };
+
     float interval_dist(float min_a, float max_a, float min_b, float max_b);
 }
 

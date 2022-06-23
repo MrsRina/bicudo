@@ -12,7 +12,7 @@ float cx, cy, x, y, prev_x, prev_y;
 
 void scene_physic::on_start() {
     for (uint8_t i = 0; i < 30; i++) {
-        auto rigid2d_obj = new rigid2d_rectangle(math::vec2(rand() % 1280, 200 + rand() % 100), 50 + (rand() % 5), 0.0f, 0.0f, rand() % 75, rand() % 75);
+        auto rigid2d_obj = new rigid2d_rectangle(math::vec2(rand() % 1280, 200 + rand() % 100), 50 + (rand() % 5), 0.0f, 1.0f, rand() % 75, rand() % 75);
     }
 
     auto rigid2d_obj = new rigid2d_rectangle(math::vec2(400, 600), 0.0f, 0.0f, 0.0f, 1280, 100);
@@ -60,14 +60,7 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
                 y = ((my - cy) - rigid_object->center.y);
 
                 math::vec2 delta = math::vec2(x, y);
-                rigid_object->velocity += (delta) * util::timing::delta_time;
-
-                rigid_object->velocity.x = math::clampf(rigid_object->velocity.x, -30.f, 30.0f);
-                rigid_object->velocity.y = math::clampf(rigid_object->velocity.y, -30.f, 30.0f);
-
-
-                prev_x = x;
-                prev_y = y;
+                rigid_object->velocity = delta;
             }
 
             break;

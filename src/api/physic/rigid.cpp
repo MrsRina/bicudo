@@ -41,6 +41,40 @@ void rigid2d_solve_collide(rigid2d *&r1, rigid2d *&r2) {
         r2->move(vec_correction_amount * mass_r2);
     }
 
+    switch (r1->get_physic()) {
+        case rigid::FULL: {
+            rigid2d_apply_full_physic(r1, r2);
+            break;
+        }
+
+        case rigid::POS: {
+            rigid2d_apply_physic(r1, r2);
+            break;
+        }
+    }
+}
+
+bool rigid2d_collide_with_point(rigid2d *&r, float x, float y) {
+    bool flag_point_collide = false;
+
+    switch (r->get_type()) {
+        case rigid::type::RIGID2D_RECTANGLE: {
+            auto rigid2d_rect = (rigid2d_rectangle*) r;
+            flag_point_collide = (
+                x > rigid2d_rect->get_vertices()[0].x && y > rigid2d_rect->get_vertices()[0].y &&
+                x < rigid2d_rect->get_vertices()[1].x && y > rigid2d_rect->get_vertices()[1].y &&
+                x < rigid2d_rect->get_vertices()[2].x && y < rigid2d_rect->get_vertices()[2].y &&
+                x > rigid2d_rect->get_vertices()[3].x && y < rigid2d_rect->get_vertices()[3].y
+            );
+
+            break;
+        }
+    }
+
+    return flag_point_collide;
+}
+
+void rigid2d_apply_full_physic(rigid2d* &r1, rigid2d* &r2) {
     math::vec2 n = geometry::collision_info.normal;
     math::vec2 start = geometry::collision_info.start * (r2->mass / (r1->mass + r2->mass));
     math::vec2 end = geometry::collision_info.end * (r1->mass / (r1->mass + r2->mass));
@@ -95,22 +129,37 @@ void rigid2d_solve_collide(rigid2d *&r1, rigid2d *&r2) {
     r2->angular_velocity += c2_cross_t * jt * r2->inertia;
 }
 
-bool rigid2d_collide_with_point(rigid2d *&r, float x, float y) {
-    bool flag_point_collide = false;
+void rigid2d_apply_physic(rigid2d* &r1, rigid2d* &r2) {
+    math::vec2 n = geometry::collision_info.normal;
+    math::vec2 v1 = r1->velocity;
+    math::vec2 v2 = r2->velocity;
+    math::vec2 relative_velocity = v2 - v1;
 
-    switch (r->get_type()) {
-        case rigid::type::RIGID2D_RECTANGLE: {
-            auto rigid2d_rect = (rigid2d_rectangle*) r;
-            flag_point_collide = (
-                x > rigid2d_rect->get_vertices()[0].x && y > rigid2d_rect->get_vertices()[0].y &&
-                x < rigid2d_rect->get_vertices()[1].x && y > rigid2d_rect->get_vertices()[1].y &&
-                x < rigid2d_rect->get_vertices()[2].x && y < rigid2d_rect->get_vertices()[2].y &&
-                x > rigid2d_rect->get_vertices()[3].x && y < rigid2d_rect->get_vertices()[3].y
-            );
+    float relative_velocity_normal = relative_velocity.dot(n);
 
-            break;
-        }
+    if (relative_velocity_normal > 0.0f) {
+        return;
     }
 
-    return flag_point_collide;
+    float new_restitution = std::min(r1->restitution, r2->restitution);
+    float new_friction = std::min(r1->friction, r2->friction);
+    float jn = -(1.0f + new_restitution) * relative_velocity_normal;
+
+    jn /= (r1->mass + r2->mass);
+    math::vec2 impulse = n * jn;
+
+    r1->velocity -= impulse * r1->mass;
+    r2->velocity += impulse * r2->mass;
+
+    math::vec2 tangent = relative_velocity - n * relative_velocity.dot(n);
+    tangent = tangent.normalize() * -1.0f;
+
+    float jt = -(1.0f + new_restitution) * relative_velocity.dot(tangent) * new_friction;
+    jt /= r1->mass + r2->mass;
+    jt = jt > jn ? jn : jt;
+
+    impulse = tangent * jt;
+
+    r1->velocity -= impulse * r1->mass;
+    r2->velocity += impulse * r2->mass;
 }

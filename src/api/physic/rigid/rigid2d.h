@@ -9,6 +9,7 @@
 class rigid2d {
 protected:
     rigid::type type;
+    rigid::physic physic;
 public:
     math::vec2 center, velocity, acceleration;
 
@@ -16,18 +17,17 @@ public:
     float mass, friction, restitution, inertia;
     float minx, maxx, miny, maxy;
 
-    /* Start of setters and getters. */
     rigid::type get_type();
+
+    void set_physic(rigid::physic val_enum);
+    rigid::physic get_physic();
 
     bool collide_ab_with(rigid2d* &r);
     bool collide_axis_with(rigid2d* &r);
-    /* End of setters and getters. */
 
-    /* Start of abstract methods. */
     virtual void move(math::vec2 vec_vel) {};
     virtual void rotate(float val_angle) {};
     virtual void on_update_position() {};
-    /* End of abstract methods. */
 };
 
 #endif
