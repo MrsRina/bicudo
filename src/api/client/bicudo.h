@@ -16,6 +16,7 @@
 #include "api/scene/scene_service.h"
 #include "api/task/task_service.h"
 #include "api/physic/physic_service.h"
+#include "api/render/camera.h"
 
 static const uint32_t FEATURE_BUFFER_LIMIT = 256;
 
@@ -69,6 +70,9 @@ protected:
     // Gui context in game for inventory and context for facts in game.
     gui* guiscreen;
     context* game_context;
+
+    // Current project camera.
+    camera* the_camera;
 public:
     ~game_core() {}
 
@@ -89,11 +93,14 @@ public:
     context* get_game_context();
 
     uint64_t get_fps();
+    SDL_Window* get_sdl_win();
 
     module_service &get_module_manager();
     scene_service &get_scene_manager();
     task_service &get_task_manager();
     physic_service &get_physic_manager();
+
+    camera* get_camera();
     /* End of setters and getters. */
 
     /* Start of main methods. */

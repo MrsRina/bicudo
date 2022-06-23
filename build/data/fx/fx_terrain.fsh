@@ -1,4 +1,4 @@
-#version core 330
+#version 330 core
 
 in vec4 varying_fragcolor;
 

@@ -162,3 +162,15 @@ void math::ortho2d(float* mat, float left, float right, float bottom, float top)
     *mat++ = (-(zFar + zNear) * inv_z);
     *mat++ = (1.0f);
 }
+
+float math::clampf(float val, float min, float max) {
+    return val < min ? min : val > max ? max : val;
+}
+
+int32_t math::clampi(int32_t val, int32_t min, int32_t max) {
+    return val < min ? min : val > max ? max : val;;
+}
+
+void math::clamp_vec2(math::vec2 vec, float min_vec_len, float max_vec_len) {
+
+}

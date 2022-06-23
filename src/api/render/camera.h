@@ -1,25 +1,32 @@
 #pragma once
 
+#include "api/util/util.h"
+#include "shader.h"
+
 #ifndef CAMERA_H
 #define CAMERA_H
-
-#include "api/util/util.h"
 
 /**
  * Game frustum management.
  **/
 struct camera {
-    math::vec3 pos = math::vec3(0, -8.0, 0.0);
-    math::vec3 target = math::vec3(0, 0.0, 0.0);
-    math::vec3 up = math::vec3(0, 0.0, 1.0);
+public:
+    math::vec3 position, front, up, right, world_up;
 
-    float fov_y = {90.0f};
-    float near = {0.5f};
-    float far = {100.0};
+    float yaw, pitch;
+    float mouse_sensitivity;
+    float fov;
 
-    math::vec2 vp = math::vec2(0, 0);
+    camera();
 
-    float* perspective();
+    /* Start of main methods. */
+    void update_camera_motion(float mx, float my, bool constrain_pitch);
+    void calc_camera_rotation();
+    void calc_camera_matrix();
+    /* End of main methods. */
+
+    /* Push everything. */
+    static void push(fx &shader_fx);
 };
 
 #endif

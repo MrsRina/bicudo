@@ -29,7 +29,7 @@ namespace draw {
     void init();
 
     /**
-     * Draw shapes using mesh mode.
+     * Draw shapes using mesh2d mode.
      **/
     namespace shape {
         void shape(math::vec2 &v0, math::vec2 &v1, math::vec2 &v2, math::vec2 &v3, material &material_data);
@@ -38,10 +38,32 @@ namespace draw {
         void add_color_to_mesh_material_rgba(util::color &color);
     }
 
+    class mesh3d_instanced {
+    protected:
+        GLuint buffer_list, vao;
+
+        float* linked_material_color;
+        float* linked_vertex_data;
+        float* linked_material;
+
+        uint32_t sizeof_vertex, sizeof_material, sizeof_material_color;
+    public:
+        mesh3d_instanced() {}
+        ~mesh3d_instanced() {}
+
+        /* Start of main methods. */
+        void init();
+        void batch();
+        void vertex();
+        void refresh();
+        void draw();
+        /* End of main methods. */
+    };
+
     /**
      * 2D tessellator.
      **/
-    class mesh {
+    class mesh2d {
     protected:
         static GLuint attribute_vertex, attribute_material, attribute_material_color;
         static GLuint draw_mode;
@@ -53,9 +75,11 @@ namespace draw {
         static uint32_t iterator_vertex, iterator_material, size_of_draw;
 
         static float outline_line_thickness;
-        static bool flag_ptr, flag_texture;
         static fx concurrent_fx;
+        static GLuint buffer_vao;
     public:
+        static bool flag_ptr, flag_texture, flag_fx;
+
         /* Start of main static methods. */
         static void init();
         static void outline(float line_thickness);
@@ -73,7 +97,9 @@ namespace draw {
 
         static void set_fx(fx &shader_fx);
         static fx &get_fx();
+        static void active_fx();
         static void draw();
+        static void flush();
         /* End of main static methods. */
     };
 }

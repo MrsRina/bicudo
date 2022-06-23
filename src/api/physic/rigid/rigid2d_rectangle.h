@@ -9,8 +9,9 @@
 class rigid2d_rectangle : public rigid2d {
 protected:
     math::vec2 vertices[4], edges_normalised[4];
+    math::vec2 old_pos;
 public:
-    float w, h, angle, angular_velocity, angular_acceleration;
+    float w, h;
 
     rigid2d_rectangle(math::vec2 vec_center, float val_mass, float val_friction, float val_restitution, float width, float height);
     ~rigid2d_rectangle() {}

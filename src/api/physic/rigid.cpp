@@ -42,10 +42,17 @@ void rigid2d_solve_collide(rigid2d *&r1, rigid2d *&r2) {
     }
 
     math::vec2 n = geometry::collision_info.normal;
-    math::vec2 v1 = r1->velocity;
-    math::vec2 v2 = r2->velocity;
-    math::vec2 relative_velocity = v2 - v1;
+    math::vec2 start = geometry::collision_info.start * (r2->mass / (r1->mass + r2->mass));
+    math::vec2 end = geometry::collision_info.end * (r1->mass / (r1->mass + r2->mass));
+    math::vec2 p = start + end;
 
+    math::vec2 c1 = p - r1->center;
+    math::vec2 c2 = p - r2->center;
+
+    math::vec2 v1 = r1->velocity + math::vec2(-1.0f * r1->angular_velocity * c1.y, r1->angular_velocity * c1.x);
+    math::vec2 v2 = r2->velocity + math::vec2(-1.0f * r2->angular_velocity * c2.y, r2->angular_velocity * c2.x);
+
+    math::vec2 relative_velocity = v2 - v1;
     float relative_velocity_normal = relative_velocity.dot(n);
 
     if (relative_velocity_normal > 0.0f) {
@@ -54,25 +61,38 @@ void rigid2d_solve_collide(rigid2d *&r1, rigid2d *&r2) {
 
     float new_restitution = std::min(r1->restitution, r2->restitution);
     float new_friction = std::min(r1->friction, r2->friction);
+
+    float c1_cross_n = c1.cross(n);
+    float c2_cross_n = c2.cross(n);
+
     float jn = -(1.0f + new_restitution) * relative_velocity_normal;
 
-    jn /= (r1->mass + r2->mass);
+    jn /= (r1->mass + r2->mass + c1_cross_n * c1_cross_n * r1->inertia + c2_cross_n * c2_cross_n * r2->inertia);
     math::vec2 impulse = n * jn;
 
     r1->velocity -= impulse * r1->mass;
     r2->velocity += impulse * r2->mass;
 
+    r1->angular_velocity -= c1_cross_n * jn * r1->inertia;
+    r2->angular_velocity += c2_cross_n * jn * r2->inertia;
+
     math::vec2 tangent = relative_velocity - n * relative_velocity.dot(n);
     tangent = tangent.normalize() * -1.0f;
 
+    float c1_cross_t = c1.cross(tangent);
+    float c2_cross_t = c2.cross(tangent);
+
     float jt = -(1.0f + new_restitution) * relative_velocity.dot(tangent) * new_friction;
-    jt /= r1->mass + r2->mass;
+    jt /= (r1->mass + r2->mass + c1_cross_t * c1_cross_t + r1->mass + c2_cross_t * c2_cross_t * r2->inertia);
     jt = jt > jn ? jn : jt;
 
     impulse = tangent * jt;
 
     r1->velocity -= impulse * r1->mass;
     r2->velocity += impulse * r2->mass;
+
+    r1->angular_velocity -= c1_cross_t * jt * r1->inertia;
+    r2->angular_velocity += c2_cross_t * jt * r2->inertia;
 }
 
 bool rigid2d_collide_with_point(rigid2d *&r, float x, float y) {

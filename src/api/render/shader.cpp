@@ -1,10 +1,13 @@
 #include "shader.h"
 #include "api/util/util.h"
 
-fx shader::fx_default = fx();
+fx shader::fx_default;
+fx shader::fx_terrain;
 
 float shader::mat4x4_ortho2d[16];
 float shader::mat2x2_viewport[4];
+float shader::mat4x4_perspective[16];
+float shader::mat4x4_view[16];
 
 void fx::use() {
 	glUseProgram(this->program);
@@ -32,16 +35,12 @@ void fx::set_float(const std::string &name, float val) {
 
 void shader::init() {
 	shader::load(shader::fx_default, "data/fx/fx_default.vsh", "data/fx/fx_default.fsh");
+    shader::load(shader::fx_terrain, "data/fx/fx_terrain.vsh", "data/fx/fx_terrain.fsh");
 }
 
 void shader::context() {
 	glGetFloatv(GL_VIEWPORT, mat2x2_viewport);
 	math::ortho2d(mat4x4_ortho2d, 0.0f, mat2x2_viewport[2], mat2x2_viewport[3], 0.0f);
-
-	fx_default.use();
-	fx_default.set_mat4x4("u_matrix", mat4x4_ortho2d);
-	fx_default.set_float("u_viewport_height", mat2x2_viewport[3]);
-	fx_default.end();
 }
 
 bool shader::compile(GLuint &shader, GLuint shader_mode, const char* shader_str) {

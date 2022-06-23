@@ -31,9 +31,9 @@ void module_camera::on_update() {
 }
 
 void module_camera::on_render() {
-    draw::mesh::batch(GL_TRIANGLES, 6);
-    draw::mesh::vertex(0.0f, 0);
-    draw::mesh::vertex(0.0f, 0);
-    draw::mesh::vertex(0.0f, 0);
-    draw::mesh::draw();
+    draw::mesh2d::batch(GL_TRIANGLES, 6);
+    draw::mesh2d::vertex(0.0f, 0);
+    draw::mesh2d::vertex(0.0f, 0);
+    draw::mesh2d::vertex(0.0f, 0);
+    draw::mesh2d::draw();
 }

@@ -11,6 +11,8 @@ protected:
     rigid::type type;
 public:
     math::vec2 center, velocity, acceleration;
+
+    float angle, angular_velocity, angular_acceleration;
     float mass, friction, restitution, inertia;
     float minx, maxx, miny, maxy;
 

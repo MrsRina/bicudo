@@ -27,12 +27,15 @@ struct fx {
  * Shader management.
  **/
 struct shader {
-	/* All fx registered in game. */
+	/* All active_fx registered in game. */
 	static fx fx_default;
+    static fx fx_terrain;
 
 	/* Matrix used in shaders. */
 	static float mat4x4_ortho2d[16];
 	static float mat2x2_viewport[4];
+    static float mat4x4_view[16];
+    static float mat4x4_perspective[16];
 
 	static void init();
 	static void context();

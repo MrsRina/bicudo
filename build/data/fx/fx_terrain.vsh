@@ -1,4 +1,4 @@
-#verison core 330
+#version 330 core
 
 in vec4 attribute_pos;
 in vec4 attribute_fragcolor;

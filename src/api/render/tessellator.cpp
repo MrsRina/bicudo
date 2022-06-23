@@ -1,30 +1,32 @@
 #include "tessellator.h"
 
-GLuint draw::mesh::attribute_material = 0;
-GLuint draw::mesh::attribute_vertex   = 0;
-GLuint draw::mesh::draw_mode         = 0;
+GLuint draw::mesh2d::attribute_material = 0;
+GLuint draw::mesh2d::attribute_vertex   = 0;
+GLuint draw::mesh2d::draw_mode         = 0;
 
-GLuint draw::mesh::buffer_vertex    = 0;
-GLuint draw::mesh::buffer_material = 0;
-GLuint draw::mesh::buffer_texture   = 0;
-GLuint draw::mesh::bind_texture     = 0;
+GLuint draw::mesh2d::buffer_vertex    = 0;
+GLuint draw::mesh2d::buffer_vao       = 0;
+GLuint draw::mesh2d::buffer_material  = 0;
+GLuint draw::mesh2d::buffer_texture   = 0;
+GLuint draw::mesh2d::bind_texture     = 0;
 
-GLfloat* draw::mesh::linked_vertex_data   = (GLfloat*) 0;
-GLfloat* draw::mesh::linked_material_data = (GLfloat*) 0;
+GLfloat* draw::mesh2d::linked_vertex_data   = (GLfloat*) 0;
+GLfloat* draw::mesh2d::linked_material_data = (GLfloat*) 0;
 
-util::color draw::mesh::material_color = util::color(0, 0, 0);
-uint32_t draw::mesh::iterator_vertex   = 0;
-uint32_t draw::mesh::iterator_material = 0;
-uint32_t draw::mesh::size_of_draw      = 0;
+util::color draw::mesh2d::material_color = util::color(0, 0, 0);
+uint32_t draw::mesh2d::iterator_vertex   = 0;
+uint32_t draw::mesh2d::iterator_material = 0;
+uint32_t draw::mesh2d::size_of_draw      = 0;
 
-float draw::mesh::outline_line_thickness = 0.0f;
-bool draw::mesh::flag_ptr = false;
-bool draw::mesh::flag_texture = false;
+float draw::mesh2d::outline_line_thickness = 0.0f;
+bool draw::mesh2d::flag_ptr = false;
+bool draw::mesh2d::flag_texture = false;
+bool draw::mesh2d::flag_fx = false;
 
-fx draw::mesh::concurrent_fx;
+fx draw::mesh2d::concurrent_fx;
 
 void draw::init() {
-    draw::mesh::init();
+    draw::mesh2d::init();
 }
 
 void draw::shape::add_color_to_mesh_material_rgba(util::color &color) {
@@ -90,35 +92,33 @@ void draw::shape::rect(float x, float y, float w, float h, material &material_da
     MESH_RECT_XYZ[MESH_ITERATOR++] = 0;
 
     // Start draw us shape.
-    draw::mesh::batch(GL_TRIANGLES, 6, true);
+    draw::mesh2d::batch(GL_TRIANGLES, 6, true);
 
     if (material_data.texture.id != 0) {
-        draw::mesh::material(material_data.texture);
-        draw::mesh::material(material_data.uv_coordinates, 12);
+        draw::mesh2d::material(material_data.texture);
+        draw::mesh2d::material(material_data.uv_coordinates, 12);
     } else {
         draw::shape::add_color_to_mesh_material_rgba(material_data.color);
-        draw::mesh::material(MESH_MATERIAL_COLOR_RGBA, 24);
+        draw::mesh2d::material(MESH_MATERIAL_COLOR_RGBA, 24);
     }
 
-    draw::mesh::get_fx().use();
-    draw::mesh::get_fx().set_float("u_center_x", x + (w / 2.0f));
-    draw::mesh::get_fx().set_float("u_center_y", y + (h / 2.0f));
+    if (!draw::mesh2d::flag_fx) {
+        draw::mesh2d::get_fx().use();
+    }
 
-    draw::mesh::vertex(MESH_RECT_XYZ, 18);
-    draw::mesh::draw();
+    draw::mesh2d::get_fx().set_float("u_center_x", x + (w / 2.0f));
+    draw::mesh2d::get_fx().set_float("u_center_y", y + (h / 2.0f));
+
+    draw::mesh2d::vertex(MESH_RECT_XYZ, 18);
+    draw::mesh2d::draw();
 }
 
 void draw::shape::circle(float x, float y, float radius, material &material_data) {
-    draw::mesh::get_fx().use();
-    draw::mesh::get_fx().set_bool("u_set_radius", true);
-    draw::mesh::get_fx().set_float("u_radius_dist", radius);
-    draw::mesh::get_fx().end();
+    draw::mesh2d::active_fx();
+    draw::mesh2d::get_fx().set_bool("u_set_radius", true);
+    draw::mesh2d::get_fx().set_float("u_radius_dist", radius);
 
     draw::shape::rect(x - (radius / 2), y - (radius / 2), radius, radius, material_data);
-
-    draw::mesh::get_fx().use();
-    draw::mesh::get_fx().set_bool("u_radius", false);
-    draw::mesh::get_fx().end();
 }
 
 void draw::shape::shape(math::vec2 &v0, math::vec2 &v1, math::vec2 &v2, math::vec2 &v3, material &material_data) {
@@ -149,27 +149,30 @@ void draw::shape::shape(math::vec2 &v0, math::vec2 &v1, math::vec2 &v2, math::ve
     MESH_RECT_XYZ[MESH_ITERATOR++] = 0;
 
     // Start draw us shape.
-    draw::mesh::batch(GL_TRIANGLES, 6, true);
+    draw::mesh2d::batch(GL_TRIANGLES, 6, true);
 
     if (material_data.texture.id != 0) {
-        draw::mesh::material(material_data.texture);
-        draw::mesh::material(material_data.uv_coordinates, 12);
+        draw::mesh2d::material(material_data.texture);
+        draw::mesh2d::material(material_data.uv_coordinates, 12);
     } else {
         draw::shape::add_color_to_mesh_material_rgba(material_data.color);
-        draw::mesh::material(MESH_MATERIAL_COLOR_RGBA, 24);
+        draw::mesh2d::material(MESH_MATERIAL_COLOR_RGBA, 24);
     }
 
     math::vec2 center = v1 + (v1 - v2);
 
-    draw::mesh::get_fx().use();
-    draw::mesh::get_fx().set_float("u_center_x", center.x);
-    draw::mesh::get_fx().set_float("u_center_y", center.y);
+    if (!draw::mesh2d::flag_fx) {
+        draw::mesh2d::get_fx().use();
+    }
 
-    draw::mesh::vertex(MESH_RECT_XYZ, 18);
-    draw::mesh::draw();
+    draw::mesh2d::get_fx().set_float("u_center_x", center.x);
+    draw::mesh2d::get_fx().set_float("u_center_y", center.y);
+
+    draw::mesh2d::vertex(MESH_RECT_XYZ, 18);
+    draw::mesh2d::draw();
 }
 
-void draw::mesh::init() {
+void draw::mesh2d::init() {
     glGenBuffers(1, &buffer_vertex);
     glGenBuffers(1, &buffer_material);
     glGenBuffers(1, &buffer_texture);
@@ -190,11 +193,11 @@ void draw::mesh::init() {
     set_fx(shader::fx_default);
 }
 
-void draw::mesh::outline(float line_thickness) {
+void draw::mesh2d::outline(float line_thickness) {
     outline_line_thickness = line_thickness;
 }
 
-void draw::mesh::batch(GLuint mode, uint32_t size, bool mesh) {
+void draw::mesh2d::batch(GLuint mode, uint32_t size, bool mesh) {
     if (!mesh) {
         linked_vertex_data = new GLfloat[size * 2];
     }
@@ -205,60 +208,65 @@ void draw::mesh::batch(GLuint mode, uint32_t size, bool mesh) {
     flag_texture = false;
 }
 
-void draw::mesh::vertex(GLfloat* vertex, uint32_t size) {
+void draw::mesh2d::vertex(GLfloat* vertex, uint32_t size) {
     linked_vertex_data = vertex;
     iterator_vertex = size;
 }
 
-void draw::mesh::material(GLfloat* material, uint32_t size) {
+void draw::mesh2d::material(GLfloat* material, uint32_t size) {
     linked_material_data = material;
     iterator_material = size;
 }
 
-void draw::mesh::material(util::texture &texture) {
+void draw::mesh2d::material(util::texture &texture) {
     flag_texture = true;
     bind_texture = texture.id;
 }
 
-void draw::mesh::vertex(float x, float y) {
+void draw::mesh2d::vertex(float x, float y) {
     linked_vertex_data[iterator_material++] = x;
     linked_vertex_data[iterator_material++] = y;
 }
 
-void draw::mesh::material(float u, float v) {
+void draw::mesh2d::material(float u, float v) {
     linked_material_data[iterator_material++] = u;
     linked_material_data[iterator_material++] = v;
 }
-void draw::mesh::color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) {
+void draw::mesh2d::color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) {
     linked_material_data[iterator_material++] = (float) red / 255.0f;
     linked_material_data[iterator_material++] = (float) green / 255.0f;
     linked_material_data[iterator_material++] = (float) blue / 255.0f;
     linked_material_data[iterator_material++] = (float) alpha / 255.0f;
 }
 
-void draw::mesh::color(util::color &color) {
+void draw::mesh2d::color(util::color &color) {
     linked_material_data[iterator_material++] = color.redf();
     linked_material_data[iterator_material++] = color.greenf();
     linked_material_data[iterator_material++] = color.bluef();
     linked_material_data[iterator_material++] = color.alphaf();
 }
 
-void draw::mesh::set_fx(fx &shader_fx) {
+void draw::mesh2d::set_fx(fx &shader_fx) {
     concurrent_fx = shader_fx;
 }
 
-fx &draw::mesh::get_fx() {
+fx &draw::mesh2d::get_fx() {
     return concurrent_fx;
 }
 
-void draw::mesh::draw() {
-    concurrent_fx.use();
+void draw::mesh2d::draw() {
+    if (!flag_fx) {
+        concurrent_fx.use();
+    }
 
     attribute_vertex = glGetAttribLocation(concurrent_fx.program, "attribute_pos");
     attribute_material = glGetAttribLocation(concurrent_fx.program, "attribute_fragcolor");
 
     concurrent_fx.set_bool("u_set_texture", flag_texture);
     concurrent_fx.set_int("u_active_texture", 0);
+
+    concurrent_fx.set_mat4x4("u_matrix", shader::mat4x4_ortho2d);
+    concurrent_fx.set_float("u_viewport_height", shader::mat2x2_viewport[3]);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -291,5 +299,39 @@ void draw::mesh::draw() {
         delete linked_material_data;
     }
 
+    concurrent_fx.set_bool("u_set_circle", false);
     concurrent_fx.end();
+    flag_fx = false;
+
+    glDisableVertexAttribArray(attribute_vertex);
+    glDisableVertexAttribArray(attribute_material);
+}
+
+void draw::mesh2d::flush() {
+    size_of_draw = 0;
+}
+
+void draw::mesh2d::active_fx() {
+    concurrent_fx.use();
+    flag_fx = true;
+}
+
+void draw::mesh3d_instanced::init() {
+
+}
+
+void draw::mesh3d_instanced::batch() {
+
+}
+
+void draw::mesh3d_instanced::draw() {
+
+}
+
+void draw::mesh3d_instanced::vertex() {
+
+}
+
+void draw::mesh3d_instanced::refresh() {
+
 }

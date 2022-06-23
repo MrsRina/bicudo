@@ -15,6 +15,7 @@ protected:
     // Rigid list to update collision between 2D.
     std::array<rigid2d*, 2048> rigid2d_list;
     uint32_t rigid2d_iterator;
+    uint32_t x = 0, y = 0, prev_x = 0, prev_y = 0;
 
     /* Start of methods used in physic engine. */
     void update_pos();
@@ -23,8 +24,8 @@ protected:
 public:
     // Physic configs.
     bool setting_flag_positional_correction_flag = true;
-    uint8_t setting_iterations_count = 3;
-    float setting_pos_correction_rate = 1.0f;
+    uint8_t setting_iterations_count = 14;
+    float setting_pos_correction_rate = 0.8f;
     material material_rigid2d_objects;
 
     /* Start of setters and getters. */

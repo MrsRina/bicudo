@@ -11,16 +11,10 @@ void update_task(task* atomic_task) {
 
     uint64_t previous_ticks = SDL_GetTicks64();
     uint64_t current_ticks = SDL_GetTicks64();
-    uint8_t interval = 16;
+    uint8_t interval = 1000 / 75;
 
     while (!atomic_task->get_atomic_boolean_state()) {
-        if (atomic_task == nullptr) {
-            break;
-        }
-
-        current_ticks = SDL_GetTicks64() - previous_ticks;
-
-        if (current_ticks > interval) {
+        if ((current_ticks = SDL_GetTicks64() - previous_ticks) > interval) {
             previous_ticks = SDL_GetTicks64();
 
             // Set the locked dt.
@@ -101,6 +95,7 @@ void game_core::init_window() {
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 }
 
 void game_core::init_context() {
@@ -109,6 +104,8 @@ void game_core::init_context() {
     // Init static components.
     shader::init();
     draw::init();
+
+    this->the_camera = new camera();
 }
 
 void game_core::init_services() {
@@ -176,17 +173,17 @@ void game_core::mainloop() {
      * The game mainloop.
      */
     while (this->is_running) {
-        // Update input and events unsynchronized.
-        while (SDL_PollEvent(&sdl_event)) {
-            this->on_event(sdl_event);
-        }
-
         // Get the difference from previous tick.
         this->current_ticks = SDL_GetTicks64() - this->previous_ticks;
 
         // If the difference is not less than interval tick,
         // we update and render this moment tick.
         if (this->current_ticks > this->interval) {
+            // Update input and events unsynchronized.
+            while (SDL_PollEvent(&sdl_event)) {
+                this->on_event(sdl_event);
+            }
+
             this->previous_ticks = SDL_GetTicks64();
             concurrent_dt += this->current_ticks;
 
@@ -199,7 +196,7 @@ void game_core::mainloop() {
 
             // Swap buffers and flip.
             SDL_GL_SwapWindow(this->sdl_window);
-        
+
             // Reset delta and get the game fps.
             if (concurrent_dt > 1000) {
                 this->fps = this->elapsed_frames;
@@ -207,6 +204,8 @@ void game_core::mainloop() {
                 concurrent_dt = 0;
             }
         }
+
+        SDL_Delay(this->interval);
     }
 
     thread_locked_update.join();
@@ -280,7 +279,7 @@ void game_core::on_update() {
 }
 
 void game_core::on_render() {
-    glViewport(0, 0, this->screen_width, this->screen_height);
+    glViewport(0, 0, game_core::screen_width, game_core::screen_height);
     shader::context();
 
     glClearColor(0.5, 0.5, 0.5, 0.5);
@@ -316,4 +315,12 @@ void game_core::set_game_context(context* raw_game_context) {
 
 context* game_core::get_game_context() {
     return this->game_context;
+}
+
+camera *game_core::get_camera() {
+    return this->the_camera;
+}
+
+SDL_Window *game_core::get_sdl_win() {
+    return this->sdl_window;
 }

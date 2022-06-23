@@ -4,6 +4,8 @@
 extern game_core* const BICUDO;
 
 namespace bicudo {
+    camera* camera();
+
     void set_guiscreen(gui* new_gui);
     gui* current_guiscreen();
 

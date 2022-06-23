@@ -192,6 +192,10 @@ namespace math {
         }
     };
 
+    float clampf(float val, float min, float max);
+    int32_t clampi(int32_t val, int32_t min, int32_t max);
+    void clamp_vec2(vec2 vec, float min_vec_len, float max_vec_len);
+
     float radians(float degress);
 
     void perspective(float* mat, float fov, float aspect, float z_near, float);
