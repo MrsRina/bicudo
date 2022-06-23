@@ -33,6 +33,10 @@ void physic_service::on_locked_update() {
         for (x = 0; x < this->rigid2d_iterator; x++) {
             rigid_obj1 = this->rigid2d_list[x];
 
+            if (rigid_obj1->mass == 0.0f) {
+                continue;
+            }
+
             for (y = x + 1; y < this->rigid2d_iterator; y++) {
                 rigid_obj2 = this->rigid2d_list[y];
 

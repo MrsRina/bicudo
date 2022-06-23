@@ -12,7 +12,7 @@ float cx, cy, x, y, prev_x, prev_y;
 
 void scene_physic::on_start() {
     for (uint8_t i = 0; i < 30; i++) {
-        auto rigid2d_obj = new rigid2d_rectangle(math::vec2(rand() % 1280, 200 + rand() % 100), 50 + (rand() % 5), 0.0f, 1.0f, rand() % 75, rand() % 75);
+        auto rigid2d_obj = new rigid2d_rectangle(math::vec2(rand() % 1280, 200 + rand() % 100), 1.0f, 1.0f, 0.2f, rand() % 75, rand() % 75);
     }
 
     auto rigid2d_obj = new rigid2d_rectangle(math::vec2(400, 600), 0.0f, 0.0f, 0.0f, 1280, 100);
