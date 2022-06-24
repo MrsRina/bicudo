@@ -59,7 +59,6 @@ protected:
     /* End of setup methods. */
 
     /* Start of main methods called every tick. */
-    void on_event(SDL_Event &sdl_event);
     void on_update();
     void on_render();
     /* End of main methods. */
@@ -107,6 +106,7 @@ public:
     void refresh();
     void init();
     void quit();
+    void on_event(SDL_Event &sdl_event);
     void mainloop();
     void mainloop_locked_update();
     /* End of main methods. */

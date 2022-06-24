@@ -13,17 +13,20 @@ void update_task(task* atomic_task) {
     uint64_t current_ticks = SDL_GetTicks64();
     uint8_t interval = 1000 / 75;
 
+    SDL_Event sdl_event;
+
     while (!atomic_task->get_atomic_boolean_state()) {
-        if ((current_ticks = SDL_GetTicks64() - previous_ticks) > interval) {
-            previous_ticks = SDL_GetTicks64();
+        current_ticks = SDL_GetTicks64() - previous_ticks;
 
-            // Set the locked dt.
-            util::timing::locked_delta += current_ticks;
-            util::timing::locked_delta_time = (float) current_ticks / 100.0f;
+        // Set the locked dt.
+        util::timing::locked_delta += current_ticks;
+        util::timing::locked_delta_time = (float) current_ticks / 100.0f;
 
-            // Call main object into this thread.
-            BICUDO->mainloop_locked_update();
-        }
+        // Call main object into this thread.
+        BICUDO->mainloop_locked_update();
+        previous_ticks = SDL_GetTicks64();
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(interval));
     }
 
     atomic_task->set_atomic_boolean_end_state(true);
@@ -94,8 +97,8 @@ void game_core::init_window() {
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+    //SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetSwapInterval(1);
 }
 
 void game_core::init_context() {
@@ -155,8 +158,6 @@ void game_core::quit() {
 }
 
 void game_core::mainloop() {
-    SDL_Event sdl_event;
-
     this->current_ticks = SDL_GetTicks64();
     this->previous_ticks = SDL_GetTicks64();
 
@@ -167,7 +168,7 @@ void game_core::mainloop() {
     uint64_t concurrent_dt = SDL_GetTicks64();
 
     // Initialize the locked task.
-    std::thread thread_locked_update(update_task, bicudo::create_task("locked-update"));
+   std::thread thread_locked_update(update_task, bicudo::create_task("locked-update"));
 
     /*
      * The game mainloop.
@@ -179,9 +180,11 @@ void game_core::mainloop() {
         // If the difference is not less than interval tick,
         // we update and render this moment tick.
         if (this->current_ticks > this->interval) {
+            SDL_Event sdl_event;
+
             // Update input and events unsynchronized.
             while (SDL_PollEvent(&sdl_event)) {
-                this->on_event(sdl_event);
+                BICUDO->on_event(sdl_event);
             }
 
             this->previous_ticks = SDL_GetTicks64();
@@ -194,18 +197,15 @@ void game_core::mainloop() {
             this->on_render();
             this->elapsed_frames++;
 
-            // Swap buffers and flip.
-            SDL_GL_SwapWindow(this->sdl_window);
-
-            // Reset delta and get the game fps.
-            if (concurrent_dt > 1000) {
+            if (concurrent_dt > 1000)  {
                 this->fps = this->elapsed_frames;
                 this->elapsed_frames = 0;
                 concurrent_dt = 0;
             }
-        }
 
-        SDL_Delay(this->interval);
+            // Swap buffers and flip.
+            SDL_GL_SwapWindow(this->sdl_window);
+        }
     }
 
     thread_locked_update.join();

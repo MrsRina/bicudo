@@ -11,6 +11,11 @@ void util::log(std::string string) {
     std::cout << string.c_str() << "\n";
 }
 
+void util::dispatch_event(SDL_Event &sdl_event) {
+    sdl_event.type = SDL_USEREVENT;
+    SDL_PushEvent(&sdl_event);
+}
+
 void util::color::set(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) {
     this->r = red;
     this->g = green;

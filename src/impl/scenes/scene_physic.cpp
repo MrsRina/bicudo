@@ -7,15 +7,42 @@ material material_shape;
 rigid2d* rigid_object;
 
 scene_physic *scene_physic::instance = nullptr;
+draw::mesh3d_instanced mesh;
 
 float cx, cy, x, y, prev_x, prev_y;
+bool moving;
 
 void scene_physic::on_start() {
-    for (uint8_t i = 0; i < 30; i++) {
-        auto rigid2d_obj = new rigid2d_rectangle(math::vec2(rand() % 1280, 200 + rand() % 100), 1.0f, 1.0f, 0.2f, rand() % 75, rand() % 75);
-    }
+   for (uint32_t i = 0; i < 40; i++) {
+       auto rigid2d_obj = new rigid2d_rectangle(math::vec2(rand() % 1280, 200 + rand() % 100), 200.0f, 1.0f, 0.2f, rand() % 75, rand() % 75);
+       rigid2d_obj->set_physic(rigid::physic::FULL);
+   }
 
-    auto rigid2d_obj = new rigid2d_rectangle(math::vec2(400, 600), 0.0f, 0.0f, 0.0f, 1280, 100);
+   auto rigid2d_obj = new rigid2d_rectangle(math::vec2(400, 600), 0.0f, 0.0f, 0.0f, 1280, 100);
+
+   float vertex_positions[12 * 6] = {
+         0.5,  0.5,  0.5,  0.5, -0.5,  0.5,  0.5, -0.5, -0.5,  0.5,  0.5, -0.5,
+        -0.5,  0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5,  0.5, -0.5,  0.5,  0.5,
+         0.5,  0.5,  0.5,  0.5,  0.5, -0.5, -0.5,  0.5, -0.5, -0.5,  0.5,  0.5,
+        -0.5, -0.5,  0.5, -0.5, -0.5, -0.5,  0.5, -0.5, -0.5,  0.5, -0.5,  0.5,
+        -0.5,  0.5,  0.5, -0.5, -0.5,  0.5,  0.5, -0.5,  0.5,  0.5,  0.5,  0.5,
+         0.5,  0.5, -0.5,  0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5,  0.5, -0.5
+   };
+
+    float material[12 * 6] = {
+        0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0,
+        0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0,
+        0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0,
+        0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0,
+        0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0,
+        0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0
+    };
+
+   mesh = draw::mesh3d_instanced(shader::fx_terrain);
+   mesh.init();
+   mesh.vertex(vertex_positions, 12 * 6);
+   mesh.material(material, 12 * 6);
+   mesh.refresh();
 }
 
 void scene_physic::on_end() {
@@ -25,6 +52,8 @@ void scene_physic::on_end() {
 void scene_physic::on_event(SDL_Event &sdl_event) {
     switch (sdl_event.type) {
         case SDL_MOUSEBUTTONDOWN: {
+            bicudo::camera()->position.z -= 50;
+
             rigid_object = nullptr;
 
             for (uint32_t i = 0; i < bicudo::service_physic().get_rigid2d_iterator(); i++) {
@@ -72,10 +101,10 @@ void scene_physic::on_locked_update() {
 }
 
 void scene_physic::on_update() {
-    if (rigid_object != nullptr) {
-}
+
 }
 
 void scene_physic::on_render() {
-    bicudo::service_physic().on_render();
+    //bicudo::service_physic().on_render();
+    mesh.draw();
 }

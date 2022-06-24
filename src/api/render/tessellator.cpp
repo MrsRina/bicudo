@@ -333,23 +333,12 @@ fx &draw::mesh3d_instanced::get_fx() {
 
 void draw::mesh3d_instanced::init() {
     glGenVertexArrays(1, &this->vao_buffer_list);
+    glBindVertexArray(this->vao_buffer_list);
 
-    glGenBuffers(1, &this->buffer_vertex);
+    glGenBuffers(1, &this->buffer_position);
     glGenBuffers(1, &this->buffer_material);
-    glGenBuffers(1, &this->buffer_material_color);
-}
-
-void draw::mesh3d_instanced::batch(float* vertex_list, uint32_t vertex_list_size, float* material_list, uint32_t material_list_size) {
-    this->linked_vertex_data = vertex_list;
-    this->linked_material = material_list;
-
-    this->sizeof_vertex = vertex_list_size;
-    this->sizeof_material = material_list_size;
-
-    this->refresh();
-
-    this->linked_vertex_data = (float*) 0;
-    this->linked_material = (float*) 0;
+    glGenBuffers(1, &this->buffer_shader);
+    glGenBuffers(1, &this->buffer_total);
 }
 
 void draw::mesh3d_instanced::draw() {
@@ -358,28 +347,49 @@ void draw::mesh3d_instanced::draw() {
     glBindVertexArray(0);
 }
 
-void draw::mesh3d_instanced::vertex() {
-
-}
-
 void draw::mesh3d_instanced::refresh() {
     glBindVertexArray(this->vao_buffer_list);
 
-    this->concurrent_shader.use();
+    glBindBuffer(GL_ARRAY_BUFFER, this->buffer_position);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+    glEnableVertexAttribArray(0);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * this->sizeof_vertex, this->linked_vertex_position, GL_STATIC_DRAW);
 
-    this->attribute_vertex = glGetAttribLocation(this->concurrent_shader.program, "attribute_pos");
-    this->attribute_material = glGetAttribLocation(this->concurrent_shader.program, "attribute_material");
+    glBindBuffer(GL_ARRAY_BUFFER, this->buffer_material);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * this->sizeof_material, this->linked_material, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
 
-    glEnableVertexAttribArray(this->attribute_vertex);
-    glEnableVertexAttribArray(this->attribute_material);
+    glBindBuffer(GL_ARRAY_BUFFER, this->buffer_shader);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * this->sizeof_shader, this->linked_shader, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 0, (void*) 0);
 
-    glBindBuffer(GL_ARRAY_BUFFER, this->buffer_vertex);
-    glVertexAttribPointer(this->attribute_vertex, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * this->sizeof_vertex, this->linked_vertex_data, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ARRAY_BUFFER, this->buffer_material_color);
-    glVertexAttribPointer(this->attribute_material, 4, GL_FLOAT, GL_FALSE, 0, (void*) 0);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * this->sizeof_material, this->linked_vertex_data, GL_STATIC_DRAW);
-
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->buffer_total);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * this->sizeof_mesh, this->linked_buffer, GL_STATIC_DRAW);
     glBindVertexArray(0);
+}
+
+void draw::mesh3d_instanced::batch() {
+
+}
+
+void draw::mesh3d_instanced::vertex(float *mesh, uint32_t size) {
+    this->linked_vertex_position = mesh;
+    this->sizeof_vertex = size;
+}
+
+void draw::mesh3d_instanced::mesh(float *mesh, uint32_t size) {
+    this->linked_buffer = mesh;
+    this->sizeof_mesh = size;
+}
+
+void draw::mesh3d_instanced::material(float *mesh, uint32_t size) {
+    this->linked_material = mesh;
+    this->sizeof_material = size;
+}
+
+void draw::mesh3d_instanced::shader(float *mesh, uint32_t size) {
+    this->linked_shader = mesh;
+    this->sizeof_shader = size;
 }

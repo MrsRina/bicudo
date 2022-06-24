@@ -233,6 +233,7 @@ namespace util {
     };
 
     void log(std::string string);
+    void dispatch_event(SDL_Event &sdl_event);
 
     /**
      * Simple load and exists.

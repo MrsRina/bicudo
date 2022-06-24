@@ -63,14 +63,14 @@ void physic_service::on_update() {
 void physic_service::on_render() {
     rigid2d* rigid2d_obj = nullptr;
 
-    for (uint32_t i = 0; i < this->rigid2d_iterator; i++) {
-        rigid2d_obj = this->rigid2d_list[i];
+   for (uint32_t i = 0; i < this->rigid2d_iterator; i++) {
+       rigid2d_obj = this->rigid2d_list[i];
 
-        if (rigid2d_obj->get_type() == rigid::type::RIGID2D_RECTANGLE) {
-            auto rigid2d_rect_obj = (rigid2d_rectangle*) rigid2d_obj;
-            draw::shape::shape(rigid2d_rect_obj->get_vertices()[0], rigid2d_rect_obj->get_vertices()[1], rigid2d_rect_obj->get_vertices()[2], rigid2d_rect_obj->get_vertices()[3], this->material_rigid2d_objects);
-        }
-    }
+       if (rigid2d_obj->get_type() == rigid::type::RIGID2D_RECTANGLE) {
+           auto rigid2d_rect_obj = (rigid2d_rectangle*) rigid2d_obj;
+           draw::shape::shape(rigid2d_rect_obj->get_vertices()[0], rigid2d_rect_obj->get_vertices()[1], rigid2d_rect_obj->get_vertices()[2], rigid2d_rect_obj->get_vertices()[3], this->material_rigid2d_objects);
+       }
+   }
 }
 
 void physic_service::add_rigid2d(rigid2d *rigid2d_body) {

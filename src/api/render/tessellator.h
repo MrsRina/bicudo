@@ -40,16 +40,18 @@ namespace draw {
 
     class mesh3d_instanced {
     protected:
-        GLuint vao_buffer_list, buffer_vertex, buffer_material, buffer_material_color;
+        GLuint vao_buffer_list, buffer_position, buffer_material, buffer_shader, buffer_total;
         GLuint attribute_vertex, attribute_material_color, attribute_material;
 
-        float* linked_material_color;
-        float* linked_vertex_data;
+        float* linked_shader;
+        float* linked_vertex_position;
         float* linked_material;
+        float* linked_buffer;
 
-        uint32_t sizeof_mesh, sizeof_vertex, sizeof_material, sizeof_material_color;
+        uint32_t sizeof_mesh, sizeof_vertex, sizeof_material, sizeof_shader;
         fx concurrent_shader;
     public:
+        mesh3d_instanced() {}
         mesh3d_instanced(fx &shader_fx) {
             this->concurrent_shader = shader_fx;
         }
@@ -60,8 +62,11 @@ namespace draw {
         fx &get_fx();
 
         void init();
-        void batch(float* vertex_list, uint32_t vertex_list_size, float* material_list, uint32_t material_list_size);
-        void vertex();
+        void batch();
+        void vertex(float* mesh, uint32_t size);
+        void mesh(float* mesh, uint32_t size);
+        void material(float* mesh, uint32_t size);
+        void shader(float* mesh, uint32_t size);
         void refresh();
         void draw();
     };

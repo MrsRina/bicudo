@@ -55,21 +55,10 @@ void rigid2d_solve_collide(rigid2d *&r1, rigid2d *&r2) {
 }
 
 bool rigid2d_collide_with_point(rigid2d *&r, float x, float y) {
-    bool flag_point_collide = false;
-
-    switch (r->get_type()) {
-        case rigid::type::RIGID2D_RECTANGLE: {
-            auto rigid2d_rect = (rigid2d_rectangle*) r;
-            flag_point_collide = (
-                x > rigid2d_rect->get_vertices()[0].x && y > rigid2d_rect->get_vertices()[0].y &&
-                x < rigid2d_rect->get_vertices()[1].x && y > rigid2d_rect->get_vertices()[1].y &&
-                x < rigid2d_rect->get_vertices()[2].x && y < rigid2d_rect->get_vertices()[2].y &&
-                x > rigid2d_rect->get_vertices()[3].x && y < rigid2d_rect->get_vertices()[3].y
-            );
-
-            break;
-        }
-    }
+     bool flag_point_collide = (
+            x >= r->minx && y >= r->miny &&
+            y <= r->maxx && y <= r->maxy
+    );
 
     return flag_point_collide;
 }

@@ -5,6 +5,8 @@
 #ifndef CONTEXT_H
 #define CONTEXT_H
 
+const static uint32_t EVENT_TICK_UPDATE = 1;
+
 /**
  * Context to stuff in game.
  **/
