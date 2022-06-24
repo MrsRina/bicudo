@@ -2,6 +2,7 @@
 #include "api/client/instance.h"
 #include "api/render/tessellator.h"
 #include "api/physic/rigid.h"
+#include "api/util/tag.h"
 
 material material_shape;
 rigid2d* rigid_object;
@@ -13,21 +14,22 @@ float cx, cy, x, y, prev_x, prev_y;
 bool moving;
 
 void scene_physic::on_start() {
-   for (uint32_t i = 0; i < 40; i++) {
+
+    for (uint32_t i = 0; i < 40; i++) {
        auto rigid2d_obj = new rigid2d_rectangle(math::vec2(rand() % 1280, 200 + rand() % 100), 200.0f, 1.0f, 0.2f, rand() % 75, rand() % 75);
        rigid2d_obj->set_physic(rigid::physic::FULL);
-   }
+    }
 
-   auto rigid2d_obj = new rigid2d_rectangle(math::vec2(400, 600), 0.0f, 0.0f, 0.0f, 1280, 100);
+    auto rigid2d_obj = new rigid2d_rectangle(math::vec2(400, 600), 0.0f, 0.0f, 0.0f, 1280, 100);
 
-   float vertex_positions[12 * 6] = {
-         0.5,  0.5,  0.5,  0.5, -0.5,  0.5,  0.5, -0.5, -0.5,  0.5,  0.5, -0.5,
-        -0.5,  0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5,  0.5, -0.5,  0.5,  0.5,
-         0.5,  0.5,  0.5,  0.5,  0.5, -0.5, -0.5,  0.5, -0.5, -0.5,  0.5,  0.5,
-        -0.5, -0.5,  0.5, -0.5, -0.5, -0.5,  0.5, -0.5, -0.5,  0.5, -0.5,  0.5,
-        -0.5,  0.5,  0.5, -0.5, -0.5,  0.5,  0.5, -0.5,  0.5,  0.5,  0.5,  0.5,
-         0.5,  0.5, -0.5,  0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5,  0.5, -0.5
-   };
+    float vertex_positions[12 * 6] = {
+          0.5,  0.5,  0.5,  0.5, -0.5,  0.5,  0.5, -0.5, -0.5,  0.5,  0.5, -0.5,
+         -0.5,  0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5,  0.5, -0.5,  0.5,  0.5,
+          0.5,  0.5,  0.5,  0.5,  0.5, -0.5, -0.5,  0.5, -0.5, -0.5,  0.5,  0.5,
+         -0.5, -0.5,  0.5, -0.5, -0.5, -0.5,  0.5, -0.5, -0.5,  0.5, -0.5,  0.5,
+         -0.5,  0.5,  0.5, -0.5, -0.5,  0.5,  0.5, -0.5,  0.5,  0.5,  0.5,  0.5,
+          0.5,  0.5, -0.5,  0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5,  0.5, -0.5
+    };
 
     float material[12 * 6] = {
         0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0,
@@ -38,11 +40,16 @@ void scene_physic::on_start() {
         0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0
     };
 
-   mesh = draw::mesh3d_instanced(shader::fx_terrain);
-   mesh.init();
-   mesh.vertex(vertex_positions, 12 * 6);
-   mesh.material(material, 12 * 6);
-   mesh.refresh();
+    mesh = draw::mesh3d_instanced(shader::fx_terrain);
+    mesh.init();
+    mesh.vertex(vertex_positions, 12 * 6);
+    mesh.material(material, 12 * 6);
+    mesh.refresh();
+
+    tag::set("MoveForward", false);
+    tag::set("MoveStrafeLeft", false);
+    tag::set("MoveStrafeRight", false);
+    tag::set("MoveBack", false);
 }
 
 void scene_physic::on_end() {
@@ -74,6 +81,27 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
 
             break;
         }
+
+        case SDL_KEYDOWN: {
+            auto k = sdl_event.key.keysym.sym;
+
+            if (k == SDLK_w) {
+                tag::set("MoveForward", true);
+            }
+
+            break;
+        }
+
+        case SDL_KEYUP: {
+            auto k = sdl_event.key.keysym.sym;
+
+            if (k == SDLK_w) {
+                tag::set("MoveForward", false);
+            }
+
+            break;
+        }
+
         case SDL_MOUSEBUTTONUP: {
             rigid_object = nullptr;
 
