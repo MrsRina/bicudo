@@ -351,8 +351,8 @@ void draw::mesh3d_instanced::refresh() {
     glBindVertexArray(this->vao_buffer_list);
 
     glBindBuffer(GL_ARRAY_BUFFER, this->buffer_position);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
     glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * this->sizeof_vertex, this->linked_vertex_position, GL_STATIC_DRAW);
 
     glBindBuffer(GL_ARRAY_BUFFER, this->buffer_material);
@@ -367,7 +367,6 @@ void draw::mesh3d_instanced::refresh() {
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->buffer_total);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * this->sizeof_mesh, this->linked_buffer, GL_STATIC_DRAW);
-    glBindVertexArray(0);
 }
 
 void draw::mesh3d_instanced::batch() {

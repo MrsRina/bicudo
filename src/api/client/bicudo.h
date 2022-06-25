@@ -17,6 +17,7 @@
 #include "api/task/task_service.h"
 #include "api/physic/physic_service.h"
 #include "api/render/camera.h"
+#include "api/util/tag.h"
 
 static const uint32_t FEATURE_BUFFER_LIMIT = 256;
 

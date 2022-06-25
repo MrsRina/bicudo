@@ -44,6 +44,7 @@ void scene_physic::on_start() {
     mesh.init();
     mesh.vertex(vertex_positions, 12 * 6);
     mesh.material(material, 12 * 6);
+    mesh.mesh(material, 12 * 6);
     mesh.refresh();
 
     tag::set("MoveForward", false);
@@ -134,5 +135,5 @@ void scene_physic::on_update() {
 
 void scene_physic::on_render() {
     //bicudo::service_physic().on_render();
-    mesh.draw();
+    //mesh.draw();
 }
