@@ -1,11 +1,12 @@
 #include "camera.h"
 #include "api/client/instance.h"
 #include "includes/includes.h"
+#include <glm/gtc/matrix_transform.hpp>
 
 camera::camera() {
-    this->position = math::vec3(0, 0, 0);
-    this->world_up = math::vec3(0, 1.0f, 0);
-    this->front = math::vec3(0.0f, 0.0f, -1.0f);
+    this->position = glm::vec3(0, 0, 0);
+    this->world_up = glm::vec3(0, 1.0f, 0);
+    this->front = glm::vec3(0.0f, 0.0f, -1.0f);
     this->yaw = 0.0f;
     this->fov = 45;
     this->mouse_sensitivity = 0.1f;
@@ -14,13 +15,14 @@ camera::camera() {
 }
 
 void camera::calc_camera_rotation() {
-    this->front.x = cos(math::radians(this->yaw)) * cos(math::radians(this->pitch));
-    this->front.y = sin(math::radians(this->pitch));
-    this->front.z = sin(math::radians(this->yaw)) * cos(math::radians(this->pitch));
-    this->front = this->front.normalize();
+    glm::vec3 f;
 
-    this->right = (this->front.cross(this->world_up)).normalize();
-    this->up = (this->right.cross(this->front)).normalize();
+    f.x = cos(glm::radians(this->yaw)) * cos(glm::radians(this->pitch));
+    f.y = sin(glm::radians(this->pitch));
+    f.z = sin(glm::radians(this->yaw)) * cos(glm::radians(this->pitch));
+    this->front = glm::normalize(f);
+    this->right = glm::normalize(glm::cross(this->front, this->world_up));
+    this->up = glm::normalize(glm::cross(this->right, this->front));
 }
 
 void camera::update_camera_motion(float mx, float my, bool constrain_pitch) {
@@ -45,6 +47,9 @@ void camera::push(fx &shader_fx) {
 }
 
 void camera::calc_camera_matrix() {
-    math::perspective(shader::mat4x4_perspective, this->fov, ((float) game_core::screen_width / (float) game_core::screen_height), 0.1f, 2048.0f);
-    math::look_at(shader::mat4x4_view, this->position, this->position + this->front, this->up);
+    glm::mat4 perspective = glm::perspective(glm::radians(this->fov), ((float) game_core::screen_width / (float) game_core::screen_height), 0.1f, 1000.0f);
+    glm::mat4 look_at = glm::lookAt(this->position, this->position + this->front, this->up);
+
+    shader::mat4x4_perspective = &perspective[0][0];
+    shader::mat4x4_view = &look_at[0][0];
 }

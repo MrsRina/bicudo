@@ -6,8 +6,8 @@ fx shader::fx_terrain;
 
 float shader::mat4x4_ortho2d[16];
 float shader::mat2x2_viewport[4];
-float shader::mat4x4_perspective[16];
-float shader::mat4x4_view[16];
+float* shader::mat4x4_perspective;
+float* shader::mat4x4_view;
 
 void fx::use() {
 	glUseProgram(this->program);

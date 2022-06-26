@@ -34,8 +34,8 @@ struct shader {
 	/* Matrix used in shaders. */
 	static float mat4x4_ortho2d[16];
 	static float mat2x2_viewport[4];
-    static float mat4x4_view[16];
-    static float mat4x4_perspective[16];
+    static float* mat4x4_view;
+    static float* mat4x4_perspective;
 
 	static void init();
 	static void context();

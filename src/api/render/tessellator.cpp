@@ -264,11 +264,7 @@ void draw::mesh2d::active_fx() {
 void draw::mesh3d_instanced::set_fx(fx &shader_fx) {
     if (this->concurrent_shader.program != shader_fx.program) {
         this->concurrent_shader = shader_fx;
-
-        this->concurrent_shader.use();
-        this->attribute_vertex = glGetAttribLocation(this->concurrent_shader.program, "attribute_pos");
-        this->attribute_material = glGetAttribLocation(this->concurrent_shader.program, "attribute_material");
-        this->concurrent_shader.end();
+        this->attribute_vertex = 0;
     }
 }
 
@@ -287,27 +283,28 @@ void draw::mesh3d_instanced::init() {
 }
 
 void draw::mesh3d_instanced::draw() {
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(0.0f, 1.0f, 0.0f));
-    model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
-
     this->concurrent_shader.use();
     bicudo::camera()->push(this->concurrent_shader);
-    this->concurrent_shader.set_mat4x4("u_mat_model", &model[0][0]);
 
-    glBindBuffer(GL_ARRAY_BUFFER, this->buffer_position);
-    glDrawArrays(GL_TRIANGLES, 0, this->sizeof_vertex);
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(0, 0, 0));
+
+
+    glBindVertexArray(this->vao_buffer_list);
+    this->concurrent_shader.set_mat4x4("u_mat_model", &model[0][0]);
+    glEnableVertexAttribArray(this->attribute_vertex);
+
+
+    glDrawArrays(GL_TRIANGLES, 0, 36);
 }
 
 void draw::mesh3d_instanced::refresh() {
     glBindVertexArray(this->vao_buffer_list);
 
-    this->concurrent_shader.use();
-
-    glEnableVertexAttribArray(this->attribute_vertex);
     glBindBuffer(GL_ARRAY_BUFFER, this->buffer_position);
-    glVertexAttribPointer(this->attribute_vertex, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * this->sizeof_vertex, this->linked_vertex_position, GL_STATIC_DRAW);
+    glVertexAttribPointer(this->attribute_vertex, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (void*) 0);
+    glEnableVertexAttribArray(this->attribute_vertex);
 
    // glEnableVertexAttribArray(1);
     //glBindBuffer(GL_ARRAY_BUFFER, this->buffer_material);

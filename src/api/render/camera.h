@@ -11,7 +11,7 @@
  **/
 struct camera {
 public:
-    math::vec3 position, front, up, right, world_up;
+    glm::vec3 position, front, up, right, world_up;
 
     float yaw, pitch;
     float mouse_sensitivity;
