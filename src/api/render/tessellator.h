@@ -53,7 +53,7 @@ namespace draw {
     public:
         mesh3d_instanced() {}
         mesh3d_instanced(fx &shader_fx) {
-            this->concurrent_shader = shader_fx;
+            this->set_fx(shader_fx);
         }
 
         ~mesh3d_instanced() {}
@@ -77,41 +77,24 @@ namespace draw {
     class mesh2d {
     protected:
         static GLuint attribute_vertex, attribute_material, attribute_material_color;
-        static GLuint draw_mode;
-
         static GLuint buffer_vertex, buffer_material, buffer_texture, bind_texture;
-        static GLfloat *linked_vertex_data, *linked_material_data;
-
-        static util::color material_color;
+        static GLuint draw_mode;
+        
         static uint32_t iterator_vertex, iterator_material, size_of_draw;
-
-        static float outline_line_thickness;
+        static util::color material_color;
         static fx concurrent_fx;
-        static GLuint buffer_vao;
     public:
-        static bool flag_ptr, flag_texture, flag_fx;
-
-        /* Start of main static methods. */
-        static void init();
-        static void outline(float line_thickness);
-        static void batch(GLuint mode, uint32_t size, bool mesh = false);
-
-        static void vertex(GLfloat* vertex, uint32_t size);
-        static void material(GLfloat* material, uint32_t size);
-
-        static void vertex(float x, float y);
-        static void material(float u, float v);
-        static void material(util::texture &texture);
-
-        static void color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
-        static void color(util::color &color);
+        static bool flag_texture, flag_fx;
 
         static void set_fx(fx &shader_fx);
         static fx &get_fx();
+
+        static void init();
+        static void batch(GLuint mode);
+        static void material(util::texture &texture);
+        static void material(util::color &color);
         static void active_fx();
         static void draw();
-        static void flush();
-        /* End of main static methods. */
     };
 }
 

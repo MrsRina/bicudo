@@ -56,9 +56,7 @@ bool util::file::exists(const char* path) {
     return flag;
 }
 
-game_resource util::file::load(const char* path, uint8_t mode) {
-    game_resource resource;
-
+void util::file::load(game_resource &resource, const char* path, uint8_t mode) {
     if (mode == util::file::TO_STRING) {
         std::ifstream ifs(path);
         std::string string_builder;
@@ -76,8 +74,6 @@ game_resource util::file::load(const char* path, uint8_t mode) {
     } else if (mode == util::file::TO_BYTE) {
 
     }
-
-    return resource;
 }
 
 float math::radians(float degress) {
@@ -110,13 +106,12 @@ void math::perspective(float* mat, float fov, float aspect, float z_near, float 
 }
 
 void math::look_at(float* mat, math::vec3 eye, math::vec3 center, math::vec3 up) {
-    math::vec3 f = (center - eye).normalize();
+    math::vec3 f = (eye - center).normalize();
     math::vec3 u = up.normalize();
     math::vec3 s = (f.cross(u)).normalize();
-    u = s.cross(f);
 
     *mat++ = s.x;
-    *mat++ = u.y;
+    *mat++ = u.x;
     *mat++ = -f.x;
     *mat++ = 0.0f;
 
@@ -126,7 +121,7 @@ void math::look_at(float* mat, math::vec3 eye, math::vec3 center, math::vec3 up)
     *mat++ = 0.0f;
 
     *mat++ = s.z;
-    *mat++ = u.y;
+    *mat++ = u.z;
     *mat++ = -f.z;
     *mat++ = 0.0f;
 

@@ -1,25 +1,22 @@
 #include "tessellator.h"
+#include "api/client/instance.h"
+
+#include <glm/gtc/matrix_transform.hpp>
 
 GLuint draw::mesh2d::attribute_material = 0;
 GLuint draw::mesh2d::attribute_vertex   = 0;
-GLuint draw::mesh2d::draw_mode         = 0;
+GLuint draw::mesh2d::draw_mode          = 0;
 
-GLuint draw::mesh2d::buffer_vertex    = 0;
-GLuint draw::mesh2d::buffer_vao       = 0;
-GLuint draw::mesh2d::buffer_material  = 0;
-GLuint draw::mesh2d::buffer_texture   = 0;
-GLuint draw::mesh2d::bind_texture     = 0;
-
-GLfloat* draw::mesh2d::linked_vertex_data   = (GLfloat*) 0;
-GLfloat* draw::mesh2d::linked_material_data = (GLfloat*) 0;
+GLuint draw::mesh2d::buffer_vertex   = 0;
+GLuint draw::mesh2d::buffer_material = 0;
+GLuint draw::mesh2d::buffer_texture  = 0;
+GLuint draw::mesh2d::bind_texture    = 0;
 
 util::color draw::mesh2d::material_color = util::color(0, 0, 0);
 uint32_t draw::mesh2d::iterator_vertex   = 0;
 uint32_t draw::mesh2d::iterator_material = 0;
 uint32_t draw::mesh2d::size_of_draw      = 0;
 
-float draw::mesh2d::outline_line_thickness = 0.0f;
-bool draw::mesh2d::flag_ptr = false;
 bool draw::mesh2d::flag_texture = false;
 bool draw::mesh2d::flag_fx = false;
 
@@ -92,14 +89,12 @@ void draw::shape::rect(float x, float y, float w, float h, material &material_da
     MESH_RECT_XYZ[MESH_ITERATOR++] = 0;
 
     // Start draw us shape.
-    draw::mesh2d::batch(GL_TRIANGLES, 6, true);
+    draw::mesh2d::batch(GL_TRIANGLES);
 
     if (material_data.texture.id != 0) {
         draw::mesh2d::material(material_data.texture);
-        draw::mesh2d::material(material_data.uv_coordinates, 12);
     } else {
         draw::shape::add_color_to_mesh_material_rgba(material_data.color);
-        draw::mesh2d::material(MESH_MATERIAL_COLOR_RGBA, 24);
     }
 
     if (!draw::mesh2d::flag_fx) {
@@ -108,8 +103,6 @@ void draw::shape::rect(float x, float y, float w, float h, material &material_da
 
     draw::mesh2d::get_fx().set_float("u_center_x", x + (w / 2.0f));
     draw::mesh2d::get_fx().set_float("u_center_y", y + (h / 2.0f));
-
-    draw::mesh2d::vertex(MESH_RECT_XYZ, 18);
     draw::mesh2d::draw();
 }
 
@@ -149,14 +142,12 @@ void draw::shape::shape(math::vec2 &v0, math::vec2 &v1, math::vec2 &v2, math::ve
     MESH_RECT_XYZ[MESH_ITERATOR++] = 0;
 
     // Start draw us shape.
-    draw::mesh2d::batch(GL_TRIANGLES, 6, true);
+    draw::mesh2d::batch(GL_TRIANGLES);
 
     if (material_data.texture.id != 0) {
         draw::mesh2d::material(material_data.texture);
-        draw::mesh2d::material(material_data.uv_coordinates, 12);
     } else {
         draw::shape::add_color_to_mesh_material_rgba(material_data.color);
-        draw::mesh2d::material(MESH_MATERIAL_COLOR_RGBA, 24);
     }
 
     math::vec2 center = v1 + (v1 - v2);
@@ -167,8 +158,6 @@ void draw::shape::shape(math::vec2 &v0, math::vec2 &v1, math::vec2 &v2, math::ve
 
     draw::mesh2d::get_fx().set_float("u_center_x", center.x);
     draw::mesh2d::get_fx().set_float("u_center_y", center.y);
-
-    draw::mesh2d::vertex(MESH_RECT_XYZ, 18);
     draw::mesh2d::draw();
 }
 
@@ -191,59 +180,26 @@ void draw::mesh2d::init() {
 
     // Set the default shader.
     set_fx(shader::fx_default);
+
+    // Setup sizes.
+    iterator_vertex = 18;
+    size_of_draw = 6;
 }
 
-void draw::mesh2d::outline(float line_thickness) {
-    outline_line_thickness = line_thickness;
-}
-
-void draw::mesh2d::batch(GLuint mode, uint32_t size, bool mesh) {
-    if (!mesh) {
-        linked_vertex_data = new GLfloat[size * 2];
-    }
-
+void draw::mesh2d::batch(GLuint mode) {
     draw_mode = mode;
-    size_of_draw = size;
-    flag_ptr = mesh;
     flag_texture = false;
-}
-
-void draw::mesh2d::vertex(GLfloat* vertex, uint32_t size) {
-    linked_vertex_data = vertex;
-    iterator_vertex = size;
-}
-
-void draw::mesh2d::material(GLfloat* material, uint32_t size) {
-    linked_material_data = material;
-    iterator_material = size;
+    iterator_material = 24;
 }
 
 void draw::mesh2d::material(util::texture &texture) {
     flag_texture = true;
     bind_texture = texture.id;
+    iterator_material = 12;
 }
 
-void draw::mesh2d::vertex(float x, float y) {
-    linked_vertex_data[iterator_material++] = x;
-    linked_vertex_data[iterator_material++] = y;
-}
-
-void draw::mesh2d::material(float u, float v) {
-    linked_material_data[iterator_material++] = u;
-    linked_material_data[iterator_material++] = v;
-}
-void draw::mesh2d::color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) {
-    linked_material_data[iterator_material++] = (float) red / 255.0f;
-    linked_material_data[iterator_material++] = (float) green / 255.0f;
-    linked_material_data[iterator_material++] = (float) blue / 255.0f;
-    linked_material_data[iterator_material++] = (float) alpha / 255.0f;
-}
-
-void draw::mesh2d::color(util::color &color) {
-    linked_material_data[iterator_material++] = color.redf();
-    linked_material_data[iterator_material++] = color.greenf();
-    linked_material_data[iterator_material++] = color.bluef();
-    linked_material_data[iterator_material++] = color.alphaf();
+void draw::mesh2d::material(util::color &color) {
+    material_color = color;
 }
 
 void draw::mesh2d::set_fx(fx &shader_fx) {
@@ -281,34 +237,23 @@ void draw::mesh2d::draw() {
 
     glBindBuffer(GL_ARRAY_BUFFER, buffer_vertex);
     glVertexAttribPointer(attribute_vertex, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * iterator_vertex, linked_vertex_data);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * iterator_vertex, MESH_RECT_XYZ);
 
     glBindBuffer(GL_ARRAY_BUFFER, flag_texture ? buffer_texture : buffer_material);
     glVertexAttribPointer(attribute_material, flag_texture ? 2 : 4, GL_FLOAT, GL_FALSE, 0, (void*) 0);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * iterator_material, linked_material_data);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * iterator_material, flag_texture ? MESH_MATERIAL_TEXTURE_UV : MESH_MATERIAL_COLOR_RGBA);
 
     glDrawArrays(draw_mode, 0, (int) size_of_draw);
+
+    concurrent_fx.set_bool("u_set_circle", false);
+    concurrent_fx.end();
+
+    flag_fx = false;
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     if (flag_texture) {
         glBindTexture(GL_TEXTURE_2D, 0);
     }
-
-    if (!flag_ptr) {
-        delete linked_vertex_data;
-        delete linked_material_data;
-    }
-
-    concurrent_fx.set_bool("u_set_circle", false);
-    concurrent_fx.end();
-    flag_fx = false;
-
-    glDisableVertexAttribArray(attribute_vertex);
-    glDisableVertexAttribArray(attribute_material);
-}
-
-void draw::mesh2d::flush() {
-    size_of_draw = 0;
 }
 
 void draw::mesh2d::active_fx() {
@@ -333,37 +278,46 @@ fx &draw::mesh3d_instanced::get_fx() {
 
 void draw::mesh3d_instanced::init() {
     glGenVertexArrays(1, &this->vao_buffer_list);
-    glBindVertexArray(this->vao_buffer_list);
 
-    glGenBuffers(1, &this->buffer_position);
     glGenBuffers(1, &this->buffer_material);
     glGenBuffers(1, &this->buffer_shader);
+    glBindVertexArray(this->vao_buffer_list);
+    glGenBuffers(1, &this->buffer_position);
     glGenBuffers(1, &this->buffer_total);
 }
 
 void draw::mesh3d_instanced::draw() {
-    glBindVertexArray(this->vao_buffer_list);
-    glDrawElements(GL_TRIANGLES, (int) this->sizeof_mesh, GL_UNSIGNED_INT, (void*) 0);
-    glBindVertexArray(0);
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(0.0f, 1.0f, 0.0f));
+    model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+
+    this->concurrent_shader.use();
+    bicudo::camera()->push(this->concurrent_shader);
+    this->concurrent_shader.set_mat4x4("u_mat_model", &model[0][0]);
+
+    glBindBuffer(GL_ARRAY_BUFFER, this->buffer_position);
+    glDrawArrays(GL_TRIANGLES, 0, this->sizeof_vertex);
 }
 
 void draw::mesh3d_instanced::refresh() {
     glBindVertexArray(this->vao_buffer_list);
 
+    this->concurrent_shader.use();
+
+    glEnableVertexAttribArray(this->attribute_vertex);
     glBindBuffer(GL_ARRAY_BUFFER, this->buffer_position);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+    glVertexAttribPointer(this->attribute_vertex, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * this->sizeof_vertex, this->linked_vertex_position, GL_STATIC_DRAW);
 
-    glBindBuffer(GL_ARRAY_BUFFER, this->buffer_material);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * this->sizeof_material, this->linked_material, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+   // glEnableVertexAttribArray(1);
+    //glBindBuffer(GL_ARRAY_BUFFER, this->buffer_material);
+    //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+    //glBufferData(GL_ARRAY_BUFFER, sizeof(float) * this->sizeof_material, this->linked_material, GL_STATIC_DRAW);
 
-    glBindBuffer(GL_ARRAY_BUFFER, this->buffer_shader);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * this->sizeof_shader, this->linked_shader, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+//    glEnableVertexAttribArray(2);
+//    glBindBuffer(GL_ARRAY_BUFFER, this->buffer_shader);
+//    glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+//    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * this->sizeof_shader, this->linked_shader, GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->buffer_total);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * this->sizeof_mesh, this->linked_buffer, GL_STATIC_DRAW);

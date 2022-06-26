@@ -40,11 +40,26 @@ void scene_physic::on_start() {
         0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0
     };
 
+    float v[12 * 12] = {
+                 0.5,  0.5,  0.5,  0.5, -0.5,  0.5,  0.5, -0.5, -0.5,  0.5,  0.5, -0.5,
+         -0.5,  0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5,  0.5, -0.5,  0.5,  0.5,
+          0.5,  0.5,  0.5,  0.5,  0.5, -0.5, -0.5,  0.5, -0.5, -0.5,  0.5,  0.5,
+         -0.5, -0.5,  0.5, -0.5, -0.5, -0.5,  0.5, -0.5, -0.5,  0.5, -0.5,  0.5,
+         -0.5,  0.5,  0.5, -0.5, -0.5,  0.5,  0.5, -0.5,  0.5,  0.5,  0.5,  0.5,
+          0.5,  0.5, -0.5,  0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5,  0.5, -0.5,
+                  0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0,
+        0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0,
+        0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0,
+        0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0,
+        0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0,
+        0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0
+    };
+
     mesh = draw::mesh3d_instanced(shader::fx_terrain);
     mesh.init();
     mesh.vertex(vertex_positions, 12 * 6);
-    mesh.material(material, 12 * 6);
-    mesh.mesh(material, 12 * 6);
+
+    mesh.mesh(vertex_positions, 12 * 6);
     mesh.refresh();
 
     tag::set("MoveForward", false);
@@ -71,9 +86,6 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
                     cx = (float) sdl_event.motion.x - rigid_object->center.x;
                     cy = (float) sdl_event.motion.y - rigid_object->center.y;
 
-                    prev_x = cx;
-                    prev_y = cy;
-
                     break;
                 }
 
@@ -88,6 +100,12 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
 
             if (k == SDLK_w) {
                 tag::set("MoveForward", true);
+            } else if (k == SDLK_a) {
+                tag::set("MoveStrafeLeft", true);
+            } else if (k == SDLK_d) {
+                tag::set("MoveStrafeRight", true);
+            } else if (k == SDLK_s) {
+                tag::set("MoveBack", true);
             }
 
             break;
@@ -98,6 +116,12 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
 
             if (k == SDLK_w) {
                 tag::set("MoveForward", false);
+            } else if (k == SDLK_a) {
+                tag::set("MoveStrafeLeft", false);
+            } else if (k == SDLK_d) {
+                tag::set("MoveStrafeRight", false);
+            } else if (k == SDLK_s) {
+                tag::set("MoveBack", false);
             }
 
             break;
@@ -110,9 +134,15 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
         }
 
         case SDL_MOUSEMOTION: {
+            float mx = (float) sdl_event.motion.x;
+            float my = (float) sdl_event.motion.y;
+        
+            bicudo::camera()->update_camera_motion(mx - prev_x, prev_y - my, true);
+
+            prev_x - mx;
+            prev_y = my;
+
             if (rigid_object != nullptr) {
-                float mx = (float) sdl_event.motion.x;
-                float my = (float) sdl_event.motion.y;
 
                 x = ((mx - cx) - rigid_object->center.x);
                 y = ((my - cy) - rigid_object->center.y);
@@ -127,6 +157,21 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
 }
 
 void scene_physic::on_locked_update() {
+    if (tag::get("MoveForward")) {
+        bicudo::camera()->position.x += 1;
+    }
+
+    if (tag::get("MoveStrafeLeft")) {
+        bicudo::camera()->position.z -= 1;
+    }
+
+    if (tag::get("MoveStrafeRight")) {
+        bicudo::camera()->position.z += 1;
+    }
+
+    if (tag::get("MoveBack")) {
+        bicudo::camera()->position.x -= 1;
+    }
 }
 
 void scene_physic::on_update() {
@@ -135,5 +180,5 @@ void scene_physic::on_update() {
 
 void scene_physic::on_render() {
     //bicudo::service_physic().on_render();
-    //mesh.draw();
+    mesh.draw();
 }

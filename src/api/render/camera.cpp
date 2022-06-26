@@ -6,7 +6,11 @@ camera::camera() {
     this->position = math::vec3(0, 0, 0);
     this->world_up = math::vec3(0, 1.0f, 0);
     this->front = math::vec3(0.0f, 0.0f, -1.0f);
-    this->yaw = -90.0f;
+    this->yaw = 0.0f;
+    this->fov = 45;
+    this->mouse_sensitivity = 0.1f;
+
+    this->calc_camera_rotation();
 }
 
 void camera::calc_camera_rotation() {
@@ -15,8 +19,8 @@ void camera::calc_camera_rotation() {
     this->front.z = sin(math::radians(this->yaw)) * cos(math::radians(this->pitch));
     this->front = this->front.normalize();
 
-    this->right = this->front.cross(this->up).normalize();
-    this->up = this->right.cross(this->front).normalize();
+    this->right = (this->front.cross(this->world_up)).normalize();
+    this->up = (this->right.cross(this->front)).normalize();
 }
 
 void camera::update_camera_motion(float mx, float my, bool constrain_pitch) {

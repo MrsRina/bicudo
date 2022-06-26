@@ -46,6 +46,6 @@ physic_service &bicudo::service_physic() {
     return BICUDO->get_physic_manager();
 }
 
-camera *bicudo::camera() {
+camera* bicudo::camera() {
     return BICUDO->get_camera();
 }

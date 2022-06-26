@@ -14,6 +14,7 @@ class physic_service : public service {
 protected:
     // Rigid list to update collision between 2D.
     std::array<rigid2d*, 2048> rigid2d_list;
+    
     uint32_t rigid2d_iterator;
     uint32_t x = 0, y = 0, prev_x = 0, prev_y = 0;
 

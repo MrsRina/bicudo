@@ -68,9 +68,9 @@ namespace math {
 
         vec3 cross(vec3 vec) {
             return vec3(
-                this->y * vec.z - vec.y * this->z,
-                this->z * vec.x - vec.z * this->x,
-                this->x * vec.y - vec.x * this->y
+                this->y * vec.z - this->z * vec.y,
+                this->z * vec.x - this->x * vec.z,
+                this->x * vec.y - this->y * vec.x
             );
         }
 
@@ -243,7 +243,7 @@ namespace util {
         static const uint8_t TO_BYTE = 1;
 
         static bool exists(const char* path);
-        static game_resource load(const char* path, uint8_t mode = TO_STRING);
+        static void load(game_resource &resource, const char* path, uint8_t mode = TO_STRING);
     };
 
     /**

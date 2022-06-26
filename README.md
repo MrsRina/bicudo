@@ -8,7 +8,7 @@ The game base is writen in C++ and uses SDL2 + OpenGL 3+.
 
 Simple game base with modules system (most like scripts) with dynamic interactions,
 works for 2D and 3D.
-The build only work for Windows (MinGW GCC), consider having mingw64 installed in default path for
+The build only works for Windows (MinGW GCC), consider having mingw64 installed in default path for
 windows (C:/mingw64/).
 
 For compile and run in VS Code:

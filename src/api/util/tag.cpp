@@ -17,7 +17,7 @@ bool tag::get(const std::string &str) {
 }
 
 void tag::set(const std::string &str, bool val) {
-	map.insert({str, val});
+	map[str] = val;
 }
 
 void tag::remove(std::string &str) {

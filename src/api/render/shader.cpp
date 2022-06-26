@@ -91,14 +91,18 @@ bool shader::load(fx &shader_fx, const char* vsh_path, const char* fsh_path) {
 		return false;
 	}
 
-	shader_fx.compiled = false;
+	game_resource vertex_resource, fragment_resource;
 	GLuint vertex_shader, fragment_shader;
+	shader_fx.compiled = false;
+
+	util::file::load(vertex_resource, vsh_path);
+	util::file::load(fragment_resource, fsh_path);
 
 	util::log("Shader FX loading (...) " + std::string(vsh_path));
-	bool vertex_shader_status = shader::compile(vertex_shader, GL_VERTEX_SHADER, util::file::load(vsh_path).str.c_str());
+	bool vertex_shader_status = shader::compile(vertex_shader, GL_VERTEX_SHADER, vertex_resource.str.c_str());
 
 	util::log("Shader FX loading (...) " + std::string(fsh_path));
-	bool vertex_fragment_status = shader::compile(fragment_shader, GL_FRAGMENT_SHADER, util::file::load(fsh_path).str.c_str());
+	bool vertex_fragment_status = shader::compile(fragment_shader, GL_FRAGMENT_SHADER,  fragment_resource.str.c_str());
 
 	if (vertex_shader_status && vertex_fragment_status) {
 		shader_fx.program = glCreateProgram();
@@ -112,7 +116,7 @@ bool shader::load(fx &shader_fx, const char* vsh_path, const char* fsh_path) {
 		glDeleteShader(fragment_shader);
 
 		if (shader_fx.compiled) {
-			util::log("Shader compile.");
+			util::log("Shader compiled.");
 		}
 	}
 
