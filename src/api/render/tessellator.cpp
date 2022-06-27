@@ -264,7 +264,7 @@ void draw::mesh2d::active_fx() {
 void draw::mesh3d_instanced::set_fx(fx &shader_fx) {
     if (this->concurrent_shader.program != shader_fx.program) {
         this->concurrent_shader = shader_fx;
-        this->attribute_vertex = 0;
+        this->attribute_vertex = glGetAttribLocation(this->concurrent_shader.program, "attribute_pos");
     }
 }
 
@@ -286,15 +286,11 @@ void draw::mesh3d_instanced::draw() {
     this->concurrent_shader.use();
     bicudo::camera()->push(this->concurrent_shader);
 
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(0, 0, 0));
+    glm::mat4 i = glm::mat4(1.0f);
+    i = glm::translate(i, glm::vec3(1.0f, 1.0f, 1.0f));
+    this->concurrent_shader.set_mat4x4("u_mat_model", &i[0][0]);
 
-
-    glBindVertexArray(this->vao_buffer_list);
-    this->concurrent_shader.set_mat4x4("u_mat_model", &model[0][0]);
-    glEnableVertexAttribArray(this->attribute_vertex);
-
-
+    glBindBuffer(GL_ARRAY_BUFFER, this->buffer_position);
     glDrawArrays(GL_TRIANGLES, 0, 36);
 }
 
@@ -302,9 +298,9 @@ void draw::mesh3d_instanced::refresh() {
     glBindVertexArray(this->vao_buffer_list);
 
     glBindBuffer(GL_ARRAY_BUFFER, this->buffer_position);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * this->sizeof_vertex, this->linked_vertex_position, GL_STATIC_DRAW);
-    glVertexAttribPointer(this->attribute_vertex, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (void*) 0);
     glEnableVertexAttribArray(this->attribute_vertex);
+    glVertexAttribPointer(this->attribute_vertex, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (void*) 0);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * this->sizeof_vertex, this->linked_vertex_position, GL_STATIC_DRAW);
 
    // glEnableVertexAttribArray(1);
     //glBindBuffer(GL_ARRAY_BUFFER, this->buffer_material);
