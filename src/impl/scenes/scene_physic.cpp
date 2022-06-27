@@ -17,7 +17,7 @@ void scene_physic::on_start() {
 
     for (uint32_t i = 0; i < 40; i++) {
        auto rigid2d_obj = new rigid2d_rectangle(math::vec2(rand() % 1280, 200 + rand() % 100), 200.0f, 1.0f, 0.2f, rand() % 75, rand() % 75);
-       rigid2d_obj->set_physic(rigid::physic::FULL);
+       rigid2d_obj->set_physic(rigid::physic::POS);
     }
 
     auto rigid2d_obj = new rigid2d_rectangle(math::vec2(400, 600), 0.0f, 0.0f, 0.0f, 1280, 100);
@@ -36,7 +36,6 @@ void scene_physic::on_start() {
          0.5f,  0.5f,  0.5f,
         -0.5f,  0.5f,  0.5f,
         -0.5f, -0.5f,  0.5f,
-
         -0.5f,  0.5f,  0.5f,
         -0.5f,  0.5f, -0.5f,
         -0.5f, -0.5f, -0.5f,
@@ -214,6 +213,6 @@ void scene_physic::on_update() {
 }
 
 void scene_physic::on_render() {
-    //bicudo::service_physic().on_render();
-    mesh.draw();
+    bicudo::service_physic().on_render();
+    //mesh.draw();
 }
