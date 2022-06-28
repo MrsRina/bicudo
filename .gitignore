@@ -1,2 +1,3 @@
 cmake-build-debug/
 CMakeCache.txt
+src/ekg
