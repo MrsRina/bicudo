@@ -97,7 +97,7 @@ void game_core::init_window() {
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    //SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetSwapInterval(1);
 }
 
@@ -237,6 +237,8 @@ void game_core::on_event(SDL_Event &sdl_event) {
 
                 screen_width = w;
                 screen_height = h;
+            
+                glViewport(0, 0, screen_width, screen_height);
             }
 
             break;
@@ -279,7 +281,6 @@ void game_core::on_update() {
 }
 
 void game_core::on_render() {
-    glViewport(0, 0, game_core::screen_width, game_core::screen_height);
     shader::context();
 
     glClearColor(0.5, 0.5, 0.5, 0.5);

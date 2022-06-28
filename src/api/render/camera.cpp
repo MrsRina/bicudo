@@ -43,7 +43,7 @@ void camera::push(fx &shader_fx) {
     bicudo::camera()->calc_camera_matrix();
 
     shader_fx.set_mat4x4("u_mat_perspective", shader::mat4x4_perspective);
-    shader_fx.set_mat4x4("u_mat_view", shader::mat4x4_view);
+
 }
 
 void camera::calc_camera_matrix() {

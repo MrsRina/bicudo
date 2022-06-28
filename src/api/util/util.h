@@ -194,22 +194,17 @@ namespace math {
 
     struct mat4 {
     protected:
+        // 0, 1, 2, 3
+        // 4, 5, 6, 7
+        // 8, 9, 10, 11
+        // 12, 13, 14, 15
         float matrix[16];
     public:
         mat4(float z) {
-            uint8_t i = 1;
-
-            i += 4;
-            this->matrix[i - 1] = z;
-
-            i += 4;
-            this->matrix[i - 1] = z;
-
-            i += 4;
-            this->matrix[i - 1] = z;
-
-            i += 4;
-            this->matrix[i  - 1] = z;
+            this->matrix[3] = z;
+            this->matrix[7] = z;
+            this->matrix[11] = z;
+            this->matrix[15] = z;
         }
     };
 

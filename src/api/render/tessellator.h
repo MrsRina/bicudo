@@ -41,7 +41,6 @@ namespace draw {
     class mesh3d_instanced {
     protected:
         GLuint vao_buffer_list, buffer_position, buffer_material, buffer_shader, buffer_total;
-        GLuint attribute_vertex, attribute_material_color, attribute_material;
 
         float* linked_shader;
         float* linked_vertex_position;
@@ -76,7 +75,6 @@ namespace draw {
      **/
     class mesh2d {
     protected:
-        static GLuint attribute_vertex, attribute_material, attribute_material_color;
         static GLuint buffer_vertex, buffer_material, buffer_texture, bind_texture;
         static GLuint draw_mode;
         

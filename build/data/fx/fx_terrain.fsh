@@ -3,7 +3,7 @@
 in vec4 varying_fragcolor;
 
 uniform vec4 u_texture_color;
-uniform bool u_set_texture, u_set_texture_color_filter, u_set_radius, u_set_outline;
+uniform bool u_set_texture;
 uniform sampler2D u_active_texture;
 
 void main() {

@@ -3,10 +3,6 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-GLuint draw::mesh2d::attribute_material = 0;
-GLuint draw::mesh2d::attribute_vertex   = 0;
-GLuint draw::mesh2d::draw_mode          = 0;
-
 GLuint draw::mesh2d::buffer_vertex   = 0;
 GLuint draw::mesh2d::buffer_material = 0;
 GLuint draw::mesh2d::buffer_texture  = 0;
@@ -16,6 +12,7 @@ util::color draw::mesh2d::material_color = util::color(0, 0, 0);
 uint32_t draw::mesh2d::iterator_vertex   = 0;
 uint32_t draw::mesh2d::iterator_material = 0;
 uint32_t draw::mesh2d::size_of_draw      = 0;
+GLuint draw::mesh2d::draw_mode           = 0;
 
 bool draw::mesh2d::flag_texture = false;
 bool draw::mesh2d::flag_fx = false;
@@ -215,9 +212,6 @@ void draw::mesh2d::draw() {
         concurrent_fx.use();
     }
 
-    attribute_vertex = glGetAttribLocation(concurrent_fx.program, "attribute_pos");
-    attribute_material = glGetAttribLocation(concurrent_fx.program, "attribute_fragcolor");
-
     concurrent_fx.set_bool("u_set_texture", flag_texture);
     concurrent_fx.set_int("u_active_texture", 0);
 
@@ -232,16 +226,15 @@ void draw::mesh2d::draw() {
         glBindTexture(GL_TEXTURE_2D, bind_texture);
     }
 
-    glEnableVertexAttribArray(attribute_vertex);
-    glEnableVertexAttribArray(attribute_material);
-
     glBindBuffer(GL_ARRAY_BUFFER, buffer_vertex);
-    glVertexAttribPointer(attribute_vertex, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * iterator_vertex, MESH_RECT_XYZ);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+    glEnableVertexAttribArray(0);
 
     glBindBuffer(GL_ARRAY_BUFFER, flag_texture ? buffer_texture : buffer_material);
-    glVertexAttribPointer(attribute_material, flag_texture ? 2 : 4, GL_FLOAT, GL_FALSE, 0, (void*) 0);
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * iterator_material, flag_texture ? MESH_MATERIAL_TEXTURE_UV : MESH_MATERIAL_COLOR_RGBA);
+    glVertexAttribPointer(1, flag_texture ? 2 : 4, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+    glEnableVertexAttribArray(1);
 
     glDrawArrays(draw_mode, 0, (int) size_of_draw);
 
@@ -264,7 +257,6 @@ void draw::mesh2d::active_fx() {
 void draw::mesh3d_instanced::set_fx(fx &shader_fx) {
     if (this->concurrent_shader.program != shader_fx.program) {
         this->concurrent_shader = shader_fx;
-        this->attribute_vertex = 0;
     }
 }
 
@@ -287,15 +279,13 @@ void draw::mesh3d_instanced::draw() {
     bicudo::camera()->push(this->concurrent_shader);
 
     glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(0, 0, 0));
+    model = glm::translate(model, glm::vec3(0, 1.0f, 0));
 
+    this->concurrent_shader.set_mat4x4("u_mat_model", &model[0][0]);
 
     glBindVertexArray(this->vao_buffer_list);
-    this->concurrent_shader.set_mat4x4("u_mat_model", &model[0][0]);
-    glEnableVertexAttribArray(this->attribute_vertex);
-
-
     glDrawArrays(GL_TRIANGLES, 0, 36);
+    glBindVertexArray(0);
 }
 
 void draw::mesh3d_instanced::refresh() {
@@ -303,21 +293,11 @@ void draw::mesh3d_instanced::refresh() {
 
     glBindBuffer(GL_ARRAY_BUFFER, this->buffer_position);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * this->sizeof_vertex, this->linked_vertex_position, GL_STATIC_DRAW);
-    glVertexAttribPointer(this->attribute_vertex, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (void*) 0);
-    glEnableVertexAttribArray(this->attribute_vertex);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (void*) 0);
+    glEnableVertexAttribArray(0);
 
-   // glEnableVertexAttribArray(1);
-    //glBindBuffer(GL_ARRAY_BUFFER, this->buffer_material);
-    //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
-    //glBufferData(GL_ARRAY_BUFFER, sizeof(float) * this->sizeof_material, this->linked_material, GL_STATIC_DRAW);
-
-//    glEnableVertexAttribArray(2);
-//    glBindBuffer(GL_ARRAY_BUFFER, this->buffer_shader);
-//    glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 0, (void*) 0);
-//    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * this->sizeof_shader, this->linked_shader, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->buffer_total);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * this->sizeof_mesh, this->linked_buffer, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 }
 
 void draw::mesh3d_instanced::batch() {
