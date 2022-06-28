@@ -22,7 +22,7 @@ void scene_physic::on_start() {
 
     auto rigid2d_obj = new rigid2d_rectangle(math::vec2(400, 600), 0.0f, 0.0f, 0.0f, 1280, 100);
 
-    float vertex_positions[18 * 6] = {
+    float vertex_positions[] = {
         -0.5f, -0.5f, -0.5f,
          0.5f, -0.5f, -0.5f,
          0.5f,  0.5f, -0.5f,
@@ -91,9 +91,9 @@ void scene_physic::on_start() {
 
     mesh = draw::mesh3d_instanced(shader::fx_terrain);
     mesh.init();
-    mesh.vertex(vertex_positions, 18 * 6);
+    mesh.vertex(vertex_positions, sizeof(vertex_positions));
 
-    mesh.mesh(vertex_positions, 18 * 6);
+    mesh.mesh(vertex_positions, sizeof(vertex_positions));
     mesh.refresh();
 
     tag::set("MoveForward", false);

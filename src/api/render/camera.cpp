@@ -20,6 +20,7 @@ void camera::calc_camera_rotation() {
     f.x = cos(glm::radians(this->yaw)) * cos(glm::radians(this->pitch));
     f.y = sin(glm::radians(this->pitch));
     f.z = sin(glm::radians(this->yaw)) * cos(glm::radians(this->pitch));
+
     this->front = glm::normalize(f);
     this->right = glm::normalize(glm::cross(this->front, this->world_up));
     this->up = glm::normalize(glm::cross(this->right, this->front));
