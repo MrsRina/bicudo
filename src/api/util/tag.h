@@ -8,7 +8,7 @@
 #include <map>
 
 /**
- * Handle and store flags (input, states...).
+ * Handle and redirect_data flags (input, states...).
  **/
 struct tag {
 protected:

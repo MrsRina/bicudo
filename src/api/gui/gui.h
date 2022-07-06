@@ -14,7 +14,7 @@ protected:
     std::string description;
 public:
     gui() : ifeature() {   
-        // invoke register.
+        // access_or_store register.
         this->on_registry();
     }
 

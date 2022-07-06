@@ -5,6 +5,8 @@
     <excludeRoots>
       <file path="$PROJECT_DIR$/.vscode" />
       <file path="$PROJECT_DIR$/build" />
+      <file path="$PROJECT_DIR$/ekg" />
+      <file path="$PROJECT_DIR$/ekg/cmake-build-debug" />
       <file path="$PROJECT_DIR$/external" />
     </excludeRoots>
   </component>
