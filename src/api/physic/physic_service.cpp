@@ -26,21 +26,18 @@ void physic_service::on_locked_update() {
     this->update_gravity();
     this->update_pos();
 
-    rigid2d* rigid_obj1 = nullptr;
-    rigid2d* rigid_obj2 = nullptr;
-
     uint8_t i = 0;
 
     for (i = 0; i < this->setting_iterations_count; i++) {
         for (this->x = 0; x < this->rigid2d_iterator; x++) {
-            rigid_obj1 = this->rigid2d_list[this->x];
+            rigid2d* &rigid_obj1 = this->rigid2d_list[this->x];
 
             if (rigid_obj1->mass == 0.0f) {
                 continue;
             }
 
             for (this->y = this->x + 1; y < this->rigid2d_iterator; y++) {
-                rigid_obj2 = this->rigid2d_list[this->y];
+                rigid2d* &rigid_obj2 = this->rigid2d_list[this->y];
 
                 if (rigid_obj1 == rigid_obj2) {
                     continue;
@@ -63,10 +60,8 @@ void physic_service::on_update() {
 }
 
 void physic_service::on_render() {
-    rigid2d* rigid2d_obj = nullptr;
-
     for (uint32_t i = 0; i < this->rigid2d_iterator; i++) {
-        rigid2d_obj = this->rigid2d_list[i];
+        rigid2d* &rigid2d_obj = this->rigid2d_list[i];
 
         if (rigid2d_obj->get_type() == rigid::type::RIGID2D_RECTANGLE) {
             auto rigid2d_rect_obj = (rigid2d_rectangle*) rigid2d_obj;

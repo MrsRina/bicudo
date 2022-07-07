@@ -69,7 +69,7 @@ std::vector<ifeature*> &service::get_render_list() {
 }
 
 void service::on_start() {
-    util::log(this->get_name() + " service start.");
+    util::log(this->get_name() + " service invoke.");
 }
 
 void service::on_end() {

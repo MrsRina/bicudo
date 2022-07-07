@@ -109,6 +109,12 @@ void game_core::init_context() {
     draw::init();
 
     this->the_camera = new camera();
+
+    // Init EKG.
+    ekg::init(this->sdl_window);
+
+    // Test.;
+    ekg::button* button = ekg::create_button("hello");
 }
 
 void game_core::init_services() {
@@ -137,7 +143,7 @@ void game_core::refresh() {
 
 void game_core::init() {
     util::log("Powered by Bicudo!");
-    util::log("Game start!");
+    util::log("Game invoke!");
     util::log("Initializing SDL2.");
     util::log("Initializing OpenGL.");
     util::log("Initializing window, context and services.");
@@ -168,7 +174,7 @@ void game_core::mainloop() {
     uint64_t concurrent_dt = SDL_GetTicks64();
 
     // Initialize the locked task.
-   std::thread thread_locked_update(update_task, bicudo::create_task("locked-update"));
+    std::thread thread_locked_update(update_task, bicudo::create_task("locked-update"));
 
     /*
      * The game mainloop.
@@ -184,6 +190,7 @@ void game_core::mainloop() {
 
             // Update input and events unsynchronized.
             while (SDL_PollEvent(&sdl_event)) {
+                ekg::poll_event(sdl_event);
                 BICUDO->on_event(sdl_event);
             }
 
@@ -278,6 +285,9 @@ void game_core::on_update() {
     if (this->guiscreen != nullptr) {
         this->guiscreen->on_update();
     }
+
+    // Update EKG.
+    ekg::update(util::timing::delta_time);
 }
 
 void game_core::on_render() {
@@ -292,6 +302,8 @@ void game_core::on_render() {
     if (this->guiscreen != nullptr) {
         this->guiscreen->on_render();
     }
+
+    ekg::render();
 }
 
 module_service &game_core::get_module_manager() {
