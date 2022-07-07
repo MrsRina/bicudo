@@ -64,4 +64,4 @@ endif()
 
 # Add into executable and add libraries.
 add_executable(bicudo ${SOURCE_FILES})
-target_link_libraries(bicudo mingw32 glew32 SDL2main SDL2 SDL2_image opengl32 "${EKG_LIB_DIR}")
+target_link_libraries(bicudo mingw32 glew32 opengl32 "${EKG_LIB_DIR}" SDL2main SDL2 SDL2_image)
