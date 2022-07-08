@@ -143,5 +143,5 @@ void scene_physic::on_update() {
 }
 
 void scene_physic::on_render() {
-    bicudo::service_physic().on_render();
+    //bicudo::service_physic().on_render();
 }

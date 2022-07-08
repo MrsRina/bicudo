@@ -108,13 +108,14 @@ void game_core::init_context() {
     shader::init();
     draw::init();
 
-    this->the_camera = new camera();
-
     // Init EKG.
+    ekg::set_font("data/fonts/microsoft-segoe-ui/SEGOEUI.TTF");
     ekg::init(this->sdl_window);
 
     // Test.;
     ekg::button* button = ekg::create_button("hello");
+
+    this->the_camera = new camera();
 }
 
 void game_core::init_services() {
