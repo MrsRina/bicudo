@@ -37,6 +37,7 @@ include_directories(src)
 # Find EKG library.
 if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ekg/")
     message("-- Found EKG!")
+    message("-- Preparing to install EKG!")
 
     add_subdirectory(ekg/)
     include_directories(external/include)
@@ -47,16 +48,28 @@ if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ekg/")
         file(REMOVE "${file_i}")
     endforeach(file_i)
 
-    file(GLOB_RECURSE EKG_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/ekg/ekg/*.hpp")
-    file(MAKE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/external/include/ekg")
+    file(MAKE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/external/include/ekg" "${CMAKE_CURRENT_SOURCE_DIR}/external/include/ekg/api" "${CMAKE_CURRENT_SOURCE_DIR}/external/include/ekg/impl")
 
-    message("-- Moving EKG header files!")
+    message("-- Installing EKG core!")
+    file(GLOB EKG_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/ekg/ekg/*.hpp")
 
     foreach(file_i ${EKG_HEADER_FILES})
-        file(COPY "${file_i}" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/external/include/ekg/")
+        file(COPY "${file_i}" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/external/include/ekg")
     endforeach(file_i)
 
-    message("-- Copying EKG lib to libs!")
+    message("-- Installing EKG API!")
+    file(GLOB EKG_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/ekg/ekg/api/*.hpp")
+
+    foreach(file_i ${EKG_HEADER_FILES})
+        file(COPY "${file_i}" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/external/include/ekg/api")
+    endforeach(file_i)
+
+    message("-- Installing EKG implements!")
+    file(GLOB EKG_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/ekg/ekg/impl/*.hpp")
+
+    foreach(file_i ${EKG_HEADER_FILES})
+        file(COPY "${file_i}" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/external/include/ekg/impl")
+    endforeach(file_i)
 
     file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/ekg/lib/libekg.a" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/external/lib/")
     message("-- EKG done!")

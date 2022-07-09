@@ -44,9 +44,6 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
                 rigid_object = bicudo::service_physic().get_rigid2d_list()[i];
 
                 if (rigid2d_collide_with_point(rigid_object, (float) sdl_event.motion.x, (float) sdl_event.motion.y)) {
-                    cx = (float) sdl_event.motion.x - rigid_object->center.x;
-                    cy = (float) sdl_event.motion.y - rigid_object->center.y;
-
                     break;
                 }
 
@@ -89,10 +86,6 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
         }
 
         case SDL_MOUSEBUTTONUP: {
-            if (rigid_object != nullptr) {
-                rigid_object->velocity = math::vec2(0, 0);
-            }
-
             rigid_object = nullptr;
 
             break;
@@ -104,12 +97,12 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
         
             bicudo::camera()->update_camera_motion(mx - prev_x, prev_y - my, true);
 
-            prev_x - mx;
+            prev_x = mx;
             prev_y = my;
 
             if (rigid_object != nullptr) {
-                x = ((mx - cx) - rigid_object->center.x);
-                y = ((my - cy) - rigid_object->center.y);
+                x = (mx - rigid_object->center.x);
+                y = (my - rigid_object->center.y);
 
                 math::vec2 delta = math::vec2(x, y);
                 rigid_object->velocity = delta;
@@ -143,5 +136,5 @@ void scene_physic::on_update() {
 }
 
 void scene_physic::on_render() {
-    //bicudo::service_physic().on_render();
+    bicudo::service_physic().on_render();
 }

@@ -32,8 +32,8 @@ void update_task(task* atomic_task) {
     atomic_task->set_atomic_boolean_end_state(true);
 }
 
-std::string game_core::client_name        = "";
-std::string game_core::client_version_str = "";
+std::string game_core::client_name;
+std::string game_core::client_version_str;
 
 uint16_t game_core::screen_width  = 800;
 uint16_t game_core::screen_height = 600;
@@ -54,6 +54,7 @@ void game_core::set_guiscreen(gui* new_gui) {
         delete new_gui;
         return;
     }
+
 
     bool phase_remove_gui = (new_gui == nullptr && this->guiscreen != nullptr) ||
                             (new_gui != nullptr && this->guiscreen != nullptr && this->guiscreen->get_name() != new_gui->get_name());
@@ -108,14 +109,17 @@ void game_core::init_context() {
     shader::init();
     draw::init();
 
+    this->the_camera = new camera();
+
     // Init EKG.
     ekg::set_font("data/fonts/microsoft-segoe-ui/SEGOEUI.TTF");
     ekg::init(this->sdl_window);
 
     // Test.;
-    ekg::button* button = ekg::create_button("hello");
+    auto button = ekg::button("hello");
+    auto frame = ekg::frame();
 
-    this->the_camera = new camera();
+    frame->set_pos(20, 20);
 }
 
 void game_core::init_services() {
