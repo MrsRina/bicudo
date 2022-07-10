@@ -57,7 +57,7 @@ void rigid2d_solve_collide(rigid2d *&r1, rigid2d *&r2) {
 bool rigid2d_collide_with_point(rigid2d *&r, float x, float y) {
      bool flag_point_collide = (
             x >= r->minx && y >= r->miny &&
-            y <= r->maxx && y <= r->maxy
+            x <= r->maxx && y <= r->maxy
     );
 
     return flag_point_collide;

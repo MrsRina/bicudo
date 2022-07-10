@@ -114,12 +114,6 @@ void game_core::init_context() {
     // Init EKG.
     ekg::set_font("data/fonts/microsoft-segoe-ui/SEGOEUI.TTF");
     ekg::init(this->sdl_window);
-
-    // Test.;
-    auto button = ekg::button("hello");
-    auto frame = ekg::frame();
-
-    frame->set_pos(20, 20);
 }
 
 void game_core::init_services() {
