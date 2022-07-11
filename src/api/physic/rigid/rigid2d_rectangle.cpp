@@ -20,7 +20,7 @@ rigid2d_rectangle::rigid2d_rectangle(math::vec2 vec_center, float val_mass, floa
 
     if (this->mass != 0.0f) {
         this->mass = 1.0f / this->mass;
-        this->acceleration = rigid::GRAVITY;
+        this->acceleration = GLOBAL_WORLD_2D_GRAVITY;
     }
 
     this->vertices[0] = math::vec2(this->center.x - this->w / 2.0f, this->center.y - this->h / 2.0f);
@@ -163,7 +163,7 @@ void rigid2d_rectangle::update_mass(float delta) {
         this->angular_acceleration = 0.0f;
     } else {
         this->mass = 1 / val_mass;
-        this->acceleration = rigid::GRAVITY;
+        this->acceleration = GLOBAL_WORLD_2D_GRAVITY;
     }
 
     this->update_inertia();

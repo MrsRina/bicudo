@@ -32,18 +32,10 @@ void physic_service::on_locked_update() {
         for (this->x = 0; x < this->rigid2d_iterator; x++) {
             rigid2d* &rigid_obj1 = this->rigid2d_list[this->x];
 
-            if (rigid_obj1->mass == 0.0f) {
-                continue;
-            }
-
-            for (this->y = this->x + 1; y < this->rigid2d_iterator; y++) {
+            for (this->y = 0; y < this->rigid2d_iterator; y++) {
                 rigid2d* &rigid_obj2 = this->rigid2d_list[this->y];
 
-                if (rigid_obj1 == rigid_obj2) {
-                    continue;
-                }
-
-                if (!rigid_obj1->collide_axis_with(rigid_obj2)) {
+                if (rigid_obj1 == rigid_obj2 || !rigid_obj1->collide_axis_with(rigid_obj2)) {
                     continue;
                 }
 

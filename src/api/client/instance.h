@@ -2,6 +2,7 @@
 #include "bicudo.h"
 
 extern game_core* const BICUDO;
+static math::vec2 GLOBAL_WORLD_2D_GRAVITY;
 
 namespace bicudo {
     camera* camera();
