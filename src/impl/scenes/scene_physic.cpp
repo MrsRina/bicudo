@@ -31,6 +31,9 @@ void scene_physic::on_start() {
     tag::set("MoveStrafeRight", false);
     tag::set("MoveBack", false);
 
+    //for (uint32_t i = 0; i < 100; i++) {
+
+
     auto button = ekg::button("hello");
     auto frame = ekg::frame();
     auto frame2 = ekg::frame();
@@ -48,6 +51,7 @@ void scene_physic::on_start() {
     frame2->set_resize_offset(30.0f);
 
     frame2->place(button, 10, 10);
+    //}
 }
 
 void scene_physic::on_end() {
@@ -173,5 +177,5 @@ void scene_physic::on_update() {
 }
 
 void scene_physic::on_render() {
-    bicudo::service_physic().on_render();
+    //bicudo::service_physic().on_render();
 }
