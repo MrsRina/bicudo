@@ -21,8 +21,10 @@ void scene_physic::on_start() {
        rigid2d_obj->set_physic(rigid::physic::FULL);
     }
 
-    auto rigid2d_obj = new rigid2d_rectangle(math::vec2(400, 600), 0.0f, 0.0f, 0.0f, 1280, 100);
-    auto r2 = new rigid2d_rectangle(math::vec2(400, 600), 0.0f, 1.0f, 0.0f, 100, 800);
+    new rigid2d_rectangle(math::vec2(400, 10), 0.0f, 0.0f, 0.0f, 1280, 100);
+    new rigid2d_rectangle(math::vec2(10, 300), 0.0f, 1.0f, 0.0f, 100, 800);
+    new rigid2d_rectangle(math::vec2(400, 600), 0.0f, 0.0f, 0.0f, 1280, 100);
+    new rigid2d_rectangle(math::vec2(800, 300), 0.0f, 1.0f, 0.0f, 100, 800);
 
     tag::set("MoveForward", false);
     tag::set("MoveStrafeLeft", false);
@@ -31,16 +33,14 @@ void scene_physic::on_start() {
 
     auto button = ekg::button("hello");
     auto frame = ekg::frame();
+    auto frame2 = ekg::frame();
 
     frame->set_pos(100, 50);
     frame->set_drag_dock(ekg::dock::TOP);
     frame->set_drag_offset(30.0f);
 
-    auto frame2 = ekg::frame();
-
     frame2->set_pos(80, 90);
     frame2->set_size(300, 300);
-    frame2->bg_color.color(190, 0, 190, 200);
 
     frame2->set_resize_dock(ekg::dock::LEFT | ekg::dock::BOTTOM | ekg::dock::RIGHT);
     frame2->set_drag_dock(ekg::dock::TOP);
