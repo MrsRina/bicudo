@@ -174,6 +174,8 @@ void scene_physic::on_update() {
             rigid_object->velocity = delta;
         }
     }
+
+    //util::log(std::to_string(BICUDO->get_fps()));
 }
 
 void scene_physic::on_render() {
