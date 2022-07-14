@@ -4,6 +4,8 @@ Hello, this is a Minecraft clone game, not finished yet.
 
 The game base is writen in C++ and uses SDL2 + OpenGL 3+.
 
+![((https://share.gifyoutube.com/KzB6Gb.gif))][(https://www.youtube.com/watch?v=fY20qCsS_TI)]
+
 # details
 
 Simple game base with modules system (most like scripts) with dynamic interactions,
