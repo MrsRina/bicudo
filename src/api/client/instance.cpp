@@ -1,6 +1,7 @@
 #include "instance.h"
 
 game_core* const BICUDO = new game_core();
+math::vec2 GLOBAL_WORLD_2D_GRAVITY;
 
 void bicudo::set_guiscreen(gui* new_gui) {
     BICUDO->set_guiscreen(new_gui);

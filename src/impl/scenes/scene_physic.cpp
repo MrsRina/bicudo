@@ -14,14 +14,14 @@ float cx, cy, x, y, prev_x, prev_y;
 bool moving;
 
 void scene_physic::on_start() {
-    GLOBAL_WORLD_2D_GRAVITY.y = 0.0f;
+    GLOBAL_WORLD_2D_GRAVITY = math::vec2(0, 10.0f);
 
     for (uint32_t i = 0; i < 40; i++) {
        auto rigid2d_obj = new rigid2d_rectangle(math::vec2(rand() % 1280, 200 + rand() % 100), rand() % 100, 200.0f, 0.2f, rand() % 75, rand() % 75);
        rigid2d_obj->set_physic(rigid::physic::FULL);
     }
 
-    new rigid2d_rectangle(math::vec2(400, 10), 0.0f, 0.0f, 0.0f, 1280, 100);
+    new rigid2d_rectangle(math::vec2(400, 10), 900.0f, 0.0f, 0.0f, 1280, 100);
     new rigid2d_rectangle(math::vec2(10, 300), 0.0f, 1.0f, 0.0f, 100, 800);
     new rigid2d_rectangle(math::vec2(400, 600), 0.0f, 0.0f, 0.0f, 1280, 100);
     new rigid2d_rectangle(math::vec2(800, 300), 0.0f, 1.0f, 0.0f, 100, 800);
@@ -179,5 +179,5 @@ void scene_physic::on_update() {
 }
 
 void scene_physic::on_render() {
-    //bicudo::service_physic().on_render();
+    bicudo::service_physic().on_render();
 }
