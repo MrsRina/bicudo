@@ -1,8 +1,8 @@
 # bicudo
 
-Hello, this is a Minecraft clone game, not finished yet.
+Hello, this is a Minecraft clone game, not finished yet. /
+The game base is writen in C++ and uses SDL2 + OpenGL 3+. /
 
-The game base is writen in C++ and uses SDL2 + OpenGL 3+.
 [![GIF](https://github.com/MrsRina/bicudo/blob/main/splash/splash-physics-1.gif)]
 
 # details
