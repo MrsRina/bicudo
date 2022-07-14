@@ -1,11 +1,11 @@
-# Bocidp
+# Bocido
 
 Hello, this is a game-base for my projects, not finished yet. \
 The game base is writen in C++ and uses SDL2 + OpenGL 3+.
 
 [![GIF](https://github.com/MrsRina/bicudo/blob/main/splash/splash-physics-1.gif)]
 
-# details
+# Details
 
 Simple game base with modules system (most like scripts) with dynamic interactions,
 works for 2D and 3D.
@@ -26,7 +26,7 @@ For compile and run in CLion Jetbrains IDE:
 - 3 Click in run or debug.
 - 4 :))) ,,,!
 
-# disclaimer
+# Disclaimer
 
 I am using this project to learn advanced physic (rigid, mass, friction, euler, verlet, angular velocity, etc).
 You can easy make different games in the same project, you can have a 2D game while a 3D game is running.
