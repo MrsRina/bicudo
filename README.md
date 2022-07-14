@@ -1,4 +1,4 @@
-# Bocido
+# Bicudo
 
 Hello, this is a game-base for my projects, not finished yet. \
 The game base is writen in C++ and uses SDL2 + OpenGL 3+.
