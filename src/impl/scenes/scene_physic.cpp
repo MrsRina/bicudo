@@ -32,7 +32,7 @@ void scene_physic::on_start() {
     tag::set("MoveStrafeRight", false);
     tag::set("MoveBack", false);
 
-    ekg::set_font_size(18);
+    ekg::set_font_size(36);
 
     float axis = 0;
 
@@ -44,42 +44,48 @@ void scene_physic::on_start() {
     float add_x = 10;
     float add_y = 10;
 
-    frame->set_height(0);
+    frame->set_height(0.0f);
 
     for (uint32_t i = 0; i < 10; i++) {
-        auto checkbox = ekg::check_box("check-box lin");
-        auto slider = ekg::slider(50, 20, 200);
-        auto button = ekg::button("hello");
+        auto button = ekg::button("oi rs " + std::to_string(i));
+        auto slider = ekg::slider(50.0f, 20.0f, 200.0f);
+        auto checkbox = ekg::check_box("me selecione rs " + std::to_string(i));
 
         checkbox->set_width(75);
         checkbox->set_text_dock(ekg::dock::LEFT);
 
-        frame->place(checkbox, 10, 150);
-        frame->place(slider, 10, 10);
-        frame->place(button, 10, 10);
+        frame->place(checkbox, 10.0f, 150.0f);
+        frame->place(slider, 10.0f, 10.0f);
+        frame->place(button, 10.0f, 10.0f);
+
+        button->set_pos(add_x, add_y);
 
         frame->set_drag_dock(ekg::dock::TOP);
         frame->set_drag_offset(30.0f);
 
+        add_x = button->get_width() + 5.0f;
+
         slider->set_pos(add_x, add_y);
-        add_x += slider->get_width() + 5;
+        slider->set_width(150.0f);
+        add_x += slider->get_width() + 5.0f;
 
         checkbox->set_pos(add_x, add_y);
-        add_x += checkbox->get_width() + 5;
 
-        button->set_pos(add_x, add_y);
-        add_x = 10;
+        add_x = 10.0f;
         add_y += checkbox->get_height();
+        ekgutil::log(std::to_string(add_y));
     }
 
     frame->set_height(add_y);
+
+    ekgutil::log(std::to_string(add_y));
 
     frame->set_resize_dock(ekg::dock::LEFT | ekg::dock::BOTTOM | ekg::dock::RIGHT);
     frame->set_drag_dock(ekg::dock::TOP);
     frame->set_drag_offset(30.0f);
     frame->set_resize_offset(30.0f);
 
-    ekg::core::instance.debug_mode = false;
+    ekg::core::instance.debug_mode = true;
 }
 
 void scene_physic::on_end() {
