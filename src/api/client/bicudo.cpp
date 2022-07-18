@@ -114,6 +114,7 @@ void game_core::init_context() {
     // Init EKG.
     ekg::set_font("data/fonts/microsoft-segoe-ui/SEGOEUI.TTF");
     ekg::init(this->sdl_window);
+    ekg::set_font_size(56);
 }
 
 void game_core::init_services() {

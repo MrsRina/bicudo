@@ -14,15 +14,16 @@ float cx, cy, x, y, prev_x, prev_y;
 bool moving;
 
 void scene_physic::on_start() {
-    GLOBAL_WORLD_2D_GRAVITY = math::vec2(0, 10.0f);
+    GLOBAL_WORLD_2D_GRAVITY = math::vec2(0, 9.0f);
 
-    for (uint32_t i = 0; i < 40; i++) {
-       auto rigid2d_obj = new rigid2d_rectangle(math::vec2(rand() % 1280, 200 + rand() % 100), rand() % 100, 200.0f, 0.2f, rand() % 75, rand() % 75);
-       rigid2d_obj->set_physic(rigid::physic::FULL);
+    for (uint32_t i = 0; i < 80; i++) {
+        auto rigid2d_obj = new rigid2d_rectangle(math::vec2(rand() % 1280, 200 + rand() % 100), rand() % 100, 0.0001f,
+                                                 0.2f, rand() % 75, rand() % 75);
+        rigid2d_obj->set_physic(rigid::physic::FULL);
     }
 
     new rigid2d_rectangle(math::vec2(400, 10), 900.0f, 0.0f, 0.0f, 1280, 100);
-    new rigid2d_rectangle(math::vec2(10, 300), 0.0f, 1.0f, 0.0f, 100, 800);
+    new rigid2d_rectangle(math::vec2(10, 300), 0.0f, 0.0f, 0.0f, 100, 800);
     new rigid2d_rectangle(math::vec2(400, 600), 0.0f, 0.0f, 0.0f, 1280, 100);
     new rigid2d_rectangle(math::vec2(800, 300), 0.0f, 1.0f, 0.0f, 100, 800);
 
@@ -31,27 +32,54 @@ void scene_physic::on_start() {
     tag::set("MoveStrafeRight", false);
     tag::set("MoveBack", false);
 
-    //for (uint32_t i = 0; i < 100; i++) {
+    ekg::set_font_size(18);
 
+    float axis = 0;
 
-    auto button = ekg::button("hello");
+    //for (uint32_t i = 0; i < 1; i++) {
+    axis += 5.0f;
+
     auto frame = ekg::frame();
-    auto frame2 = ekg::frame();
 
-    frame->set_pos(100, 50);
+    float add_x = 10;
+    float add_y = 10;
+
+    frame->set_height(0);
+
+    for (uint32_t i = 0; i < 10; i++) {
+        auto checkbox = ekg::check_box("check-box lin");
+        auto slider = ekg::slider(50, 20, 200);
+        auto button = ekg::button("hello");
+
+        checkbox->set_width(75);
+        checkbox->set_text_dock(ekg::dock::LEFT);
+
+        frame->place(checkbox, 10, 150);
+        frame->place(slider, 10, 10);
+        frame->place(button, 10, 10);
+
+        frame->set_drag_dock(ekg::dock::TOP);
+        frame->set_drag_offset(30.0f);
+
+        slider->set_pos(add_x, add_y);
+        add_x += slider->get_width() + 5;
+
+        checkbox->set_pos(add_x, add_y);
+        add_x += checkbox->get_width() + 5;
+
+        button->set_pos(add_x, add_y);
+        add_x = 10;
+        add_y += checkbox->get_height();
+    }
+
+    frame->set_height(add_y);
+
+    frame->set_resize_dock(ekg::dock::LEFT | ekg::dock::BOTTOM | ekg::dock::RIGHT);
     frame->set_drag_dock(ekg::dock::TOP);
     frame->set_drag_offset(30.0f);
+    frame->set_resize_offset(30.0f);
 
-    frame2->set_pos(80, 90);
-    frame2->set_size(300, 300);
-
-    frame2->set_resize_dock(ekg::dock::LEFT | ekg::dock::BOTTOM | ekg::dock::RIGHT);
-    frame2->set_drag_dock(ekg::dock::TOP);
-    frame2->set_drag_offset(30.0f);
-    frame2->set_resize_offset(30.0f);
-
-    frame2->place(button, 10, 10);
-    //}
+    ekg::core::instance.debug_mode = false;
 }
 
 void scene_physic::on_end() {
