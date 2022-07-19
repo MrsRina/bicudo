@@ -73,12 +73,9 @@ void scene_physic::on_start() {
 
         add_x = 10.0f;
         add_y += checkbox->get_height();
-        ekgutil::log(std::to_string(add_y));
     }
 
     frame->set_height(add_y);
-
-    ekgutil::log(std::to_string(add_y));
 
     frame->set_resize_dock(ekg::dock::LEFT | ekg::dock::BOTTOM | ekg::dock::RIGHT);
     frame->set_drag_dock(ekg::dock::TOP);
