@@ -8,7 +8,9 @@
  **/
 #pragma once
 
-#include "api/feature/feature.h"
+#ifndef GAME_CORE_H
+#define GAME_CORE_H
+
 #include "api/gui/gui.h"
 #include "context.h"
 
@@ -23,9 +25,6 @@ static const uint32_t FEATURE_BUFFER_LIMIT = 256;
 
 /* The update task. */
 void update_task(task* raw_task);
-
-#ifndef GAME_CORE_H
-#define GAME_CORE_H
 
 /**
  * Main class of game where everything is processed.

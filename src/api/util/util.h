@@ -29,7 +29,7 @@ namespace math {
         }
 
         vec3 operator - () {
-            return vec3(-this->x, -this->y, -this->z);
+            return vec3(-this->x, this->y, -this->z);
         }
 
         vec3 operator + (vec3 vec) {

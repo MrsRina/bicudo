@@ -1,11 +1,11 @@
 #pragma once
 
+#ifndef PHYSIC_SERVICE_H
+#define PHYSIC_SERVICE_H
+
 #include "api/service/service.h"
 #include "api/render/tessellator.h"
 #include "rigid.h"
-
-#ifndef PHYSIC_SERVICE_H
-#define PHYSIC_SERVICE_H
 
 /**
  * Manage all abstract_rigid objects to apply physic.

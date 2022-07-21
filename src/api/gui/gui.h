@@ -1,9 +1,9 @@
 #pragma once
 
-#include "api/feature/feature.h"
-
 #ifndef GUI_H
 #define GUI_H
+
+#include "api/feature/feature.h"
 
 /**
  * Gui to display any render context.

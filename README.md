@@ -28,7 +28,7 @@ For compile and run in CLion Jetbrains IDE:
 
 # Disclaimer
 
-I am using this project to learn advanced physic (rigid, mass, friction, euler, verlet, angular velocity, etc).
+I am using this project to learn advanced physic (rigidutil, mass, friction, euler, verlet, angular velocity, etc).
 You can easy make different games in the same project, you can have a 2D game while a 3D game is running.
 There is no docs still (also it is not a game engine).
 

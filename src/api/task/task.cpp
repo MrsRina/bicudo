@@ -1,4 +1,3 @@
-#include "task.h"
 #include "api/client/instance.h"
 
 task::task(const std::string &task_name, uint32_t next_task_id) {

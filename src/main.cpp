@@ -1,6 +1,5 @@
 #include "api/client/instance.h"
 #include "impl/context/game_context.h"
-#include "api/util/tag.h"
 #include <ekg/ekg.hpp>
 
 int main(int argv, char** argc) {

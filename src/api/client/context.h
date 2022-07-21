@@ -1,9 +1,9 @@
 #pragma once
 
-#include "api/module/module.h"
-
 #ifndef CONTEXT_H
 #define CONTEXT_H
+
+#include "api/module/module.h"
 
 const static uint32_t EVENT_TICK_UPDATE = 1;
 

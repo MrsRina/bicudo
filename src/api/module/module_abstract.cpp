@@ -1,5 +1,4 @@
 #include "module_abstract.h"
-#include "api/client/instance.h"
 
 void module_abstract::set_name(const std::string &module_name) {
     this->name = module_name;

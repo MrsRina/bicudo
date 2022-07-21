@@ -1,4 +1,3 @@
-#include "task_service.h"
 #include "api/client/instance.h"
 
 task* task_service::start(const std::string &task_name) {

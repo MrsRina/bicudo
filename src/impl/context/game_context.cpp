@@ -1,7 +1,7 @@
 #include "game_context.h"
-#include "api/client/instance.h"
 #include "impl/scripts/module_camera.h"
 #include "impl/scenes/scene_physic.h"
+#include "api/client/instance.h"
 
 void game_context::on_start() {
 	module_camera* mod_camera = new module_camera();

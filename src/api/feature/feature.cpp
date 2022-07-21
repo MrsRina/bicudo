@@ -1,6 +1,5 @@
 #include "feature.h"
 #include "api/util/util.h"
-#include "api/client/instance.h"
 
 ifeature::ifeature() {
     // Constructor.

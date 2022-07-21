@@ -3,6 +3,7 @@
 #include "api/render/tessellator.h"
 #include "api/physic/rigid.h"
 #include "api/util/tag.h"
+#include <ekg/ekg.hpp>
 
 material material_shape;
 rigid2d* rigid_object;
@@ -19,7 +20,7 @@ void scene_physic::on_start() {
     for (uint32_t i = 0; i < 80; i++) {
         auto rigid2d_obj = new rigid2d_rectangle(math::vec2(rand() % 1280, 200 + rand() % 100), rand() % 100, 0.0001f,
                                                  0.2f, rand() % 75, rand() % 75);
-        rigid2d_obj->set_physic(rigid::physic::FULL);
+        rigid2d_obj->set_physic(rigidutil::physic::FULL);
     }
 
     new rigid2d_rectangle(math::vec2(400, 10), 900.0f, 0.0f, 0.0f, 1280, 100);

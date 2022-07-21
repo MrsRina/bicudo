@@ -1,5 +1,5 @@
-#ifndef RIGID_DATA_H
-#define RIGID_DATA_H
+#ifndef RIGIGD2D_H
+#define RIGIGD2D_H
 
 #include "api/physic/util/physic_util.h"
 
@@ -8,8 +8,8 @@
  **/
 class rigid2d {
 protected:
-    rigid::type type;
-    rigid::physic physic;
+    rigidutil::type type;
+    rigidutil::physic physic;
 public:
     math::vec2 center, velocity, acceleration;
 
@@ -17,10 +17,10 @@ public:
     float mass, friction, restitution, inertia;
     float minx, maxx, miny, maxy;
 
-    rigid::type get_type();
+    rigidutil::type get_type();
 
-    void set_physic(rigid::physic val_enum);
-    rigid::physic get_physic();
+    void set_physic(rigidutil::physic val_enum);
+    rigidutil::physic get_physic();
 
     bool collide_ab_with(rigid2d* &r);
     bool collide_axis_with(rigid2d* &r);

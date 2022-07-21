@@ -1,9 +1,9 @@
 #pragma once
 
-#include "api/client/context.h"
-
 #ifndef GAME_CONTEXT_H
 #define GAME_CONTEXT_H
+
+#include "api/client/context.h"
 
 /**
  * Where everything is going on.

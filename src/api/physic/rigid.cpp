@@ -15,9 +15,9 @@ bool rigid2d_rect_collide_with_rect(rigid2d_rectangle* r1, rigid2d_rectangle* r2
         if (phase2) {
             if (collision_info_r1.depth < collision_info_r2.depth) {
                 math::vec2 vec_depth = collision_info_r1.normal * collision_info_r1.depth;
-                geometry::collision_info.set(collision_info_r1.depth, collision_info_r1.normal, collision_info_r1.start - vec_depth);
+                geometry::collision_info::set(collision_info_r1.depth, collision_info_r1.normal, collision_info_r1.start - vec_depth);
             } else {
-                geometry::collision_info.set(collision_info_r2.depth, collision_info_r2.normal * -1.0f, collision_info_r2.start);
+                geometry::collision_info::set(collision_info_r2.depth, collision_info_r2.normal * -1.0f, collision_info_r2.start);
             }
         }
     }
@@ -34,20 +34,20 @@ void rigid2d_solve_collide(rigid2d *&r1, rigid2d *&r2) {
         float mass_r1 = r1->mass;
         float mass_r2 = r2->mass;
 
-        float num = geometry::collision_info.depth / (mass_r1 + mass_r2) * bicudo::service_physic().setting_pos_correction_rate;
-        math::vec2 vec_correction_amount = geometry::collision_info.normal * num;
+        float num = geometry::collision_info::depth / (mass_r1 + mass_r2) * bicudo::service_physic().setting_pos_correction_rate;
+        math::vec2 vec_correction_amount = geometry::collision_info::normal * num;
 
         r1->move(vec_correction_amount * -mass_r1);
         r2->move(vec_correction_amount * mass_r2);
     }
 
     switch (r1->get_physic()) {
-        case rigid::FULL: {
+        case rigidutil::FULL: {
             rigid2d_apply_full_physic(r1, r2);
             break;
         }
 
-        case rigid::POS: {
+        case rigidutil::POS: {
             rigid2d_apply_physic(r1, r2);
             break;
         }
@@ -64,9 +64,9 @@ bool rigid2d_collide_with_point(rigid2d *&r, float x, float y) {
 }
 
 void rigid2d_apply_full_physic(rigid2d* &r1, rigid2d* &r2) {
-    math::vec2 n = geometry::collision_info.normal;
-    math::vec2 start = geometry::collision_info.start * (r2->mass / (r1->mass + r2->mass));
-    math::vec2 end = geometry::collision_info.end * (r1->mass / (r1->mass + r2->mass));
+    math::vec2 n = geometry::collision_info::normal;
+    math::vec2 start = geometry::collision_info::start * (r2->mass / (r1->mass + r2->mass));
+    math::vec2 end = geometry::collision_info::end * (r1->mass / (r1->mass + r2->mass));
     math::vec2 p = start + end;
 
     math::vec2 c1 = p - r1->center;
@@ -119,7 +119,7 @@ void rigid2d_apply_full_physic(rigid2d* &r1, rigid2d* &r2) {
 }
 
 void rigid2d_apply_physic(rigid2d* &r1, rigid2d* &r2) {
-    math::vec2 n = geometry::collision_info.normal;
+    math::vec2 n = geometry::collision_info::normal;
     math::vec2 v1 = r1->velocity;
     math::vec2 v2 = r2->velocity;
     math::vec2 relative_velocity = v2 - v1;

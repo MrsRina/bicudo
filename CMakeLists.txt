@@ -1,21 +1,13 @@
 # The main project setup var segment.
 cmake_minimum_required(VERSION 3.13)
 project(bicudo)
-add_compile_options(-O0)
 
 # Collect native source files and set compiler flags.
 set(CMAKE_CXX_STANDARD 11)
 set(EXECUTABLE_OUTPUT_PATH  ../build)
 set(EKG_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/external/lib/libekg.a")
 
-file(GLOB_RECURSE SOURCE_FILES
-        "src/main.cpp"
-        "src/*.cpp"
-)
-
-file(GLOB_RECURSE LIB_FILES
-        "external/lib/*.lib"
-)
+file(GLOB_RECURSE SOURCE_FILES "src/*.cpp")
 
 # Add project src folder into ekg path.
 include_directories(src)
@@ -57,10 +49,10 @@ if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ekg/")
         file(COPY "${file_i}" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/external/include/ekg/impl")
     endforeach(file_i)
 
-    file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/ekg/lib/ekg.lib" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/external/lib/")
+    file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/ekg/lib/libekg.a" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/external/lib/")
     message("-- EKG done!")
 endif()
 
 # Add into executable and add libraries.
 add_executable(bicudo ${SOURCE_FILES})
-target_link_libraries(bicudo "${EKG_LIB_DIR}" "${LIB_FILES}" opengl32 SDL2main SDL2)
+target_link_libraries(bicudo "${EKG_LIB_DIR}" mingw32 glew32 opengl32 SDL2main SDL2 freetype)

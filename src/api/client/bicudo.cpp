@@ -1,8 +1,5 @@
-#include "bicudo.h"
-#include "api/util/util.h"
+#include <ekg/ekg.hpp>
 #include "instance.h"
-#include "api/render/shader.h"
-#include "api/render/tessellator.h"
 
 void update_task(task* atomic_task) {
     if (atomic_task == nullptr) {

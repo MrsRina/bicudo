@@ -1,8 +1,8 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <ekg/ekg.hpp>
 #include <SDL2/SDL.h>
+#include <gl/glew.h>
 #include <iostream>
 #include <string>
 #include <vector>

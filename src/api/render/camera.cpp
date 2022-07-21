@@ -1,6 +1,5 @@
 #include "camera.h"
 #include "api/client/instance.h"
-#include "includes/includes.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 camera::camera() {

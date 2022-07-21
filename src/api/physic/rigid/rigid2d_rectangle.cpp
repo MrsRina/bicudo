@@ -1,9 +1,8 @@
-#include "rigid2d_rectangle.h"
 #include "api/client/instance.h"
 
 rigid2d_rectangle::rigid2d_rectangle(math::vec2 vec_center, float val_mass, float val_friction, float val_restitution, float width, float height) {
-    this->type = rigid::type::RIGID2D_RECTANGLE;
-    this->physic = rigid::physic::POS;
+    this->type = rigidutil::type::RIGID2D_RECTANGLE;
+    this->physic = rigidutil::physic::POS;
 
     this->center = vec_center;
     this->friction = val_friction;
@@ -86,18 +85,18 @@ void rigid2d_rectangle::find_support_point(math::vec2 dir, math::vec2 vert) {
     math::vec2 to_edge;
     float projection;
 
-    geometry::support_info.dist = -99999.0f;
-    geometry::support_info.point = math::vec2(0, 0);
-    geometry::support_info.flag = false;
+    geometry::support_info::dist = -99999.0f;
+    geometry::support_info::point = math::vec2(0, 0);
+    geometry::support_info::flag = false;
 
     for (auto &vertex : this->vertices) {
         to_edge = vertex - vert;
         projection = to_edge.dot(dir);
 
-        if (projection > 0 && projection > geometry::support_info.dist) {
-            geometry::support_info.point = vertex;
-            geometry::support_info.dist = projection;
-            geometry::support_info.flag = true;
+        if (projection > 0 && projection > geometry::support_info::dist) {
+            geometry::support_info::point = vertex;
+            geometry::support_info::dist = projection;
+            geometry::support_info::flag = true;
         }
     }
 }
@@ -119,12 +118,12 @@ bool rigid2d_rectangle::find_axis_least_penetration(rigid2d_rectangle *&r, geome
         vert = this->vertices[i];
 
         r->find_support_point(dir, vert);
-        flag_has_support = geometry::support_info.flag;
+        flag_has_support = geometry::support_info::flag;
 
-        if (flag_has_support && geometry::support_info.dist < best_dist) {
-            best_dist = geometry::support_info.dist;
+        if (flag_has_support && geometry::support_info::dist < best_dist) {
+            best_dist = geometry::support_info::dist;
             best_index = i;
-            support_point = geometry::support_info.point;
+            support_point = geometry::support_info::point;
         }
 
         i++;
@@ -173,7 +172,7 @@ void rigid2d_rectangle::update_inertia() {
     if (this->mass == 0) {
         this->inertia = 0.0f;
     } else {
-        this->inertia = (1.0f / this->mass) * (this->w * this->w + this->h * this->h) / rigid::INERTIA;
+        this->inertia = (1.0f / this->mass) * (this->w * this->w + this->h * this->h) / rigidutil::INERTIA;
         this->inertia = 1.0f / this->inertia;
     }
 }
