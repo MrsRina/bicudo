@@ -9,10 +9,10 @@ namespace math {
      * Vector3D to directional or color.
      **/
     struct vec3 {
-        double x = 0.0f, y = 0.0f, z = 0.0f;
+        float x = 0.0f, y = 0.0f, z = 0.0f;
 
         vec3() {}
-        vec3(double x, double y, double z = 0.0f) {
+        vec3(float x, float y, float z = 0.0f) {
             this->x = x;
             this->y = y;
             this->z = z;
@@ -42,7 +42,7 @@ namespace math {
             this->z += vec.z;
         }
 
-        void operator *= (double n) {
+        void operator *= (float n) {
             this->x *= n;
             this->y *= n;
             this->z *= n;
@@ -54,7 +54,7 @@ namespace math {
             this->z *= n;
         }
 
-        vec3 operator * (double n) {
+        vec3 operator * (float n) {
             return vec3(this->x * n, this->y * n, this->z * n);
         }
 

@@ -10,25 +10,11 @@ set(EKG_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/external/lib/libekg.a")
 
 file(GLOB_RECURSE SOURCE_FILES
         "src/main.cpp"
-        "src/api/client/*.cpp"
-        "src/api/util/*.cpp"
-        "src/api/render/*.cpp"
-        "src/api/module/*.cpp"
-        "src/api/scene/*.cpp"
-        "src/api/service/*.cpp"
-        "src/api/task/*.cpp"
-        "src/api/feature/*.cpp"
-        "src/api/gui/*.cpp"
-        "src/api/physic/*.cpp"
-        "src/api/physic/util/*.cpp"
-        "src/api/physic/rigid/*.cpp"
-        "src/api/world/util/*.cpp"
-        "src/api/world/block/*.cpp"
-        "src/api/world/entity/*.cpp"
-        "src/api/world/chunk/*.cpp"
-        "src/impl/scripts/*.cpp"
-        "src/impl/scenes/*.cpp"
-        "src/impl/context/*.cpp"
+        "src/*.cpp"
+)
+
+file(GLOB_RECURSE LIB_FILES
+        "external/lib/*.lib"
 )
 
 # Add project src folder into ekg path.
@@ -71,10 +57,10 @@ if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ekg/")
         file(COPY "${file_i}" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/external/include/ekg/impl")
     endforeach(file_i)
 
-    file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/ekg/lib/libekg.a" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/external/lib/")
+    file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/ekg/lib/ekg.lib" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/external/lib/")
     message("-- EKG done!")
 endif()
 
 # Add into executable and add libraries.
 add_executable(bicudo ${SOURCE_FILES})
-target_link_libraries(bicudo "${EKG_LIB_DIR}" mingw32 glew32 opengl32 SDL2main SDL2 SDL2_image freetype-6)
+target_link_libraries(bicudo "${EKG_LIB_DIR}" "${LIB_FILES}" opengl32 SDL2main SDL2)

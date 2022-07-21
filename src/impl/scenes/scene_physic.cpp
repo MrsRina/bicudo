@@ -81,8 +81,6 @@ void scene_physic::on_start() {
     frame->set_drag_dock(ekg::dock::TOP);
     frame->set_drag_offset(30.0f);
     frame->set_resize_offset(30.0f);
-
-    ekg::core::instance.debug_mode = true;
 }
 
 void scene_physic::on_end() {
