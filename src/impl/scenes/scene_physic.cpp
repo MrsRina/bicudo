@@ -9,7 +9,6 @@ material material_shape;
 rigid2d* rigid_object;
 
 scene_physic *scene_physic::instance = nullptr;
-draw::mesh3d_instanced mesh;
 
 float cx, cy, x, y, prev_x, prev_y;
 bool moving;

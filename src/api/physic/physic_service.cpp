@@ -56,7 +56,6 @@ void physic_service::on_render() {
 
         if (rigid2d_obj->get_type() == rigidutil::type::RIGID2D_RECTANGLE) {
             auto rigid2d_rect_obj = (rigid2d_rectangle*) rigid2d_obj;
-            draw::shape::shape(rigid2d_rect_obj->get_vertices()[0], rigid2d_rect_obj->get_vertices()[1], rigid2d_rect_obj->get_vertices()[2], rigid2d_rect_obj->get_vertices()[3], this->material_rigid2d_objects);
         }
     }
 }
