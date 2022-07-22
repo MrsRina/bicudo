@@ -34,11 +34,11 @@ void fx::set_float(const std::string &name, float val) {
 }
 
 void fx::set_vec2f(const std::string &name, const float *vec) {
-    glUniform2fv(glGetUniformLocation(this->program, name.c_str()), GL_FALSE, vec);
+    glUniform2fv(glGetUniformLocation(this->program, name.c_str()), 1, vec);
 }
 
 void fx::set_vec4f(const std::string &name, const float *vec) {
-    glUniform4fv(glGetUniformLocation(this->program, name.c_str()), GL_FALSE, vec);
+    glUniform4fv(glGetUniformLocation(this->program, name.c_str()), 1, vec);
 }
 
 void shader::init() {

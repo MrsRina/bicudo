@@ -22,6 +22,7 @@ struct gpu_data {
     float pos[2];
     float color[4];
     float z_depth;
+    float angle;
 
     GLint begin = 0;
     GLint end = 0;
@@ -62,6 +63,7 @@ namespace draw {
         void color(float r, float g, float b, float a);
         void rect(float x, float y, float w, float h);
         void modal(float x, float y, float w, float h);
+        void rotate(float angle);
         void end_instance();
 
         void xy(float x, float y);

@@ -12,6 +12,9 @@
  **/
 class physic_service : public service {
 protected:
+    uint32_t thread1 = 0;
+    uint32_t thread2 = 0;
+
     // Rigid list to update collision between 2D.
     std::array<rigid2d*, 2048> rigid2d_list;
     
@@ -25,7 +28,7 @@ protected:
 public:
     // Physic configs.
     bool setting_flag_positional_correction_flag = true;
-    uint8_t setting_iterations_count = 3;
+    uint8_t setting_iterations_count = 1;
     float setting_pos_correction_rate = 0.8f;
     draw::batch2d batch;
 

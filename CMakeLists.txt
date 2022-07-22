@@ -1,6 +1,7 @@
 # The main project setup var segment.
 cmake_minimum_required(VERSION 3.13)
 project(bicudo)
+add_compile_options(-O3)
 
 # Collect native source files and set compiler flags.
 set(CMAKE_CXX_STANDARD 11)

@@ -1,4 +1,7 @@
 #include "physic_service.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 void physic_service::update_gravity() {
 }
@@ -22,9 +25,7 @@ void physic_service::on_event(SDL_Event &sdl_event) {
 }
 
 void physic_service::on_locked_update() {
-    this->update_gravity();
     this->update_pos();
-
     uint8_t i = 0;
 
     for (i = 0; i < this->setting_iterations_count; i++) {
@@ -47,7 +48,6 @@ void physic_service::on_locked_update() {
 }
 
 void physic_service::on_update() {
-
 }
 
 void physic_service::on_render() {
@@ -61,9 +61,10 @@ void physic_service::on_render() {
 
             this->batch.start_instance();
             this->batch.color(0.5f, 0.0f, 0.5f, 1.0f);
-            this->batch.pos(rigid2d_obj->center.x, rigid2d_obj->center.y);
-            this->batch.rect(0.0f, 0.0f, 200, 200);
+            this->batch.pos(rigid2d_obj->minx, rigid2d_obj->miny);
+            this->batch.rect(0.0f, 0.0f, rigid2d_rect_obj->w, rigid2d_rect_obj->h);
             this->batch.modal(0.0f, 0.0f, 1.0f, 1.0f);
+            this->batch.rotate(rigid2d_obj->angle);
             this->batch.end_instance();
         }
     }

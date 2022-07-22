@@ -15,10 +15,10 @@ bool moving;
 void scene_physic::on_start() {
     GLOBAL_WORLD_2D_GRAVITY = math::vec2(0, 9.0f);
 
-    for (uint32_t i = 0; i < 80; i++) {
+    for (uint32_t i = 0; i < 700; i++) {
         auto rigid2d_obj = new rigid2d_rectangle(math::vec2(rand() % 1280, 200 + rand() % 100), rand() % 100, 0.0001f,
                                                  0.2f, rand() % 75, rand() % 75);
-        rigid2d_obj->set_physic(rigidutil::physic::FULL);
+        rigid2d_obj->set_physic(rigidutil::physic::POS);
     }
 
     new rigid2d_rectangle(math::vec2(400, 10), 900.0f, 0.0f, 0.0f, 1280, 100);
@@ -45,10 +45,10 @@ void scene_physic::on_start() {
 
     frame->set_height(0.0f);
 
-    for (uint32_t i = 0; i < 10; i++) {
-        auto button = ekg::button("oi rs " + std::to_string(i));
+    for (uint32_t i = 0; i < 1; i++) {
+        auto button = ekg::button("oi " + std::to_string(i));
         auto slider = ekg::slider(50.0f, 20.0f, 200.0f);
-        auto checkbox = ekg::check_box("me selecione rs " + std::to_string(i));
+        auto checkbox = ekg::check_box("oi " + std::to_string(i));
 
         checkbox->set_width(75);
         checkbox->set_text_dock(ekg::dock::LEFT);

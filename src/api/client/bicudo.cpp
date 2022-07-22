@@ -6,24 +6,20 @@ void update_task(task* atomic_task) {
         return;
     }
 
-    uint64_t previous_ticks = SDL_GetTicks64();
     uint64_t current_ticks = SDL_GetTicks64();
-    uint8_t interval = 1000 / 75;
-
-    SDL_Event sdl_event;
+    uint64_t elapsed_ticks = SDL_GetTicks64();
+    uint32_t interval = 16;
+    util::timing::locked_delta_time = 0.16f;
 
     while (!atomic_task->get_atomic_boolean_state()) {
-        current_ticks = SDL_GetTicks64() - previous_ticks;
+        current_ticks = SDL_GetTicks64();
 
-        // Set the locked dt.
-        util::timing::locked_delta += current_ticks;
-        util::timing::locked_delta_time = (float) current_ticks / 100.0f;
+        if (current_ticks - elapsed_ticks > interval) {
+            elapsed_ticks = current_ticks;
 
-        // Call main object into this thread.
-        BICUDO->mainloop_locked_update();
-        previous_ticks = SDL_GetTicks64();
-
-        std::this_thread::sleep_for(std::chrono::milliseconds(interval));
+            // Call main object into this thread.
+            BICUDO->mainloop_locked_update();
+        }
     }
 
     atomic_task->set_atomic_boolean_end_state(true);
@@ -94,7 +90,7 @@ void game_core::init_window() {
     // Set default OpenGL attributs to works with SDL2.
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetSwapInterval(1);
 }
@@ -195,7 +191,7 @@ void game_core::mainloop() {
             concurrent_dt += this->current_ticks;
 
             util::timing::delta += this->current_ticks;
-            util::timing::delta_time = (float) this->current_ticks / 100.0f;
+            util::timing::delta_time = static_cast<float>(this->current_ticks) / 100.0f;
 
             this->on_update();
             this->on_render();

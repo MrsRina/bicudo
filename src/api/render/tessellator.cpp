@@ -1,4 +1,7 @@
 #include "tessellator.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 fx draw::batch2d::fx_shape2d;
 
@@ -37,6 +40,7 @@ void draw::batch2d::revoke() {
     bool flag = this->should_alloc_new_gpu_data || this->sizeof_allocated_gpu_data != this->sizeof_previous_allocated_gpu_data;
 
     if (flag) {
+        util::log("Batch 2d ticked changed buffer.");
         glBindVertexArray(this->vertex_arr_object);
 
         // Location 0 of shaders.
@@ -64,14 +68,17 @@ void draw::batch2d::draw() {
     draw::batch2d::fx_shape2d.use();
     draw::batch2d::fx_shape2d.set_mat4x4("u_mat_view", shader::mat4x4_ortho2d);
 
+    glm::mat4 matrix_rot;
     glBindVertexArray(this->vertex_arr_object);
 
     for (uint32_t i = 0; i < this->sizeof_allocated_gpu_data; i++) {
         gpu_data &data = this->allocated_gpu_data[i];
+        matrix_rot = glm::rotate(glm::mat4(), glm::radians(9.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
         draw::batch2d::fx_shape2d.set_float("u_float_z_depth", data.z_depth);
         draw::batch2d::fx_shape2d.set_vec2f("u_vec_pos", data.pos);
         draw::batch2d::fx_shape2d.set_vec4f("u_vec_color", data.color);
+        draw::batch2d::fx_shape2d.set_mat4x4("u_vec_rotate", &matrix_rot[0][0]);
 
         glDrawArrays(GL_TRIANGLES, data.begin, data.end);
     }
@@ -98,12 +105,12 @@ void draw::batch2d::rect(float x, float y, float w, float h) {
 
     // We can not divide it by 0.
     if (h == 0) {
-        this->should_alloc_new_gpu_data = true;
+        this->should_alloc_new_gpu_data = false;
     } else {
         factor = static_cast<int32_t>(w) / static_cast<int32_t>(h);
 
         if (this->previous_allocated_gpu_data_factor != factor) {
-            this->should_alloc_new_gpu_data = true;
+            this->should_alloc_new_gpu_data = false;
         }
     }
 
@@ -140,4 +147,8 @@ void draw::batch2d::end_instance() {
     this->sizeof_allocated_vertexes += this->sizeof_instanced_allocated_vertexes;
     this->sizeof_instanced_allocated_vertexes = 0;
     this->sizeof_allocated_gpu_data++;
+}
+
+void draw::batch2d::rotate(float angle) {
+    this->allocated_gpu_data[this->sizeof_allocated_gpu_data].angle = angle;
 }
