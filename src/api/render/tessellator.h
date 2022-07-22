@@ -13,26 +13,18 @@ static float MESH_MATERIAL_TEXTURE_UV[12];
 static uint8_t MESH_ITERATOR;
 
 /**
- * Material to stuff.
- **/
-struct material {
-	util::color color = util::color(255, 0, 255, 255);
-	util::texture texture;
-
-	float* uv_coordinates;
-};
-
-/**
  * GPU data.
  **/
 struct gpu_data {
-    uint32_t id;
+    uint32_t id = 0;
+    int32_t factor = 0;
 
     float pos[2];
     float color[4];
+    float z_depth;
 
-    GLint index_start;
-    GLint index_end;
+    GLint begin = 0;
+    GLint end = 0;
 };
 
 /**
@@ -43,16 +35,39 @@ namespace draw {
 
     class batch2d {
     protected:
-        gpu_data allocated_data[2048];
+        gpu_data allocated_gpu_data[2048];
+        uint32_t sizeof_allocated_gpu_data;
+        uint32_t sizeof_previous_allocated_gpu_data;
 
-        std::vector<GLfloat> vertices;
-        std::vector<GLfloat> coordinates;
+        std::vector<float> allocated_vertices;
+        std::vector<float> allocated_coordinates;
+
+        GLint sizeof_instanced_allocated_vertexes;
+        GLint sizeof_allocated_vertexes;
 
         GLuint vertex_arr_object;
-        GLuint vertex_buf_object;
+        GLuint vbo_vertices;
+        GLuint vbo_texture_coordinates;
+
+        static fx fx_shape2d;
+
+        int32_t previous_allocated_gpu_data_factor;
+        bool should_alloc_new_gpu_data;
+        bool should_create_buffers = true;
     public:
-        void add();
-        void alloc();
+        static void init();
+
+        void start_instance();
+        void pos(float x, float y);
+        void color(float r, float g, float b, float a);
+        void rect(float x, float y, float w, float h);
+        void modal(float x, float y, float w, float h);
+        void end_instance();
+
+        void xy(float x, float y);
+        void uv(float u, float v);
+        void invoke();
+        void revoke();
         void draw();
     };
 }

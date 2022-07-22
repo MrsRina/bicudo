@@ -5,7 +5,6 @@
 #include "api/util/tag.h"
 #include <ekg/ekg.hpp>
 
-material material_shape;
 rigid2d* rigid_object;
 
 scene_physic *scene_physic::instance = nullptr;

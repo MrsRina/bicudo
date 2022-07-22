@@ -10,7 +10,7 @@ void physic_service::update_pos() {
 }
 
 void physic_service::on_start() {
-    this->material_rigid2d_objects.color = util::color(0, 0, 0, 150);
+
 }
 
 void physic_service::on_end() {
@@ -51,13 +51,25 @@ void physic_service::on_update() {
 }
 
 void physic_service::on_render() {
+    this->batch.invoke();
+
     for (uint32_t i = 0; i < this->rigid2d_iterator; i++) {
         rigid2d* &rigid2d_obj = this->rigid2d_list[i];
 
         if (rigid2d_obj->get_type() == rigidutil::type::RIGID2D_RECTANGLE) {
             auto rigid2d_rect_obj = (rigid2d_rectangle*) rigid2d_obj;
+
+            this->batch.start_instance();
+            this->batch.color(0.5f, 0.0f, 0.5f, 1.0f);
+            this->batch.pos(rigid2d_obj->center.x, rigid2d_obj->center.y);
+            this->batch.rect(0.0f, 0.0f, 200, 200);
+            this->batch.modal(0.0f, 0.0f, 1.0f, 1.0f);
+            this->batch.end_instance();
         }
     }
+
+    this->batch.revoke();
+    this->batch.draw();
 }
 
 void physic_service::add_rigid2d(rigid2d *rigid2d_body) {

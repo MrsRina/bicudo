@@ -33,6 +33,14 @@ void fx::set_float(const std::string &name, float val) {
 	glUniform1f(glGetUniformLocation(this->program, name.c_str()), val);
 }
 
+void fx::set_vec2f(const std::string &name, const float *vec) {
+    glUniform2fv(glGetUniformLocation(this->program, name.c_str()), GL_FALSE, vec);
+}
+
+void fx::set_vec4f(const std::string &name, const float *vec) {
+    glUniform4fv(glGetUniformLocation(this->program, name.c_str()), GL_FALSE, vec);
+}
+
 void shader::init() {
 	shader::load(shader::fx_default, "data/fx/fx_default.vsh", "data/fx/fx_default.fsh");
     shader::load(shader::fx_terrain, "data/fx/fx_terrain.vsh", "data/fx/fx_terrain.fsh");

@@ -27,7 +27,7 @@ public:
     bool setting_flag_positional_correction_flag = true;
     uint8_t setting_iterations_count = 3;
     float setting_pos_correction_rate = 0.8f;
-    material material_rigid2d_objects;
+    draw::batch2d batch;
 
     /* Start of setters and getters. */
     std::array<rigid2d*, 2048> &get_rigid2d_list();

@@ -104,6 +104,7 @@ void game_core::init_context() {
 
     // Init static components.
     shader::init();
+    draw::batch2d::init();
 
     this->the_camera = new camera();
 
