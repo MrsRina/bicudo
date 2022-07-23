@@ -10,7 +10,7 @@ scene_physic *scene_physic::instance = nullptr;
 void scene_physic::on_start() {
     GLOBAL_WORLD_2D_GRAVITY = math::vec2(0, 9.0f);
 
-    for (uint32_t i = 0; i < 20; i++) {
+    for (uint32_t i = 0; i < 700; i++) {
         auto rigid2d_obj = new rigid2d_rectangle(math::vec2(rand() % 1280, 200 + rand() % 100), rand() % 100, 0.0001f,
                                                  0.2f, rand() % 75, rand() % 75);
         rigid2d_obj->set_physic(rigidutil::physic::FULL);
