@@ -7,8 +7,8 @@ rigid2d_rectangle::rigid2d_rectangle(math::vec2 vec_center, float val_mass, floa
     this->center = vec_center;
     this->friction = val_friction;
     this->restitution = val_restitution;
-    this->w = width;
-    this->h = height;
+    this->w = width < 0.1f ? 1.0f : width;
+    this->h = height < 0.1f ? 1.0f : height;
     this->mass = val_mass;
     this->inertia = 0.0f;
     this->acceleration = math::vec2(0, 0);

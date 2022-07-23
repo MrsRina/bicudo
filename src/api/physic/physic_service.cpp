@@ -61,10 +61,10 @@ void physic_service::on_render() {
 
             this->batch.start_instance();
             this->batch.color(0.5f, 0.0f, 0.5f, 1.0f);
-            this->batch.pos(rigid2d_obj->minx, rigid2d_obj->miny);
+            this->batch.pos(rigid2d_obj->center.x - rigid2d_rect_obj->w / 2, rigid2d_obj->center.y - rigid2d_rect_obj->h / 2);
             this->batch.rect(0.0f, 0.0f, rigid2d_rect_obj->w, rigid2d_rect_obj->h);
             this->batch.modal(0.0f, 0.0f, 1.0f, 1.0f);
-            this->batch.rotate(rigid2d_obj->angle);
+            this->batch.rotate(rigid2d_obj->angle, rigid2d_obj->center);
             this->batch.end_instance();
         }
     }

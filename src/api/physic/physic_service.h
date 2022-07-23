@@ -28,7 +28,7 @@ protected:
 public:
     // Physic configs.
     bool setting_flag_positional_correction_flag = true;
-    uint8_t setting_iterations_count = 1;
+    uint8_t setting_iterations_count = 3;
     float setting_pos_correction_rate = 0.8f;
     draw::batch2d batch;
 

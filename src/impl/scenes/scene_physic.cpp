@@ -5,21 +5,18 @@
 #include "api/util/tag.h"
 #include <ekg/ekg.hpp>
 
-rigid2d* rigid_object;
-
 scene_physic *scene_physic::instance = nullptr;
-
-float cx, cy, x, y, prev_x, prev_y;
-bool moving;
 
 void scene_physic::on_start() {
     GLOBAL_WORLD_2D_GRAVITY = math::vec2(0, 9.0f);
 
-    for (uint32_t i = 0; i < 700; i++) {
+    for (uint32_t i = 0; i < 20; i++) {
         auto rigid2d_obj = new rigid2d_rectangle(math::vec2(rand() % 1280, 200 + rand() % 100), rand() % 100, 0.0001f,
                                                  0.2f, rand() % 75, rand() % 75);
-        rigid2d_obj->set_physic(rigidutil::physic::POS);
+        rigid2d_obj->set_physic(rigidutil::physic::FULL);
     }
+
+    player = new rigid2d_rectangle(math::vec2(300, 10), 800.0f, 0.8f, 0.2f, 100.0f, 100.0f);
 
     new rigid2d_rectangle(math::vec2(400, 10), 900.0f, 0.0f, 0.0f, 1280, 100);
     new rigid2d_rectangle(math::vec2(10, 300), 0.0f, 0.0f, 0.0f, 100, 800);
@@ -38,31 +35,37 @@ void scene_physic::on_start() {
     //for (uint32_t i = 0; i < 1; i++) {
     axis += 5.0f;
 
+    auto frame2 = ekg::frame();
+
+    frame2->set_drag_offset(50.0f);
+    frame2->set_drag_dock(ekg::dock::TOP);
+
     auto frame = ekg::frame();
 
     float add_x = 10;
     float add_y = 10;
 
     frame->set_height(0.0f);
+    frame->set_pos(50, 50);
 
     for (uint32_t i = 0; i < 1; i++) {
         auto button = ekg::button("oi " + std::to_string(i));
-        auto slider = ekg::slider(50.0f, 20.0f, 200.0f);
         auto checkbox = ekg::check_box("oi " + std::to_string(i));
+        auto slider = ekg::slider(50.0f, 20.0f, 200.0f);
 
         checkbox->set_width(75);
         checkbox->set_text_dock(ekg::dock::LEFT);
 
         frame->place(checkbox, 10.0f, 150.0f);
-        frame->place(slider, 10.0f, 10.0f);
         frame->place(button, 10.0f, 10.0f);
+        frame->place(slider, 10.0f, 10.0f);
 
         button->set_pos(add_x, add_y);
 
         frame->set_drag_dock(ekg::dock::TOP);
         frame->set_drag_offset(30.0f);
 
-        add_x = button->get_width() + 5.0f;
+        add_x = button->get_width() + 12.0f;
 
         slider->set_pos(add_x, add_y);
         slider->set_width(150.0f);
@@ -122,13 +125,13 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
         case SDL_KEYDOWN: {
             auto k = sdl_event.key.keysym.sym;
 
-            if (k == SDLK_w) {
+            if (k == SDLK_UP) {
                 tag::set("MoveForward", true);
-            } else if (k == SDLK_a) {
+            } else if (k == SDLK_LEFT) {
                 tag::set("MoveStrafeLeft", true);
-            } else if (k == SDLK_d) {
+            } else if (k == SDLK_RIGHT) {
                 tag::set("MoveStrafeRight", true);
-            } else if (k == SDLK_s) {
+            } else if (k == SDLK_DOWN) {
                 tag::set("MoveBack", true);
             }
 
@@ -138,13 +141,13 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
         case SDL_KEYUP: {
             auto k = sdl_event.key.keysym.sym;
 
-            if (k == SDLK_w) {
+            if (k == SDLK_UP) {
                 tag::set("MoveForward", false);
-            } else if (k == SDLK_a) {
+            } else if (k == SDLK_LEFT) {
                 tag::set("MoveStrafeLeft", false);
-            } else if (k == SDLK_d) {
+            } else if (k == SDLK_RIGHT) {
                 tag::set("MoveStrafeRight", false);
-            } else if (k == SDLK_s) {
+            } else if (k == SDLK_DOWN) {
                 tag::set("MoveBack", false);
             }
 
@@ -173,15 +176,15 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
 
 void scene_physic::on_locked_update() {
     if (tag::get("MoveForward")) {
-        bicudo::camera()->position.x += 1;
+        player->velocity.y -= 5;
     }
 
     if (tag::get("MoveStrafeLeft")) {
-        bicudo::camera()->position.z -= 1;
+        player->velocity.x -= 1;
     }
 
     if (tag::get("MoveStrafeRight")) {
-        bicudo::camera()->position.z += 1;
+        player->velocity.x += 1;
     }
 
     if (tag::get("MoveBack")) {

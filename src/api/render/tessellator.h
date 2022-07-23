@@ -17,9 +17,11 @@ static uint8_t MESH_ITERATOR;
  **/
 struct gpu_data {
     uint32_t id = 0;
+
+    bool skip = false;
     int32_t factor = 0;
 
-    float pos[2];
+    float pos[4];
     float color[4];
     float z_depth;
     float angle;
@@ -55,17 +57,17 @@ namespace draw {
         int32_t previous_allocated_gpu_data_factor;
         bool should_alloc_new_gpu_data;
         bool should_create_buffers = true;
+        bool should_skip_data = false;
     public:
         static void init();
 
         void start_instance();
-        void pos(float x, float y);
+        void pos(float x, float y, bool skip = false);
         void color(float r, float g, float b, float a);
         void rect(float x, float y, float w, float h);
         void modal(float x, float y, float w, float h);
-        void rotate(float angle);
+        void rotate(float angle, math::vec2 center);
         void end_instance();
-
         void xy(float x, float y);
         void uv(float u, float v);
         void invoke();
