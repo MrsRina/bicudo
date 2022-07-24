@@ -23,8 +23,8 @@ struct gpu_data {
 
     float pos[4];
     float color[4];
-    float z_depth;
-    float angle;
+    float z_depth = 1.0f;
+    float angle = 0.0f;
 
     GLint begin = 0;
     GLint end = 0;

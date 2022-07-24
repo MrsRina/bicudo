@@ -36,10 +36,9 @@ void scene_physic::on_start() {
     axis += 5.0f;
 
     auto frame2 = ekg::frame();
+    auto popup = ekg::popup("popup da lina", {"element 1", "element 2", "element 3"});
 
-    frame2->set_drag_offset(50.0f);
-    frame2->set_drag_dock(ekg::dock::TOP);
-
+    frame2->place(popup, 10, 10);
     auto frame = ekg::frame();
 
     float add_x = 10;
