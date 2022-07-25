@@ -16,7 +16,7 @@ void scene_physic::on_start() {
         rigid2d_obj->set_physic(rigidutil::physic::FULL);
     }
 
-    player = new rigid2d_rectangle(math::vec2(300, 10), 800.0f, 0.8f, 0.2f, 100.0f, 100.0f);
+    player = new rigid2d_rectangle(math::vec2(300, 10), 1.0f, 0.8f, 0.2f, 100.0f, 100.0f);
 
     new rigid2d_rectangle(math::vec2(400, 10), 900.0f, 0.0f, 0.0f, 1280, 100);
     new rigid2d_rectangle(math::vec2(10, 300), 0.0f, 0.0f, 0.0f, 100, 800);
@@ -36,9 +36,6 @@ void scene_physic::on_start() {
     axis += 5.0f;
 
     auto frame2 = ekg::frame();
-    auto popup = ekg::popup("popup da lina", {"element 1", "element 2", "element 3"});
-
-    frame2->place(popup, 10, 10);
     auto frame = ekg::frame();
 
     float add_x = 10;
@@ -82,6 +79,8 @@ void scene_physic::on_start() {
     frame->set_drag_dock(ekg::dock::TOP);
     frame->set_drag_offset(30.0f);
     frame->set_resize_offset(30.0f);
+
+    the_ekg_core->debug_mode = true;
 }
 
 void scene_physic::on_end() {
@@ -155,6 +154,9 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
 
         case SDL_MOUSEBUTTONUP: {
             rigid_object = nullptr;
+
+            //auto popup = ekg::popup("popup da lina", {"element 1", "element 2", "element 3"});
+            //popup->set_pos(sdl_event.button.x, sdl_event.button.y);
 
             break;
         }
