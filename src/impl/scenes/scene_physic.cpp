@@ -155,8 +155,10 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
         case SDL_MOUSEBUTTONUP: {
             rigid_object = nullptr;
 
-            //auto popup = ekg::popup("popup da lina", {"element 1", "element 2", "element 3"});
-            //popup->set_pos(sdl_event.button.x, sdl_event.button.y);
+            auto popup = ekg::popup("popup da lina", {"element 1", "element 2", "element 3"});
+            if (popup != nullptr) {
+                popup->set_pos(sdl_event.button.x, sdl_event.button.y);
+            }
 
             break;
         }
