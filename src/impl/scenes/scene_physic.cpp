@@ -88,6 +88,21 @@ void scene_physic::on_end() {
 }
 
 void scene_physic::on_event(SDL_Event &sdl_event) {
+    float x, y;
+
+    if (ekgapi::input_up_right(sdl_event, x, y)) {
+        auto popup = ekg::popup("popup", {"element 1", "element 2", "element 3"});
+        auto popup2 = ekg::popup("element 1", {"thasaturation", "ui 2", "micie 3"});
+        auto popup3 = ekg::popup("element 3", {"25", "ui 2", "micie 3"});
+        auto popup4 = ekg::popup("ui 2", {"oi", "ui 2", "micie 3"});
+
+        if (popup != nullptr) {
+            popup->place(popup2);
+            popup2->place(popup3);
+            popup3->place(popup4);
+        }
+    }
+
     switch (sdl_event.type) {
         case SDL_MOUSEWHEEL: {
             float s = sdl_event.wheel.preciseY;
@@ -154,12 +169,6 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
 
         case SDL_MOUSEBUTTONUP: {
             rigid_object = nullptr;
-
-            auto popup = ekg::popup("popup da lina", {"element 1", "element 2", "element 3"});
-            if (popup != nullptr) {
-                popup->set_pos(sdl_event.button.x, sdl_event.button.y);
-            }
-
             break;
         }
 
