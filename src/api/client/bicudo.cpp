@@ -74,7 +74,7 @@ void game_core::init_window() {
         game_core::exception();
     }
 
-    // Set default OpenGL attributs to works with SDL2.
+    // Set default OpenGL attributes to work with SDL2.
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);

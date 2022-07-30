@@ -97,6 +97,7 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
         auto popup4 = ekg::popup("ui 2", {"oi", "ui 2", "micie 3"});
 
         if (popup != nullptr) {
+            popup->state("element 3", false);
             popup->place(popup2);
             popup2->place(popup3);
             popup3->place(popup4);
