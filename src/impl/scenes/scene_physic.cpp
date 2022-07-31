@@ -37,6 +37,9 @@ void scene_physic::on_start() {
     this->top_bar->set_drag_dock(ekg::dock::UNDEFINED);
     this->top_bar->set_resize_dock(ekg::dock::BOTTOM);
 
+    auto check = ekg::button("hi sou linda");
+    this->top_bar->place(check, 300, 2);
+
     this->left_bar = ekg::frame();
     this->left_bar->set_pos(0, 0);
     this->left_bar->set_drag_dock(ekg::dock::UNDEFINED);
@@ -70,6 +73,28 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
     }
 
     switch (sdl_event.type) {
+        case SDL_USEREVENT: {
+            auto event = ekg::event();
+
+            if (event != nullptr && event->type == ekg::ui::POPUP) {
+                util::log("Received UI event from ekg: " + event->text);
+            }
+
+            if (event != nullptr && event->type == ekg::ui::BUTTON) {
+                util::log("Received UI event from ekg: " + event->text);
+
+                if (event->text == "hi sou linda") {
+                    SDL_Event sdl_custom_event;
+                    sdl_custom_event.type = SDL_QUIT;
+                    sdl_custom_event.quit.type = SDL_QUIT;
+                    sdl_custom_event.quit.timestamp = 20;
+                    SDL_PushEvent(&sdl_custom_event);
+                }
+            }
+
+            break;
+        }
+
         case SDL_MOUSEWHEEL: {
             float s = sdl_event.wheel.preciseY;
 
