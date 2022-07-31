@@ -39,6 +39,8 @@ rigid2d_rectangle::rigid2d_rectangle(math::vec2 vec_center, float val_mass, floa
 void rigid2d_rectangle::on_update_position() {
     rigid2d::on_update_position();
 
+    this->acceleration = this->mass <= 0 ? math::zero2f : GLOBAL_WORLD_2D_GRAVITY;
+
     // [x, y] p = p + v + acc * dt * dt
     this->velocity += this->acceleration * util::timing::locked_delta_time;
     this->move(this->velocity * util::timing::locked_delta_time);

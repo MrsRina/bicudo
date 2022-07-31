@@ -28,57 +28,22 @@ void scene_physic::on_start() {
     tag::set("MoveStrafeRight", false);
     tag::set("MoveBack", false);
 
-    ekg::set_font_size(36);
+    ekg::set_font_size(28);
 
     float axis = 0;
 
-    //for (uint32_t i = 0; i < 1; i++) {
-    axis += 5.0f;
+    this->top_bar = ekg::frame();
+    this->top_bar->set_pos(0, 0);
+    this->top_bar->set_drag_dock(ekg::dock::UNDEFINED);
+    this->top_bar->set_resize_dock(ekg::dock::BOTTOM);
 
-    auto frame2 = ekg::frame();
-    auto frame = ekg::frame();
+    this->left_bar = ekg::frame();
+    this->left_bar->set_pos(0, 0);
+    this->left_bar->set_drag_dock(ekg::dock::UNDEFINED);
+    this->left_bar->set_resize_dock(ekg::dock::RIGHT);
 
-    float add_x = 10;
-    float add_y = 10;
-
-    frame->set_height(0.0f);
-    frame->set_pos(50, 50);
-
-    for (uint32_t i = 0; i < 1; i++) {
-        auto button = ekg::button("oi " + std::to_string(i));
-        auto checkbox = ekg::check_box("oi " + std::to_string(i));
-        auto slider = ekg::slider(50.0f, 20.0f, 200.0f);
-
-        checkbox->set_width(75);
-        checkbox->set_text_dock(ekg::dock::LEFT);
-
-        frame->place(checkbox, 10.0f, 150.0f);
-        frame->place(button, 10.0f, 10.0f);
-        frame->place(slider, 10.0f, 10.0f);
-
-        button->set_pos(add_x, add_y);
-
-        frame->set_drag_dock(ekg::dock::TOP);
-        frame->set_drag_offset(30.0f);
-
-        add_x = button->get_width() + 12.0f;
-
-        slider->set_pos(add_x, add_y);
-        slider->set_width(150.0f);
-        add_x += slider->get_width() + 5.0f;
-
-        checkbox->set_pos(add_x, add_y);
-
-        add_x = 10.0f;
-        add_y += checkbox->get_height();
-    }
-
-    frame->set_height(add_y);
-
-    frame->set_resize_dock(ekg::dock::LEFT | ekg::dock::BOTTOM | ekg::dock::RIGHT);
-    frame->set_drag_dock(ekg::dock::TOP);
-    frame->set_drag_offset(30.0f);
-    frame->set_resize_offset(30.0f);
+    this->gravity_setting = ekg::slider(9.0f, 0.0f, 100.0f);
+    this->left_bar->place(this->gravity_setting, 10, 10);
 
     the_ekg_core->debug_mode = true;
 }
@@ -119,6 +84,10 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
             bicudo::camera()->position.z -= 50;
 
             rigid_object = nullptr;
+
+            if (ekg::hovered_element_id() != ekg::ui::NONE) {
+                return;
+            }
 
             for (uint32_t i = 0; i < bicudo::service_physic().get_rigid2d_iterator(); i++) {
                 rigid_object = bicudo::service_physic().get_rigid2d_list()[i];
@@ -174,14 +143,15 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
         }
 
         case SDL_MOUSEMOTION: {
-            float mx = (float) sdl_event.motion.x;
-            float my = (float) sdl_event.motion.y;
+            float mx = static_cast<float>(sdl_event.motion.x);
+            float my = static_cast<float>(sdl_event.motion.y);
         
             bicudo::camera()->update_camera_motion(mx - prev_x, prev_y - my, true);
 
             prev_x = mx;
             prev_y = my;
 
+            GLOBAL_WORLD_2D_GRAVITY = math::vec2(0.0f, this->gravity_setting->get_value());
             break;
         }
     }
@@ -206,6 +176,10 @@ void scene_physic::on_locked_update() {
 }
 
 void scene_physic::on_update() {
+    this->top_bar->set_width(static_cast<float>(game_core::screen_width));
+    this->left_bar->set_pos(0, this->top_bar->get_height());
+    this->left_bar->set_height(static_cast<float>(game_core::screen_height) - this->top_bar->get_height());
+
     if (rigid_object != nullptr) {
         x = prev_x - (rigid_object->minx + cx);
         y = prev_y - (rigid_object->miny + cy);

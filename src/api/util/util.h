@@ -236,15 +236,17 @@ namespace math {
         }
     };
 
+    float radians(float degress);
     float clampf(float val, float min, float max);
+
     int32_t clampi(int32_t val, int32_t min, int32_t max);
     void clamp_vec2(vec2 vec, float min_vec_len, float max_vec_len);
-
-    float radians(float degress);
 
     void perspective(float* mat, float fov, float aspect, float z_near, float);
     void look_at(float* mat, vec3 eye, vec3 center, vec3 up);
     void ortho2d(float* mat, float left, float right, float bottom, float top);
+
+    extern math::vec2 zero2f;
 };
 
 /**

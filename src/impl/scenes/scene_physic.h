@@ -2,6 +2,7 @@
 
 #include "api/scene/scene.h"
 #include "api/physic/rigid/rigid2d.h"
+#include <ekg/ekg.hpp>
 
 #ifndef SCENE_PHYSIC_H
 #define SCENE_PHYSIC_H
@@ -9,6 +10,11 @@
 class scene_physic : public scene {
 public:
     static scene_physic *instance;
+
+    ekg_frame* left_bar;
+    ekg_frame* right_bar;
+    ekg_frame* top_bar;
+    ekg_slider* gravity_setting;
 
     rigid2d* rigid_object = nullptr;
     rigid2d* player;
