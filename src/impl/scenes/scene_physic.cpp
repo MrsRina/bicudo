@@ -76,11 +76,15 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
         case SDL_USEREVENT: {
             auto event = ekg::event();
 
-            if (event != nullptr && event->type == ekg::ui::POPUP) {
+            if (event == nullptr) {
+                break;
+            }
+
+            if (event->type == ekg::ui::POPUP) {
                 util::log("Received UI event from ekg: " + event->text);
             }
 
-            if (event != nullptr && event->type == ekg::ui::BUTTON) {
+            if (event->type == ekg::ui::BUTTON) {
                 util::log("Received UI event from ekg: " + event->text);
 
                 if (event->text == "hi sou linda") {
