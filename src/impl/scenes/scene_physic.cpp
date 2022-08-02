@@ -37,7 +37,8 @@ void scene_physic::on_start() {
     this->top_bar->set_drag_dock(ekg::dock::UNDEFINED);
     this->top_bar->set_resize_dock(ekg::dock::BOTTOM);
 
-    auto check = ekg::button("hi");
+    auto check = ekg::check_box("hi o hi hi hi 333");
+
     this->top_bar->place(check, 300, 2);
 
     this->left_bar = ekg::frame();
@@ -48,8 +49,8 @@ void scene_physic::on_start() {
     this->gravity_setting = ekg::slider(9.0f, 0.0f, 100.0f);
     this->left_bar->place(this->gravity_setting, 10, 10);
 
-    auto combobox = ekg::combobox("hi", "component 1", {"component 1", "component 2", "component 3"});
-    this->left_bar->place(combobox, 2, 50);
+    auto combobox = ekg::combobox("hi", "josh fofinho", {"joshinho", "josé", "silveira"});
+    this->left_bar->place(combobox, 10, 50);
 
     the_ekg_core->debug_mode = true;
 }
