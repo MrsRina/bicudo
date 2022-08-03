@@ -49,8 +49,11 @@ void scene_physic::on_start() {
     this->gravity_setting = ekg::slider(9.0f, 0.0f, 100.0f);
     this->left_bar->place(this->gravity_setting, 10, 10);
 
-    auto combobox = ekg::combobox("hi", "josh fofinho", {"joshinho", "josé", "silveira"});
+    auto combobox = ekg::check_box("jose silveira");
+    auto textbox = ekg::textbox();
+
     this->left_bar->place(combobox, 10, 50);
+    this->left_bar->place(textbox, 10, 50);
 
     the_ekg_core->debug_mode = true;
 }
