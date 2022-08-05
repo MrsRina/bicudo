@@ -51,7 +51,7 @@ void physic_service::on_update() {
 }
 
 void physic_service::on_render() {
-    this->batch.invoke();
+    this->shape_builder.invoke();
 
     for (uint32_t i = 0; i < this->rigid2d_iterator; i++) {
         rigid2d* &rigid2d_obj = this->rigid2d_list[i];
@@ -59,18 +59,13 @@ void physic_service::on_render() {
         if (rigid2d_obj->get_type() == rigidutil::type::RIGID2D_RECTANGLE) {
             auto rigid2d_rect_obj = (rigid2d_rectangle*) rigid2d_obj;
 
-            this->batch.start_instance();
-            this->batch.color(0.5f, 0.0f, 0.5f, 1.0f);
-            this->batch.pos(rigid2d_obj->center.x - rigid2d_rect_obj->w / 2, rigid2d_obj->center.y - rigid2d_rect_obj->h / 2);
-            this->batch.rect(0.0f, 0.0f, rigid2d_rect_obj->w, rigid2d_rect_obj->h);
-            this->batch.modal(0.0f, 0.0f, 1.0f, 1.0f);
-            this->batch.rotate(rigid2d_obj->angle, rigid2d_obj->center);
-            this->batch.end_instance();
+            this->shape_builder.build(draw::shape::RECT, math::vec4(0.0f, 0.5f, 0.5f, 1.0f));
+            this->shape_builder.rotate(rigid2d_obj->angle);
+            this->shape_builder.draw(rigid2d_obj->center.x - (rigid2d_rect_obj->w / 2), rigid2d_obj->center.y - (rigid2d_rect_obj->w / 2), rigid2d_rect_obj->w, rigid2d_rect_obj->h);
         }
     }
 
-    this->batch.revoke();
-    this->batch.draw();
+    this->shape_builder.revoke();
 }
 
 void physic_service::add_rigid2d(rigid2d *rigid2d_body) {

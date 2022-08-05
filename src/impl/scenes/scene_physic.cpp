@@ -37,9 +37,8 @@ void scene_physic::on_start() {
     this->top_bar->set_drag_dock(ekg::dock::UNDEFINED);
     this->top_bar->set_resize_dock(ekg::dock::BOTTOM);
 
-    auto check = ekg::check_box("hi o hi hi hi 333");
-
-    this->top_bar->place(check, 300, 2);
+    auto check = ekg::button("Exit");
+    this->top_bar->place(check, 1, 1);
 
     this->left_bar = ekg::frame();
     this->left_bar->set_pos(0, 0);
@@ -49,13 +48,10 @@ void scene_physic::on_start() {
     this->gravity_setting = ekg::slider(9.0f, 0.0f, 100.0f);
     this->left_bar->place(this->gravity_setting, 10, 10);
 
-    auto combobox = ekg::check_box("jose silveira");
-    auto textbox = ekg::textbox();
-
+    auto combobox = ekg::checkbox("jose silveira");
     this->left_bar->place(combobox, 10, 50);
-    this->left_bar->place(textbox, 10, 50);
 
-    the_ekg_core->debug_mode = true;
+    ekg::the_ekg_core->debug_mode = false;
 }
 
 void scene_physic::on_end() {
@@ -94,7 +90,7 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
             if (event->type == ekg::ui::BUTTON) {
                 util::log("Received UI event from ekg: " + event->text);
 
-                if (event->text == "hi") {
+                if (event->text == "Exit") {
                     SDL_Event sdl_custom_event;
                     sdl_custom_event.type = SDL_QUIT;
                     sdl_custom_event.quit.type = SDL_QUIT;

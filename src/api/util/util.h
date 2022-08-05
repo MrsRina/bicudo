@@ -6,6 +6,32 @@
  **/
 namespace math {
     /**
+     * Vector4D to directional or color.
+     **/
+    struct vec4 {
+        float x = 0.0f;
+        float y = 0.0f;
+        float z = 0.0f;
+        float w = 0.0f;
+
+        vec4() = default;
+
+        vec4(float x, float y, float z, float w) {
+            this->x = x;
+            this->y = y;
+            this->z = z;
+            this->w = w;
+        }
+
+        vec4(int32_t r, int32_t g, int32_t b, int32_t a = 255) {
+            this->x = static_cast<float>(r) / 255;
+            this->y = static_cast<float>(g) / 255;
+            this->z = static_cast<float>(b) / 255;
+            this->w = static_cast<float>(a) / 255;
+        }
+    };
+
+    /**
      * Vector3D to directional or color.
      **/
     struct vec3 {

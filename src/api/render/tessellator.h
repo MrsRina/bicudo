@@ -6,12 +6,6 @@
 #ifndef TESSELLATOR_H
 #define TESSELLATOR_H
 
-static float MESH_RECT_XYZ[18];
-static float MESH_MATERIAL_COLOR_RGBA[24];
-static float MESH_MATERIAL_TEXTURE_UV[12];
-
-static uint8_t MESH_ITERATOR;
-
 /**
  * GPU data.
  **/
@@ -21,7 +15,7 @@ struct gpu_data {
     bool skip = false;
     int32_t factor = 0;
 
-    float pos[4];
+    float rect[4];
     float color[4];
     float z_depth = 1.0f;
     float angle = 0.0f;
@@ -35,6 +29,10 @@ struct gpu_data {
  **/
 namespace draw {
     void init();
+
+    enum shape {
+        RECT, CIRCLE
+    };
 
     class batch2d {
     protected:
@@ -73,6 +71,34 @@ namespace draw {
         void invoke();
         void revoke();
         void draw();
+    };
+
+    class shape2d_builder {
+    protected:
+        static fx fx_shape_builder;
+        static GLuint vbo_mesh;
+        static GLuint vao;
+
+        gpu_data concurrent_gpu_data;
+        int32_t outline_line_thickness;
+        float default_depth_dist = 0.0f;
+
+        glm::mat4 matrix_rotate;
+        draw::shape enum_flag_shape_mode;
+    public:
+        static void init();
+
+        void set_default_depth_dist(float depth_dist);
+        float get_default_depth_dist();
+        gpu_data &get_gpu_data();
+
+        void invoke();
+        void build(const draw::shape &mode, const math::vec4 &color, GLuint texture_id = 0);
+        void modal(float tx, float ty, float tw, float th);
+        void rotate(float angle);
+        void outline(int32_t line_thickness);
+        void draw(float x, float y, float w, float h);
+        void revoke();
     };
 }
 
