@@ -34,6 +34,19 @@ namespace draw {
         RECT, CIRCLE
     };
 
+    class batch3d {
+    protected:
+        static fx fx_shape3d;
+
+        GLuint vbo_mesh_vertices;
+        GLuint vbo_mesh_materials_uv;
+        GLuint vao;
+
+        std::vector<float, 2048> allocated_vertices;
+        std::array<float, 2048> allocated_materials_uv;
+    public:
+    };
+
     class batch2d {
     protected:
         gpu_data allocated_gpu_data[2048];
