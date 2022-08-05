@@ -1,7 +1,7 @@
-#version core 330
+#version 330 core
 
 out vec4 out_frag_color;
-in vec4 varying_attrib_vertexes;
+in vec2 varying_attrib_vertexes;
 
 uniform vec4 u_vec_color;
 uniform vec4 u_vec_texture_rect;
@@ -14,7 +14,7 @@ void main() {
 	vec4 frag_color = u_vec_color;
 
 	if (u_bool_texture_enabled) {
-		frag_color = texture(u_sampler_texture_slot, (varying_attrib_vertexes.xy * u_vec_rect.zw) + u_vec_rect.xy);
+		frag_color = texture(u_sampler_texture_slot, (varying_attrib_vertexes.xy * u_vec_texture_rect.zw) + u_vec_texture_rect.xy);
 		frag_color *= u_vec_color;
 	}
 

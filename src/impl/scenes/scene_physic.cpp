@@ -50,6 +50,7 @@ void scene_physic::on_start() {
 
     auto combobox = ekg::checkbox("jose silveira");
     this->left_bar->place(combobox, 10, 50);
+    this->top_bar->set_height(30);
 
     ekg::the_ekg_core->debug_mode = false;
 }

@@ -1,7 +1,7 @@
-#version core 330
+#version 330 core
 
 layout (location = 0) in vec2 attrib_vertexes;
-out vec4 varying_attrib_vertexes;
+out vec2 varying_attrib_vertexes;
 
 uniform mat4 u_mat_perspective;
 uniform mat4 u_mat_rotate;

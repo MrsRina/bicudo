@@ -13,7 +13,7 @@ void physic_service::update_pos() {
 }
 
 void physic_service::on_start() {
-
+    this->shape_builder.set_default_depth_dist(0.0f);
 }
 
 void physic_service::on_end() {
@@ -61,7 +61,7 @@ void physic_service::on_render() {
 
             this->shape_builder.build(draw::shape::RECT, math::vec4(0.0f, 0.5f, 0.5f, 1.0f));
             this->shape_builder.rotate(rigid2d_obj->angle);
-            this->shape_builder.draw(rigid2d_obj->center.x - (rigid2d_rect_obj->w / 2), rigid2d_obj->center.y - (rigid2d_rect_obj->w / 2), rigid2d_rect_obj->w, rigid2d_rect_obj->h);
+            this->shape_builder.draw(rigid2d_obj->center.x - (rigid2d_rect_obj->w / 2), rigid2d_obj->center.y - (rigid2d_rect_obj->h / 2), rigid2d_rect_obj->w, rigid2d_rect_obj->h);
         }
     }
 
