@@ -42,6 +42,10 @@ void game_core::exception() {
     game_core::internal_flag = -1;
 }
 
+camera2d &game_core::get_camera2d() {
+    return this->the_camera2d;
+}
+
 void game_core::set_guiscreen(gui* new_gui) {
     if (this->guiscreen != nullptr && new_gui != nullptr && this->guiscreen->get_name() == new_gui->get_name()) {
         delete new_gui;
@@ -80,7 +84,6 @@ void game_core::init_window() {
      // Set default OpenGL attributes to work with SDL2.
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0);
     SDL_GL_SetSwapInterval(1);
 
     // As you can see, we are using OpenGL 3, "minimum supported version" is 3.

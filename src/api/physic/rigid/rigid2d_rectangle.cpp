@@ -2,7 +2,7 @@
 
 rigid2d_rectangle::rigid2d_rectangle(math::vec2 vec_center, float val_mass, float val_friction, float val_restitution, float width, float height) {
     this->type = rigidutil::type::RIGID2D_RECTANGLE;
-    this->physic = rigidutil::physic::POS;
+    this->physic = rigidutil::physic::FULL;
 
     this->center = vec_center;
     this->friction = val_friction;

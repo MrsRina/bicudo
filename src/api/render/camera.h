@@ -2,9 +2,18 @@
 
 #include "api/util/util.h"
 #include "shader.h"
+#include <ekg/api/ekg_utility.hpp>
 
 #ifndef CAMERA_H
 #define CAMERA_H
+
+/**
+ * Camera for 2D world.
+ **/
+struct camera2d {
+    ekgmath::rect rect;
+    void push(float &x, float &y);
+};
 
 /**
  * Game frustum management.

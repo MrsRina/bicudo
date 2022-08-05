@@ -50,3 +50,7 @@ physic_service &bicudo::service_physic() {
 camera* bicudo::camera() {
     return BICUDO->get_camera();
 }
+
+camera2d &bicudo::camera2d() {
+    return BICUDO->get_camera2d();
+}

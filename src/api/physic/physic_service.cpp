@@ -1,7 +1,5 @@
 #include "physic_service.h"
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "api/client/instance.h"
 
 void physic_service::update_gravity() {
 }
@@ -53,15 +51,25 @@ void physic_service::on_update() {
 void physic_service::on_render() {
     this->shape_builder.invoke();
 
+    float x = 0;
+    float y = 0;
+
+    rigid2d* rigid2d_obj;
+
     for (uint32_t i = 0; i < this->rigid2d_iterator; i++) {
-        rigid2d* &rigid2d_obj = this->rigid2d_list[i];
+        rigid2d_obj = this->rigid2d_list[i];
 
         if (rigid2d_obj->get_type() == rigidutil::type::RIGID2D_RECTANGLE) {
             auto rigid2d_rect_obj = (rigid2d_rectangle*) rigid2d_obj;
 
+            x = rigid2d_rect_obj->center.x - (rigid2d_rect_obj->w / 2);
+            y = rigid2d_rect_obj->center.y - (rigid2d_rect_obj->h / 2);
+            
+            BICUDO->get_camera2d().push(x, y);
+
             this->shape_builder.build(draw::shape::RECT, math::vec4(0.0f, 0.5f, 0.5f, 1.0f));
             this->shape_builder.rotate(rigid2d_obj->angle);
-            this->shape_builder.draw(rigid2d_obj->center.x - (rigid2d_rect_obj->w / 2), rigid2d_obj->center.y - (rigid2d_rect_obj->h / 2), rigid2d_rect_obj->w, rigid2d_rect_obj->h);
+            this->shape_builder.draw(x, y, rigid2d_rect_obj->w, rigid2d_rect_obj->h);
         }
     }
 

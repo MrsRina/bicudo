@@ -10,23 +10,25 @@ scene_physic *scene_physic::instance = nullptr;
 void scene_physic::on_start() {
     GLOBAL_WORLD_2D_GRAVITY = math::vec2(0, 9.0f);
 
-    for (uint32_t i = 0; i < 1; i++) {
+    player = new rigid2d_rectangle(math::vec2(300, 10), 20.0f, 0.0001f, 0.2f, 100.0f, 50.0f);
+    player->set_physic(rigidutil::physic::FULL);
+
+    for (uint32_t i = 0; i < 20; i++) {
         auto rigid2d_obj = new rigid2d_rectangle(math::vec2(rand() % 1280, 200 + rand() % 100), rand() % 100, 0.0001f,
                                                  0.2f, rand() % 75, rand() % 75);
         rigid2d_obj->set_physic(rigidutil::physic::FULL);
     }
 
-    player = new rigid2d_rectangle(math::vec2(300, 10), 1.0f, 0.8f, 0.2f, 100.0f, 100.0f);
 
-    new rigid2d_rectangle(math::vec2(400, 10), 900.0f, 0.0f, 0.0f, 1280, 100);
+    new rigid2d_rectangle(math::vec2(400, 10), 0.0f, 0.2f, 1.0f, 1280, 100);
     new rigid2d_rectangle(math::vec2(10, 300), 0.0f, 0.0f, 0.0f, 100, 800);
-    new rigid2d_rectangle(math::vec2(400, 600), 0.0f, 0.0f, 0.0f, 1280, 100);
-    new rigid2d_rectangle(math::vec2(800, 300), 0.0f, 1.0f, 0.0f, 100, 800);
+    new rigid2d_rectangle(math::vec2(400, 600), 0.0f, 0.2f, 0.2f, 1280, 100);
+    new rigid2d_rectangle(math::vec2(800, 300), 0.0f, 0.2f, 0.2f, 100, 800);
 
-    tag::set("MoveForward", false);
-    tag::set("MoveStrafeLeft", false);
-    tag::set("MoveStrafeRight", false);
-    tag::set("MoveBack", false);
+    tag::set("MoveForw2ard", false);
+    tag::set("MoveStr2afeLeft", false);
+    tag::set("MoveStraf2eRight", false);
+    tag::set("MoveBac2k", false);
 
     ekg::set_font_size(28);
 

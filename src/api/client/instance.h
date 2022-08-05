@@ -6,6 +6,7 @@ extern math::vec2 GLOBAL_WORLD_2D_GRAVITY;
 
 namespace bicudo {
     camera* camera();
+    camera2d &camera2d();
 
     void set_guiscreen(gui* new_gui);
     gui* current_guiscreen();

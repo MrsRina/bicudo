@@ -2,6 +2,11 @@
 #include "api/client/instance.h"
 #include <glm/gtc/matrix_transform.hpp>
 
+void camera2d::push(float &x, float &y) {
+    x -= this->rect.x;
+    y -= this->rect.y;
+}
+
 camera::camera() {
     this->position = glm::vec3(0, 0, 0);
     this->world_up = glm::vec3(0, 1.0f, 0);

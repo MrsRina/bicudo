@@ -70,7 +70,8 @@ protected:
     gui* guiscreen;
     context* game_context;
 
-    // Current project camera.
+    // Cameras.
+    camera2d the_camera2d;
     camera* the_camera;
 public:
     ~game_core() {}
@@ -100,6 +101,7 @@ public:
     physic_service &get_physic_manager();
 
     camera* get_camera();
+    camera2d &get_camera2d();
     /* End of setters and getters. */
 
     /* Start of main methods. */
