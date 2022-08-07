@@ -2,9 +2,26 @@
 #include "api/client/instance.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-void camera2d::push(float &x, float &y) {
-    x -= this->rect.x;
-    y -= this->rect.y;
+void camera2d::add_pos(float &x, float &y) {
+    x += this->rect.x - this->rect.w;
+    y += this->rect.y - this->rect.h;
+}
+
+void camera2d::subtract_pos(float &x, float &y) {
+    x = (x - this->rect.x);
+    y = (y - this->rect.y);
+}
+
+void camera2d::add(float &x, float &y, float &w, float &h) {
+    x = (x + this->rect.x);
+    y = (y + this->rect.y);
+}
+
+void camera2d::subtract(float &x, float &y, float &w, float &h) {
+    x += this->rect.x + this->rect.w;
+    y += this->rect.y + this->rect.h;
+    w -= (this->rect.w);
+    h -= (this->rect.h);
 }
 
 camera::camera() {

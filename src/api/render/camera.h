@@ -12,7 +12,11 @@
  **/
 struct camera2d {
     ekgmath::rect rect;
-    void push(float &x, float &y);
+
+    void add(float &x, float &y, float &w, float &h);
+    void subtract(float &x, float &y, float &w, float &h);
+    void subtract_pos(float &x, float &y);
+    void add_pos(float &x, float &y);
 };
 
 /**

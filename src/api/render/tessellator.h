@@ -42,9 +42,15 @@ namespace draw {
         GLuint vbo_mesh_materials_uv;
         GLuint vao;
 
-        std::vector<float, 2048> allocated_vertices;
-        std::array<float, 2048> allocated_materials_uv;
+        std::vector<float> allocated_vertices;
+        std::vector<float> allocated_materials_uv;
     public:
+        void invoke();
+        void coords(float u, float v);
+        void vertex(float x, float y, float z);
+        void mode(const glm::vec4 &model);
+        void draw();
+        void revoke();
     };
 
     class batch2d {

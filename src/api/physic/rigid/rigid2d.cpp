@@ -8,6 +8,11 @@ rigidutil::type rigid2d::get_type() {
 
 void rigid2d::set_physic(rigidutil::physic val_enum) {
     this->physic = val_enum;
+
+    if (val_enum == rigidutil::physic::POS) {
+        this->angular_velocity = 0;
+        this->angle = 0.0f;
+    }
 }
 
 rigidutil::physic rigid2d::get_physic() {

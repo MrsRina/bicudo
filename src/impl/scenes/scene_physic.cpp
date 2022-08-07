@@ -13,7 +13,7 @@ void scene_physic::on_start() {
     player = new rigid2d_rectangle(math::vec2(300, 10), 20.0f, 0.0001f, 0.2f, 100.0f, 50.0f);
     player->set_physic(rigidutil::physic::FULL);
 
-    for (uint32_t i = 0; i < 20; i++) {
+    for (uint32_t i = 0; i < 700; i++) {
         auto rigid2d_obj = new rigid2d_rectangle(math::vec2(rand() % 1280, 200 + rand() % 100), rand() % 100, 0.0001f,
                                                  0.2f, rand() % 75, rand() % 75);
         rigid2d_obj->set_physic(rigidutil::physic::FULL);
@@ -37,7 +37,6 @@ void scene_physic::on_start() {
     this->top_bar = ekg::frame();
     this->top_bar->set_pos(0, 0);
     this->top_bar->set_drag_dock(ekg::dock::UNDEFINED);
-    this->top_bar->set_resize_dock(ekg::dock::BOTTOM);
 
     auto check = ekg::button("Exit");
     this->top_bar->place(check, 1, 1);
@@ -50,11 +49,21 @@ void scene_physic::on_start() {
     this->gravity_setting = ekg::slider(9.0f, 0.0f, 100.0f);
     this->left_bar->place(this->gravity_setting, 10, 10);
 
-    auto combobox = ekg::checkbox("jose silveira");
-    this->left_bar->place(combobox, 10, 50);
-    this->top_bar->set_height(30);
+    auto combobox = ekg::checkbox("Acc-Angular");
+    combobox->set_checked(true);
 
-    ekg::the_ekg_core->debug_mode = false;
+    auto textbox = ekg::textbox();
+
+    textbox->set_text("hi sou linda uuuu u uuuuuu uuu uuuu uuuuuu uuu uuu uu");
+    textbox->set_max_rows(5);
+    textbox->set_width(200);
+    textbox->set_height(200);
+
+    this->left_bar->place(combobox, 10, 50);
+    this->left_bar->place(textbox, 10, combobox->get_y() + combobox->get_height() + 1);
+    this->top_bar->set_height(33);
+
+    ekg::the_ekg_core->debug_mode = true;
 }
 
 void scene_physic::on_end() {
@@ -65,16 +74,8 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
     float x, y;
 
     if (ekgapi::input_up_right(sdl_event, x, y)) {
-        auto popup = ekg::popup("popup", {"element 1", "element 2", "element 3"});
-        auto popup2 = ekg::popup("element 1", {"thasaturation", "ui 2", "micie 3"});
-        auto popup3 = ekg::popup("element 3", {"25", "ui 2", "micie 3"});
-        auto popup4 = ekg::popup("ui 2", {"oi", "ui 2", "micie 3"});
-
-        if (popup != nullptr) {
-            popup->state("element 3", false);
-            popup->place(popup2);
-            popup2->place(popup3);
-            popup3->place(popup4);
+        if (this->rigid_object == nullptr) {
+            auto popup = ekg::popup("popup", {"Add"});
         }
     }
 
@@ -88,6 +89,15 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
 
             if (event->type == ekg::ui::POPUP) {
                 util::log("Received UI event from ekg: " + event->text);
+
+                if (event->text == "popup | Add") {
+                   x = ekgapi::display_interact_x;
+                   y = ekgapi::display_interact_y;
+
+                   bicudo::camera2d().subtract_pos(x, y);
+                   auto rigid2d_obj = new rigid2d_rectangle(math::vec2(x, y), rand() % 100, 0.0001f,
+                                                             0.2f, rand() % 75, rand() % 75);
+                }
             }
 
             if (event->type == ekg::ui::BUTTON) {
@@ -102,14 +112,28 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
                 }
             }
 
+            if (event->type == ekg::ui::CHECKBOX) {
+                util::log("Received UI event from ekg: " + event->text);
+
+                if (event->text == "Acc-Angular") {
+                    for (uint32_t i = 0; i < bicudo::service_physic().get_rigid2d_iterator(); i++) {
+                        bicudo::service_physic().get_rigid2d_list()[i]->set_physic(event->boolean ? rigidutil::physic::FULL : rigidutil::physic::POS);
+                    }
+                }
+            }
+
             break;
         }
 
         case SDL_MOUSEWHEEL: {
             float s = sdl_event.wheel.preciseY;
 
-            if (rigid_object != nullptr) {
-                rigid_object->angular_velocity = s * (float) sin(SDL_GetTicks64());
+            if (s > 0) {
+                bicudo::camera2d().rect.w++;
+                bicudo::camera2d().rect.h++;
+            } else {
+                bicudo::camera2d().rect.w--;
+                bicudo::camera2d().rect.h--;
             }
 
             break;
@@ -119,22 +143,41 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
             bicudo::camera()->position.z -= 50;
 
             rigid_object = nullptr;
+            moving_camera = false;
 
             if (ekg::hovered_element_id() != ekg::ui::NONE) {
                 return;
             }
 
-            for (uint32_t i = 0; i < bicudo::service_physic().get_rigid2d_iterator(); i++) {
-                rigid_object = bicudo::service_physic().get_rigid2d_list()[i];
+            switch (sdl_event.button.button) {
+                case SDL_BUTTON_LEFT: {
+                    auto mx = static_cast<float>(sdl_event.motion.x);
+                    auto my = static_cast<float>(sdl_event.motion.y);
 
-                if (rigid2d_collide_with_point(rigid_object, (float) sdl_event.motion.x, (float) sdl_event.motion.y)) {
-                    cx = (float) sdl_event.motion.x - rigid_object->minx;
-                    cy = (float) sdl_event.motion.y - rigid_object->miny;
+                    BICUDO->get_camera2d().subtract_pos(mx, my);
+
+                    for (uint32_t i = 0; i < bicudo::service_physic().get_rigid2d_iterator(); i++) {
+                        rigid_object = bicudo::service_physic().get_rigid2d_list()[i];
+
+                        if (rigid2d_collide_with_point(rigid_object, mx, my)) {
+                            cx = static_cast<float>(sdl_event.motion.x) - rigid_object->minx;
+                            cy = static_cast<float>(sdl_event.motion.y) - rigid_object->miny;
+
+                            break;
+                        }
+
+                        rigid_object = nullptr;
+                    }
 
                     break;
                 }
 
-                rigid_object = nullptr;
+                case SDL_BUTTON_MIDDLE: {
+                    cx = static_cast<float>(sdl_event.motion.x) - bicudo::camera2d().rect.x;
+                    cy = static_cast<float>(sdl_event.motion.y) - bicudo::camera2d().rect.y;
+                    moving_camera = true;
+                    break;
+                }
             }
 
             break;
@@ -174,12 +217,18 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
 
         case SDL_MOUSEBUTTONUP: {
             rigid_object = nullptr;
+            moving_camera = false;
             break;
         }
 
         case SDL_MOUSEMOTION: {
-            float mx = static_cast<float>(sdl_event.motion.x);
-            float my = static_cast<float>(sdl_event.motion.y);
+            auto mx = static_cast<float>(sdl_event.motion.x);
+            auto my = static_cast<float>(sdl_event.motion.y);
+
+            if (moving_camera) {
+                bicudo::camera2d().rect.x = mx - cx;
+                bicudo::camera2d().rect.y = my - cy;
+            }
         
             bicudo::camera()->update_camera_motion(mx - prev_x, prev_y - my, true);
 

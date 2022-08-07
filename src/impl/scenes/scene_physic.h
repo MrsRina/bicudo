@@ -20,7 +20,7 @@ public:
     rigid2d* player;
 
     float cx, cy, x, y, prev_x, prev_y;
-    bool moving;
+    bool moving_camera = false;
 
     scene_physic() {
         instance = this;

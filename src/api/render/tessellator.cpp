@@ -1,10 +1,9 @@
 #include "tessellator.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include "api/client/instance.h"
 
 fx draw::batch2d::fx_shape2d;
+fx draw::batch3d::fx_shape3d;
 fx draw::shape2d_builder::fx_shape_builder;
 
 GLuint draw::shape2d_builder::vbo_mesh = 0;
@@ -261,7 +260,7 @@ void draw::shape2d_builder::build(const draw::shape &mode, const math::vec4 &col
     this->outline_line_thickness = 0;
     this->concurrent_gpu_data.angle = 0.0f;
     this->concurrent_gpu_data.end = 6;
-    this->concurrent_gpu_data.z_depth += 0.00001f;
+    this->concurrent_gpu_data.z_depth += 0.000000001f;
 
     this->concurrent_gpu_data.color[0] = color.x;
     this->concurrent_gpu_data.color[1] = color.y;
@@ -323,4 +322,28 @@ void draw::shape2d_builder::draw(float x, float y, float w, float h) {
 void draw::shape2d_builder::revoke() {
     glBindVertexArray(0);
     glUseProgram(0);
+}
+
+void draw::batch3d::invoke() {
+
+}
+
+void draw::batch3d::coords(float u, float v) {
+
+}
+
+void draw::batch3d::vertex(float x, float y, float z) {
+
+}
+
+void draw::batch3d::mode(const glm::vec4 &model) {
+
+}
+
+void draw::batch3d::draw() {
+
+}
+
+void draw::batch3d::revoke() {
+
 }

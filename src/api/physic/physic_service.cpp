@@ -51,8 +51,10 @@ void physic_service::on_update() {
 void physic_service::on_render() {
     this->shape_builder.invoke();
 
-    float x = 0;
-    float y = 0;
+    float cx = 0;
+    float cy = 0;
+    float cw = 0;
+    float ch = 0;
 
     rigid2d* rigid2d_obj;
 
@@ -62,14 +64,16 @@ void physic_service::on_render() {
         if (rigid2d_obj->get_type() == rigidutil::type::RIGID2D_RECTANGLE) {
             auto rigid2d_rect_obj = (rigid2d_rectangle*) rigid2d_obj;
 
-            x = rigid2d_rect_obj->center.x - (rigid2d_rect_obj->w / 2);
-            y = rigid2d_rect_obj->center.y - (rigid2d_rect_obj->h / 2);
+            cw = rigid2d_rect_obj->w;
+            ch = rigid2d_rect_obj->h;
+            cx = rigid2d_rect_obj->center.x - (cw / 2);
+            cy = rigid2d_rect_obj->center.y - (ch / 2);
             
-            BICUDO->get_camera2d().push(x, y);
+            BICUDO->get_camera2d().add(cx, cy, cw, ch);
 
             this->shape_builder.build(draw::shape::RECT, math::vec4(0.0f, 0.5f, 0.5f, 1.0f));
             this->shape_builder.rotate(rigid2d_obj->angle);
-            this->shape_builder.draw(x, y, rigid2d_rect_obj->w, rigid2d_rect_obj->h);
+            this->shape_builder.draw(cx, cy, cw, ch);
         }
     }
 
