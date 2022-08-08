@@ -13,22 +13,21 @@ void scene_physic::on_start() {
     player = new rigid2d_rectangle(math::vec2(300, 10), 20.0f, 0.0001f, 0.2f, 100.0f, 50.0f);
     player->set_physic(rigidutil::physic::FULL);
 
-    for (uint32_t i = 0; i < 700; i++) {
+    for (uint32_t i = 0; i < 10; i++) {
         auto rigid2d_obj = new rigid2d_rectangle(math::vec2(rand() % 1280, 200 + rand() % 100), rand() % 100, 0.0001f,
                                                  0.2f, rand() % 75, rand() % 75);
         rigid2d_obj->set_physic(rigidutil::physic::FULL);
     }
-
 
     new rigid2d_rectangle(math::vec2(400, 10), 0.0f, 0.2f, 1.0f, 1280, 100);
     new rigid2d_rectangle(math::vec2(10, 300), 0.0f, 0.0f, 0.0f, 100, 800);
     new rigid2d_rectangle(math::vec2(400, 600), 0.0f, 0.2f, 0.2f, 1280, 100);
     new rigid2d_rectangle(math::vec2(800, 300), 0.0f, 0.2f, 0.2f, 100, 800);
 
-    tag::set("MoveForw2ard", false);
-    tag::set("MoveStr2afeLeft", false);
-    tag::set("MoveStraf2eRight", false);
-    tag::set("MoveBac2k", false);
+    tag::set("MoveForward", false);
+    tag::set("MoveStrafeLeft", false);
+    tag::set("MoveStrafeRight", false);
+    tag::set("MoveBack", false);
 
     ekg::set_font_size(28);
 
@@ -56,7 +55,7 @@ void scene_physic::on_start() {
 
     auto textbox = ekg::textbox();
 
-    textbox->set_text("hi sou uuuu u uuuuuu uuu uuuu uuuuuu uuu uuu uu");
+    textbox->set_text("ooooooo");
     textbox->set_max_rows(5);
     textbox->set_width(200);
     textbox->set_height(200);
