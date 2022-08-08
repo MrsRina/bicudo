@@ -50,20 +50,23 @@ void scene_physic::on_start() {
     this->left_bar->place(this->gravity_setting, 10, 10);
 
     auto combobox = ekg::checkbox("Acc-Angular");
+    auto comobobobo = ekg::combobox("oi oi modos", "modo 1", {"modo 1", "modo 2", "modo 3", "modo 4"});
     combobox->set_checked(true);
+    comobobobo->set_width(150);
 
     auto textbox = ekg::textbox();
 
-    textbox->set_text("hi sou linda uuuu u uuuuuu uuu uuuu uuuuuu uuu uuu uu");
+    textbox->set_text("hi sou uuuu u uuuuuu uuu uuuu uuuuuu uuu uuu uu");
     textbox->set_max_rows(5);
     textbox->set_width(200);
     textbox->set_height(200);
 
     this->left_bar->place(combobox, 10, 50);
     this->left_bar->place(textbox, 10, combobox->get_y() + combobox->get_height() + 1);
+    this->left_bar->place(comobobobo, 10, textbox->get_y() + textbox->get_height() + 5);
     this->top_bar->set_height(33);
 
-    ekg::the_ekg_core->debug_mode = true;
+    ekg::the_ekg_core->debug_mode = false;
 }
 
 void scene_physic::on_end() {
