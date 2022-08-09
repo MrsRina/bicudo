@@ -54,9 +54,8 @@ void scene_physic::on_start() {
     comobobobo->set_width(150);
 
     auto textbox = ekg::textbox();
-
-    textbox->set_text("ooooooo");
-    textbox->set_max_rows(5);
+    textbox->set_text("Hello this is an text box! 1234567891234567891234567890");
+    textbox->set_max_rows(14);
     textbox->set_width(200);
     textbox->set_height(200);
 
@@ -65,7 +64,7 @@ void scene_physic::on_start() {
     this->left_bar->place(comobobobo, 10, textbox->get_y() + textbox->get_height() + 5);
     this->top_bar->set_height(33);
 
-    ekg::the_ekg_core->debug_mode = false;
+    ekg::the_ekg_core->debug_mode = true;
 }
 
 void scene_physic::on_end() {
