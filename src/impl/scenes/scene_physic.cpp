@@ -56,8 +56,8 @@ void scene_physic::on_start() {
 
     auto textbox = ekg::textbox();
 
-    textbox->set_text("hi sou uuuu u uuuuuu uuu uuuu uuuuuu uuu uuu uu");
-    textbox->set_max_rows(5);
+    textbox->set_text("Hello this is an text box!");
+    textbox->set_max_rows(14);
     textbox->set_width(200);
     textbox->set_height(200);
 
