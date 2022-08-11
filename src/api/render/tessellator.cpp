@@ -6,8 +6,32 @@ fx draw::batch2d::fx_shape2d;
 fx draw::batch3d::fx_shape3d;
 fx draw::shape2d_builder::fx_shape_builder;
 
+geometry_mesh draw::batch3d::concurrent_gmesh;
+
 GLuint draw::shape2d_builder::vbo_mesh = 0;
 GLuint draw::shape2d_builder::vao = 0;
+
+std::vector<float> &geometry_mesh::get_vertice_data() {
+    return this->vertice_data;
+}
+
+std::vector<float> &geometry_mesh::get_material_data() {
+    return this->material_data;
+}
+
+void geometry_mesh::push_back(float x, float y, float z) {
+    this->material_data.push_back(x);
+    this->material_data.push_back(y);
+    this->material_data.push_back(z);
+}
+
+void geometry_mesh::push_back(float u, float v, float n1, float n2, float n3) {
+    this->material_data.push_back(u);
+    this->material_data.push_back(v);
+    this->material_data.push_back(n1);
+    this->material_data.push_back(n2);
+    this->material_data.push_back(n3);
+}
 
 void draw::init() {
     draw::batch2d::init();
@@ -325,25 +349,38 @@ void draw::shape2d_builder::revoke() {
 }
 
 void draw::batch3d::invoke() {
-
+    draw::batch3d::concurrent_gmesh.get_vertice_data().clear();
+    draw::batch3d::concurrent_gmesh.get_material_data().clear();
 }
 
-void draw::batch3d::coords(float u, float v) {
-
+void draw::batch3d::dispatch_geometry(const geometry_mesh &g_mesh) {
+    draw::batch3d::concurrent_gmesh = g_mesh;
+    this->geometry_mesh_vertex_size = g_mesh.get_vertice_data().size();
 }
 
-void draw::batch3d::vertex(float x, float y, float z) {
+void draw::batch3d::draw(const math::vec3 &pos, const math::vec4 &model) {
+    this->model[0] = pos.x;
+    this->model[1] = pos.y;
+    this->model[2] = pos.z;
 
-}
+    camera::push(draw::batch3d::fx_shape3d);
 
-void draw::batch3d::mode(const glm::vec4 &model) {
+    draw::batch3d::fx_shape3d.use();
+    draw::batch3d::fx_shape2d.setm4f("u_mat_model", this->model);
+    draw::batch3d::fx_shape2d.set3f("u_vec_pos", this->pos);
 
-}
+    glBindVertexArray(this->vao);
+    glDrawArrays(GL_TRIANGLES, 0, this->geometry_mesh_vertex_size);
+    glBindVertexArray(0);
 
-void draw::batch3d::draw() {
-
+    draw::batch3d::fx_shape3d.end();
 }
 
 void draw::batch3d::revoke() {
-
+    if (this->should_create_buffers) {
+        glGenVertexArrays(1, &this->vao);
+        glGenBuffers(1, &this->vbo_data1);
+        glGenBuffers(1, &this->vbo_data2);
+        this->should_create_buffers = false;
+    }
 }

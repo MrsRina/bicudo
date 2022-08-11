@@ -25,6 +25,21 @@ struct gpu_data {
 };
 
 /**
+ * Build complex geometry shapes.
+ **/
+struct geometry_mesh {
+protected:
+    std::vector<float> vertice_data;
+    std::vector<float> material_data;
+public:
+    std::vector<float> &get_vertice_data();
+    std::vector<float> &get_material_data();
+
+    void vertex(float x, float y, float z);
+    void material(float u, float v, float n1, float n2, float n3);
+};
+
+/**
  * Draw shapes, circles or something you want using the tools.
  **/
 namespace draw {
@@ -37,19 +52,21 @@ namespace draw {
     class batch3d {
     protected:
         static fx fx_shape3d;
+        static geometry_mesh concurrent_gmesh;
 
-        GLuint vbo_mesh_vertices;
-        GLuint vbo_mesh_materials_uv;
+        GLuint vbo_data1;
+        GLuint vbo_data2;
         GLuint vao;
 
-        std::vector<float> allocated_vertices;
-        std::vector<float> allocated_materials_uv;
+        uint32_t geometry_mesh_vertices_count;
+        bool should_create_buffers = true;
+
+        float pos[3];
+        float model[16];
     public:
         void invoke();
-        void coords(float u, float v);
-        void vertex(float x, float y, float z);
-        void mode(const glm::vec4 &model);
-        void draw();
+        void dispatch_geometry(const geometry_mesh &g_mesh);
+        void draw(const math::vec4 &model);
         void revoke();
     };
 

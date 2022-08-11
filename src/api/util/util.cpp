@@ -86,26 +86,27 @@ float math::radians(float degress) {
 void math::perspective(float* mat, float fov, float aspect, float z_near, float z_far) {
     fov = math::radians(fov);
     float f = tan(fov / 2.0f);
+    uint8_t i = 0;
 
-    *mat++ = (1.0f / (aspect * f));
-    *mat++ = (0.0f);
-    *mat++ = (0.0f);
-    *mat++ = (0.0f);
+    mat[i++] = (1.0f / (aspect * f));
+    mat[i++] = (0.0f);
+    mat[i++] = (0.0f);
+    mat[i++] = (0.0f);
 
-    *mat++ = (0.0f);
-    *mat++ = (1.0f / f);
-    *mat++ = (0.0f);
-    *mat++ = (0.0f);
+    mat[i++] = (0.0f);
+    mat[i++] = (1.0f / f);
+    mat[i++] = (0.0f);
+    mat[i++] = (0.0f);
 
-    *mat++ = (0.0f);
-    *mat++ = (0.0f);
-    *mat++ = (-(z_far + z_near) / (z_far - z_near));
-    *mat++ = (-1.0f);
+    mat[i++] = (0.0f);
+    mat[i++] = (0.0f);
+    mat[i++] = (-(z_far + z_near) / (z_far - z_near));
+    mat[i++] = (-1.0f);
 
-    *mat++ = (0.0f);
-    *mat++ = (0.0f);
-    *mat++ = (-(2.0f * z_far * z_near) / (z_far - z_near));
-    *mat++ = (0.0f);
+    mat[i++] = (0.0f);
+    mat[i++] = (0.0f);
+    mat[i++] = (-(2.0f * z_far * z_near) / (z_far - z_near));
+    mat[i++] = (0.0f);
 }
 
 void math::look_at(float* mat, math::vec3 eye, math::vec3 center, math::vec3 up) {
@@ -113,25 +114,27 @@ void math::look_at(float* mat, math::vec3 eye, math::vec3 center, math::vec3 up)
     math::vec3 u = up.normalize();
     math::vec3 s = (f.cross(u)).normalize();
 
-    *mat++ = (s.x);
-    *mat++ = (u.x);
-    *mat++ = (-f.x);
-    *mat++ = (0.0f);
+    uint8_t i = 0;
 
-    *mat++ = (s.y);
-    *mat++ = (u.y);
-    *mat++ = (-f.y);
-    *mat++ = (0.0f);
+    mat[i++] = (s.x);
+    mat[i++] = (u.x);
+    mat[i++] = (-f.x);
+    mat[i++] = (0.0f);
 
-    *mat++ = (s.z);
-    *mat++ = (u.z);
-    *mat++ = (-f.z);
-    *mat++ = (0.0f);
+    mat[i++] = (s.y);
+    mat[i++] = (u.y);
+    mat[i++] = (-f.y);
+    mat[i++] = (0.0f);
 
-    *mat++ = (-s.dot(eye));
-    *mat++ = (-u.dot(eye));
-    *mat++ = (f.dot(eye));
-    *mat++ = (1.0f);
+    mat[i++] = (s.z);
+    mat[i++] = (u.z);
+    mat[i++] = (-f.z);
+    mat[i++] = (0.0f);
+
+    mat[i++] = (-s.dot(eye));
+    mat[i++] = (-u.dot(eye));
+    mat[i++] = (f.dot(eye));
+    mat[i++] = (1.0f);
 }
 
 void math::ortho2d(float* mat, float left, float right, float bottom, float top) {
@@ -141,29 +144,27 @@ void math::ortho2d(float* mat, float left, float right, float bottom, float top)
     const float inv_y = 1.0f / (top - bottom);
     const float inv_x = 1.0f / (right - left);
 
-    // first column
-    *mat++ = (2.0f * inv_x);
-    *mat++ = (0.0f);
-    *mat++ = (0.0f);
-    *mat++ = (0.0f);
+    uint8_t i = 0;
 
-    // second
-    *mat++ = (0.0f);
-    *mat++ = (2.0 * inv_y);
-    *mat++ = (0.0f);
-    *mat++ = (0.0f);
+    mat[i++] = (2.0f * inv_x);
+    mat[i++] = (0.0f);
+    mat[i++] = (0.0f);
+    mat[i++] = (0.0f);
 
-    // third
-    *mat++ = (0.0f);
-    *mat++ = (0.0f);
-    *mat++ = (-2.0f * inv_z);
-    *mat++ = (0.0f);
+    mat[i++] = (0.0f);
+    mat[i++] = (2.0 * inv_y);
+    mat[i++] = (0.0f);
+    mat[i++] = (0.0f);
 
-    // fourth
-    *mat++ = (-(right + left) * inv_x);
-    *mat++ = (-(top + bottom) * inv_y);
-    *mat++ = (-(zFar + zNear) * inv_z);
-    *mat++ = (1.0f);
+    mat[i++] = (0.0f);
+    mat[i++] = (0.0f);
+    mat[i++] = (-2.0f * inv_z);
+    mat[i++] = (0.0f);
+
+    mat[i++] = (-(right + left) * inv_x);
+    mat[i++] = (-(top + bottom) * inv_y);
+    mat[i++] = (-(zFar + zNear) * inv_z);
+    mat[i++] = (1.0f);
 }
 
 float math::clampf(float val, float min, float max) {

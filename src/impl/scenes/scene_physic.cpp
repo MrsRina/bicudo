@@ -64,7 +64,7 @@ void scene_physic::on_start() {
     this->left_bar->place(comobobobo, 10, textbox->get_y() + textbox->get_height() + 5);
     this->top_bar->set_height(33);
 
-    ekg::the_ekg_core->debug_mode = true;
+    ekg::core->debug_mode = true;
 }
 
 void scene_physic::on_end() {
