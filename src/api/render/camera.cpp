@@ -30,6 +30,7 @@ camera::camera() {
     this->front = glm::vec3(0.0f, 0.0f, -1.0f);
     this->yaw = 0.0f;
     this->fov = 45;
+    this->pitch = 0;
     this->mouse_sensitivity = 0.1f;
 
     this->calc_camera_rotation();
@@ -65,11 +66,11 @@ void camera::push(fx &shader_fx) {
     bicudo::camera()->calc_camera_matrix();
 
     shader_fx.setm4f("u_mat_perspective", shader::mat4x4_perspective);
-
+    shader_fx.setm4f("u_mat_view", shader::mat4x4_view);
 }
 
 void camera::calc_camera_matrix() {
-    glm::mat4 perspective = glm::perspective(glm::radians(this->fov), ((float) game_core::screen_width / (float) game_core::screen_height), 0.1f, 1000.0f);
+    glm::mat4 perspective = glm::perspective(glm::radians(this->fov), ((float) game_core::screen_width / (float) game_core::screen_height), 0.1f, 100.0f);
     glm::mat4 look_at = glm::lookAt(this->position, this->position + this->front, this->up);
 
     shader::mat4x4_perspective = &perspective[0][0];

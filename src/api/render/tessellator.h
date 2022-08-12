@@ -65,7 +65,7 @@ namespace draw {
 
         void invoke();
         void dispatch_geometry(geometry_mesh g_mesh);
-        void draw(const glm::vec3 &pos, const glm::mat4 &model, const math::vec4 &color);
+        void draw(const glm::vec3 &pos, glm::mat4 model, const math::vec4 &color);
         void revoke();
     };
 

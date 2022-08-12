@@ -21,9 +21,9 @@ std::vector<float> &geometry_mesh::get_material_data() {
 }
 
 void geometry_mesh::push_back(float x, float y, float z) {
-    this->material_data.push_back(x);
-    this->material_data.push_back(y);
-    this->material_data.push_back(z);
+    this->vertices_data.push_back(x);
+    this->vertices_data.push_back(y);
+    this->vertices_data.push_back(z);
 }
 
 void geometry_mesh::push_back(float u, float v) {
@@ -354,15 +354,15 @@ void draw::batch3d::invoke() {
 
 void draw::batch3d::dispatch_geometry(geometry_mesh g_mesh) {
     draw::batch3d::concurrent_gmesh = g_mesh;
-    this->geometry_mesh_vertices_count = g_mesh.get_vertices_data().size();
+    this->geometry_mesh_vertices_count = draw::batch3d::concurrent_gmesh.get_vertices_data().size();
 }
 
-void draw::batch3d::draw(const glm::vec3 &pos, const glm::mat4 &model, const math::vec4 &color) {
-    float c[4] {color.x, color.y, color.z, color.w};
+void draw::batch3d::draw(const glm::vec3 &pos, glm::mat4 model, const math::vec4 &color) {
+    float c[4] = {color.x, color.y, color.z, color.w};
+    model = glm::translate(model, pos);
 
     draw::batch3d::fx_shape3d.use();
     draw::batch3d::fx_shape3d.setm4f("u_mat_model", &model[0][0]);
-    draw::batch3d::fx_shape3d.set3f("u_vec_pos", &pos[0]);
     draw::batch3d::fx_shape3d.set4f("u_vec_color", c);
     camera::push(draw::batch3d::fx_shape3d);
 
@@ -374,6 +374,8 @@ void draw::batch3d::draw(const glm::vec3 &pos, const glm::mat4 &model, const mat
 }
 
 void draw::batch3d::revoke() {
+    this->geometry_mesh_vertices_count /= 3;
+
     if (this->should_create_buffers) {
         glGenVertexArrays(1, &this->vao);
         glGenBuffers(1, &this->vbo_data1);
@@ -382,15 +384,16 @@ void draw::batch3d::revoke() {
     }
 
     glBindVertexArray(this->vao);
+    glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo_data1);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * draw::batch3d::concurrent_gmesh.get_vertices_data().size(), &draw::batch3d::concurrent_gmesh.get_vertices_data()[0], GL_STATIC_DRAW);
-    glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
 
+    glEnableVertexAttribArray(1);
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo_data2);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * draw::batch3d::concurrent_gmesh.get_material_data().size(), &draw::batch3d::concurrent_gmesh.get_material_data()[0], GL_STATIC_DRAW);
-    glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 }
 
