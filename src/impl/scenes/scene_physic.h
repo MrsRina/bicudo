@@ -3,6 +3,7 @@
 #include "api/scene/scene.h"
 #include "api/physic/rigid/rigid2d.h"
 #include <ekg/ekg.hpp>
+#include "api/render/tessellator.h"
 
 #ifndef SCENE_PHYSIC_H
 #define SCENE_PHYSIC_H
@@ -21,6 +22,7 @@ public:
 
     float cx, cy, x, y, prev_x, prev_y;
     bool moving_camera = false;
+    draw::batch3d batch;
 
     scene_physic() {
         instance = this;

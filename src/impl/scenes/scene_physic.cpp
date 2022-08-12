@@ -64,7 +64,45 @@ void scene_physic::on_start() {
     this->left_bar->place(comobobobo, 10, textbox->get_y() + textbox->get_height() + 5);
     this->top_bar->set_height(33);
 
-    ekg::core->debug_mode = true;
+    ekg::core->debug_mode = false;
+
+    geometry_mesh mesh;
+
+    // face 1
+    mesh.push_back(0.0f, 0.0f, 0.0f);
+    mesh.push_back(0.0f, 1.0f, 0.0f);
+    mesh.push_back(1.0f, 1.0f, 0.0f);
+    mesh.push_back(1.0f, 1.0f, 0.0f);
+    mesh.push_back(1.0f, 0.0f, 0.0f);
+    mesh.push_back(0.0f, 0.0f, 0.0f);
+
+    // face 2
+    mesh.push_back(0.0f, 1.0f, 0.0f);
+    mesh.push_back(0.0f, 1.0f, 1.0f);
+    mesh.push_back(1.0f, 1.0f, 1.0f);
+    mesh.push_back(1.0f, 1.0f, 1.0f);
+    mesh.push_back(1.0f, 1.0f, 0.0f);
+    mesh.push_back(0.0f, 1.0f, 0.0f);
+
+    // face 3
+    mesh.push_back(0.0f, 0.0f, 0.0f);
+    mesh.push_back(0.0f, 0.0f, 1.0f);
+    mesh.push_back(0.0f, 1.0f, 1.0f);
+    mesh.push_back(0.0f, 1.0f, 1.0f);
+    mesh.push_back(0.0f, 1.0f, 0.0f);
+    mesh.push_back(0.0f, 0.0f, 0.0f);
+
+    // face 4
+    mesh.push_back(1.0f, 0.0f, 0.0f);
+    mesh.push_back(1.0f, 0.0f, 1.0f);
+    mesh.push_back(1.0f, 1.0f, 1.0f);
+    mesh.push_back(1.0f, 1.0f, 1.0f);
+    mesh.push_back(1.0f, 1.0f, 0.0f);
+    mesh.push_back(1.0f, 0.0f, 0.0f);
+
+    this->batch.invoke();
+    this->batch.dispatch_geometry(mesh);
+    this->batch.revoke();
 }
 
 void scene_physic::on_end() {
@@ -283,4 +321,6 @@ void scene_physic::on_update() {
 
 void scene_physic::on_render() {
     bicudo::service_physic().on_render();
+
+    this->batch.draw(glm::vec3(0, 0, 0), glm::mat4(1.0), math::vec4(255, 255, 255, 255));
 }

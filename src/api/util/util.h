@@ -32,104 +32,13 @@ namespace math {
     };
 
     /**
-     * Vector3D to directional or color.
-     **/
-    struct vec3 {
-        float x = 0.0f, y = 0.0f, z = 0.0f;
-
-        vec3() {}
-        vec3(float x, float y, float z = 0.0f) {
-            this->x = x;
-            this->y = y;
-            this->z = z;
-        }
-
-        void operator -= (vec3 vec) {
-            this->x -= vec.x;
-            this->y -= vec.y;
-            this->z -= vec.z;
-        }
-
-        vec3 operator - (vec3 vec) {
-            return vec3(this->x - vec.x, this->y - vec.y, this->z - vec.z);
-        }
-
-        vec3 operator - () {
-            return vec3(-this->x, this->y, -this->z);
-        }
-
-        vec3 operator + (vec3 vec) {
-            return vec3(this->x + vec.x, this->y + vec.y, this->z + vec.z);
-        }
-
-        void operator += (vec3 vec) {
-            this->x += vec.x;
-            this->y += vec.y;
-            this->z += vec.z;
-        }
-
-        void operator *= (float n) {
-            this->x *= n;
-            this->y *= n;
-            this->z *= n;
-        }
-
-        void operator *= (int n) {
-            this->x *= n;
-            this->y *= n;
-            this->z *= n;
-        }
-
-        vec3 operator * (float n) {
-            return vec3(this->x * n, this->y * n, this->z * n);
-        }
-
-        vec3 operator * (int n) {
-            return vec3(this->x * n, this->y * n, this->z * n);
-        }
-
-        double dot(vec3 vec) {
-            return (this->x * vec.x + this->y * vec.y + this->z * vec.z);
-        }
-
-        vec3 cross(vec3 vec) {
-            return vec3(
-                this->y * vec.z - this->z * vec.y,
-                this->z * vec.x - this->x * vec.z,
-                this->x * vec.y - this->y * vec.x
-            );
-        }
-
-        float length() {
-            return sqrt(this->x * this->x + this->y * this->y + this->y * this->y);
-        }
-
-        vec3 normalize() {
-            float len = this->length();
-
-            if (len > 0) {
-                len = 1.0f / len;
-            }
-
-            return vec3(this->x * len, this->y * len, this->z * len);
-        }
-
-        float distance(vec3 vec) {
-            float dx = this->x - vec.x;
-            float dy = this->y - vec.y;
-            float dz = this->z - vec.z;
-
-            return sqrt(dx * dx + dy * dy + dz * dz);
-        }
-    };
-
-    /**
      * Vector2D to directional or color.
      **/
     struct vec2 {
+        static float data[2];
         float x = 0.0f, y = 0.0f;
 
-        vec2() {}
+        vec2() = default;
         vec2(float x, float y) {
             this->x = x;
             this->y = y;
@@ -140,16 +49,16 @@ namespace math {
             this->y -= vec.y;
         }
 
-        vec2 operator - (vec2 vec) {
-            return vec2(this->x - vec.x, this->y - vec.y);
+        vec2 operator - (vec2 vec) const {
+            return {this->x - vec.x, this->y - vec.y};
         }
 
-        vec2 operator - () {
-            return vec2(-this->x, -this->y);
+        vec2 operator - () const {
+            return {-this->x, -this->y};
         }
 
-        vec2 operator + (vec2 vec) {
-            return vec2(this->x + vec.x, this->y + vec.y);
+        vec2 operator + (vec2 vec) const {
+            return {this->x + vec.x, this->y + vec.y};
         }
 
         void operator += (vec2 vec) {
@@ -163,48 +72,48 @@ namespace math {
         }
 
         void operator *= (int n) {
-            this->x *= n;
-            this->y *= n;
+            this->x *= static_cast<float>(n);
+            this->y *= static_cast<float>(n);
         }
 
-        vec2 operator * (float n) {
-            return vec2(this->x * n, this->y * n);
+        vec2 operator * (float n) const {
+            return {this->x * n, this->y * n};
         }
 
-        vec2 operator * (int n) {
-            return vec2(this->x * n, this->y * n);
+        vec2 operator * (int n) const {
+            return {this->x * static_cast<float>(n), this->y * static_cast<float>(n)};
         }
 
-        float dot(vec2 vec) {
+        float dot(vec2 vec) const {
             return (this->x * vec.x + this->y * vec.y);
         }
 
-        float cross(vec2 vec) {
+        float cross(vec2 vec) const {
             return (this->x * vec.y - this->y * vec.x);
         }
 
-        float length() {
+        float length() const {
             return sqrt(this->x * this->x + this->y * this->y);
         }
 
-        vec2 normalize() {
+        vec2 normalize() const {
             float len = this->length();
 
             if (len > 0) {
                 len = 1.0f / len;
             }
 
-            return vec2(this->x * len, this->y * len);
+            return {this->x * len, this->y * len};
         }
 
-        float distance(vec2 vec) {
+        float distance(vec2 vec) const {
             float dx = this->x - vec.x;
             float dy = this->y - vec.y;
 
             return sqrt(dx * dx + dy * dy);
         }
 
-        vec2 rotate(vec2 center, float angle) {
+        vec2 rotate(vec2 center, float angle) const {
             vec2 temp = center;
 
             float dx = this->x - center.x;
@@ -216,49 +125,12 @@ namespace math {
             center += temp;
             return center;
         }
-    };
 
-    struct mat4 {
-    protected:
-        // 0, 1, 2, 3
-        // 4, 5, 6, 7
-        // 8, 9, 10, 11
-        // 12, 13, 14, 15
-        float matrix[16];
-    public:
-        mat4(float z) {
-            this->matrix[3] = z;
-            this->matrix[7] = z;
-            this->matrix[11] = z;
-            this->matrix[15] = z;
-        }
-    };
+        float* to_ptr() const {
+            data[0] = this->x;
+            data[1] = this->y;
 
-    struct mat3 {
-    protected:
-        float matrix[9];
-    public:
-        mat3(float z) {
-            uint8_t i = 1;
-
-            i += 3;
-            this->matrix[i - 1] = z;
-
-            i += 3;
-            this->matrix[i - 1] = z;
-
-            i += 3;
-            this->matrix[i - 1] = z;
-        }
-    };
-
-    struct mat2 {
-    protected:
-        float matrix[4];
-    public:
-        mat2(float z) {
-            this->matrix[1] = z;
-            this->matrix[3] = z;
+            return data;
         }
     };
 
@@ -269,7 +141,7 @@ namespace math {
     void clamp_vec2(vec2 vec, float min_vec_len, float max_vec_len);
 
     void perspective(float* mat, float fov, float aspect, float z_near, float);
-    void look_at(float* mat, vec3 eye, vec3 center, vec3 up);
+    void look_at(float* mat, glm::vec3 eye, glm::vec3 center, glm::vec3 up);
     void ortho2d(float* mat, float left, float right, float bottom, float top);
 
     extern math::vec2 zero2f;

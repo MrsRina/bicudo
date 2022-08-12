@@ -16,12 +16,13 @@ struct fx {
 	void use();
 	void end();
 	
-	void set_mat4x4(const std::string &name, float* mat4x4);
-	void set_bool(const std::string &name, bool val);
-	void set_int(const std::string &name, int32_t val);
-	void set_float(const std::string &name, float val);
-    void set_vec2f(const std::string &name, const float* vec);
-    void set_vec4f(const std::string &name, const float* vec);
+	void setm4f(const std::string &name, const float* mat);
+	void setb(const std::string &name, bool val);
+	void seti(const std::string &name, int32_t val);
+	void setf(const std::string &name, float val);
+    void set2f(const std::string &name, const float* vec);
+    void set3f(const std::string &name, const float* vec);
+    void set4f(const std::string &name, const float* vec);
 	/* End of main methods. */
 };
 

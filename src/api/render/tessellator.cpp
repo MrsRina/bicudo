@@ -1,6 +1,7 @@
 #include "tessellator.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include "camera.h"
 
 fx draw::batch2d::fx_shape2d;
 fx draw::batch3d::fx_shape3d;
@@ -11,8 +12,8 @@ geometry_mesh draw::batch3d::concurrent_gmesh;
 GLuint draw::shape2d_builder::vbo_mesh = 0;
 GLuint draw::shape2d_builder::vao = 0;
 
-std::vector<float> &geometry_mesh::get_vertice_data() {
-    return this->vertice_data;
+std::vector<float> &geometry_mesh::get_vertices_data() {
+    return this->vertices_data;
 }
 
 std::vector<float> &geometry_mesh::get_material_data() {
@@ -25,16 +26,14 @@ void geometry_mesh::push_back(float x, float y, float z) {
     this->material_data.push_back(z);
 }
 
-void geometry_mesh::push_back(float u, float v, float n1, float n2, float n3) {
+void geometry_mesh::push_back(float u, float v) {
     this->material_data.push_back(u);
     this->material_data.push_back(v);
-    this->material_data.push_back(n1);
-    this->material_data.push_back(n2);
-    this->material_data.push_back(n3);
 }
 
 void draw::init() {
     draw::batch2d::init();
+    draw::batch3d::init();
     draw::shape2d_builder::init();
 }
 
@@ -107,7 +106,7 @@ void draw::batch2d::revoke() {
 
 void draw::batch2d::draw() {
     draw::batch2d::fx_shape2d.use();
-    draw::batch2d::fx_shape2d.set_mat4x4("u_mat_view", shader::mat4x4_ortho2d);
+    draw::batch2d::fx_shape2d.setm4f("u_mat_view", shader::mat4x4_ortho2d);
 
     glm::mat4 matrix_rotate;
     glm::mat4 matrix_rotate_default = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -123,14 +122,14 @@ void draw::batch2d::draw() {
             matrix_rotate = glm::rotate(matrix_rotate, data.angle, glm::vec3(0.0f, 0.0f, 1.0f));
             matrix_rotate = glm::translate(matrix_rotate, glm::vec3(-data.rect[2], -data.rect[3], 0.0f));
 
-            draw::batch2d::fx_shape2d.set_mat4x4("u_mat_rotate", &matrix_rotate[0][0]);
+            draw::batch2d::fx_shape2d.setm4f("u_mat_rotate", &matrix_rotate[0][0]);
         } else {
-            draw::batch2d::fx_shape2d.set_mat4x4("u_mat_rotate", &matrix_rotate_default[0][0]);
+            draw::batch2d::fx_shape2d.setm4f("u_mat_rotate", &matrix_rotate_default[0][0]);
         }
 
-        draw::batch2d::fx_shape2d.set_float("u_float_z_depth", data.z_depth);
-        draw::batch2d::fx_shape2d.set_vec2f("u_vec_pos", data.rect);
-        draw::batch2d::fx_shape2d.set_vec4f("u_vec_color", data.color);
+        draw::batch2d::fx_shape2d.setf("u_float_z_depth", data.z_depth);
+        draw::batch2d::fx_shape2d.set2f("u_vec_pos", data.rect);
+        draw::batch2d::fx_shape2d.set4f("u_vec_color", data.color);
 
         glDrawArrays(GL_TRIANGLES, data.begin, data.end);
     }
@@ -273,7 +272,7 @@ void draw::shape2d_builder::invoke() {
 
     // Enable the shader for this tick shape.
     draw::shape2d_builder::fx_shape_builder.use();
-    draw::shape2d_builder::fx_shape_builder.set_mat4x4("u_mat_perspective", shader::mat4x4_ortho2d);
+    draw::shape2d_builder::fx_shape_builder.setm4f("u_mat_perspective", shader::mat4x4_ortho2d);
 
     // Enable the VAO object.
     glBindVertexArray(draw::shape2d_builder::vao);
@@ -291,15 +290,15 @@ void draw::shape2d_builder::build(const draw::shape &mode, const math::vec4 &col
     this->concurrent_gpu_data.color[2] = color.z;
     this->concurrent_gpu_data.color[3] = color.w;
 
-    draw::shape2d_builder::fx_shape_builder.set_float("u_float_depth", this->concurrent_gpu_data.z_depth);
-    draw::shape2d_builder::fx_shape_builder.set_vec4f("u_vec_color", this->concurrent_gpu_data.color);
+    draw::shape2d_builder::fx_shape_builder.setf("u_float_depth", this->concurrent_gpu_data.z_depth);
+    draw::shape2d_builder::fx_shape_builder.set4f("u_vec_color", this->concurrent_gpu_data.color);
 
     if (texture_id != 0) {
         glBindTexture(GL_TEXTURE_2D, texture_id);
         glActiveTexture(GL_TEXTURE0);
 
-        draw::shape2d_builder::fx_shape_builder.set_int("u_bool_texture_enabled", true);
-        draw::shape2d_builder::fx_shape_builder.set_int("u_sampler_texture_slot", 0);
+        draw::shape2d_builder::fx_shape_builder.seti("u_bool_texture_enabled", true);
+        draw::shape2d_builder::fx_shape_builder.seti("u_sampler_texture_slot", 0);
     }
 }
 
@@ -309,7 +308,7 @@ void draw::shape2d_builder::modal(float tx, float ty, float tw, float th) {
     this->concurrent_gpu_data.rect[2] = tw;
     this->concurrent_gpu_data.rect[3] = th;
 
-    draw::shape2d_builder::fx_shape_builder.set_vec4f("u_vec_texture_rect", this->concurrent_gpu_data.rect);
+    draw::shape2d_builder::fx_shape_builder.set4f("u_vec_texture_rect", this->concurrent_gpu_data.rect);
 }
 
 void draw::shape2d_builder::rotate(float angle) {
@@ -334,10 +333,10 @@ void draw::shape2d_builder::draw(float x, float y, float w, float h) {
     this->matrix_rotate = glm::rotate(this->matrix_rotate, this->concurrent_gpu_data.angle, glm::vec3(0.0f, 0.0f, 1.0f));
     this->matrix_rotate = glm::translate(this->matrix_rotate, glm::vec3(-cx, -cy, 0.0f));
 
-    draw::shape2d_builder::fx_shape_builder.set_vec4f("u_vec_rect", this->concurrent_gpu_data.rect);
-    draw::shape2d_builder::fx_shape_builder.set_mat4x4("u_mat_rotate", &this->matrix_rotate[0][0]);
-    draw::shape2d_builder::fx_shape_builder.set_int("u_int_shape_mode_id", this->enum_flag_shape_mode);
-    draw::shape2d_builder::fx_shape_builder.set_int("u_int_line_thickness", this->outline_line_thickness);
+    draw::shape2d_builder::fx_shape_builder.set4f("u_vec_rect", this->concurrent_gpu_data.rect);
+    draw::shape2d_builder::fx_shape_builder.setm4f("u_mat_rotate", &this->matrix_rotate[0][0]);
+    draw::shape2d_builder::fx_shape_builder.seti("u_int_shape_mode_id", this->enum_flag_shape_mode);
+    draw::shape2d_builder::fx_shape_builder.seti("u_int_line_thickness", this->outline_line_thickness);
 
     glDrawArrays(GL_TRIANGLES, 0, this->concurrent_gpu_data.end);
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -349,28 +348,26 @@ void draw::shape2d_builder::revoke() {
 }
 
 void draw::batch3d::invoke() {
-    draw::batch3d::concurrent_gmesh.get_vertice_data().clear();
+    draw::batch3d::concurrent_gmesh.get_vertices_data().clear();
     draw::batch3d::concurrent_gmesh.get_material_data().clear();
 }
 
-void draw::batch3d::dispatch_geometry(const geometry_mesh &g_mesh) {
+void draw::batch3d::dispatch_geometry(geometry_mesh g_mesh) {
     draw::batch3d::concurrent_gmesh = g_mesh;
-    this->geometry_mesh_vertex_size = g_mesh.get_vertice_data().size();
+    this->geometry_mesh_vertices_count = g_mesh.get_vertices_data().size();
 }
 
-void draw::batch3d::draw(const math::vec3 &pos, const math::vec4 &model) {
-    this->model[0] = pos.x;
-    this->model[1] = pos.y;
-    this->model[2] = pos.z;
-
-    camera::push(draw::batch3d::fx_shape3d);
+void draw::batch3d::draw(const glm::vec3 &pos, const glm::mat4 &model, const math::vec4 &color) {
+    float c[4] {color.x, color.y, color.z, color.w};
 
     draw::batch3d::fx_shape3d.use();
-    draw::batch3d::fx_shape2d.setm4f("u_mat_model", this->model);
-    draw::batch3d::fx_shape2d.set3f("u_vec_pos", this->pos);
+    draw::batch3d::fx_shape3d.setm4f("u_mat_model", &model[0][0]);
+    draw::batch3d::fx_shape3d.set3f("u_vec_pos", &pos[0]);
+    draw::batch3d::fx_shape3d.set4f("u_vec_color", c);
+    camera::push(draw::batch3d::fx_shape3d);
 
     glBindVertexArray(this->vao);
-    glDrawArrays(GL_TRIANGLES, 0, this->geometry_mesh_vertex_size);
+    glDrawArrays(GL_TRIANGLES, 0, (GLint) this->geometry_mesh_vertices_count);
     glBindVertexArray(0);
 
     draw::batch3d::fx_shape3d.end();
@@ -383,4 +380,20 @@ void draw::batch3d::revoke() {
         glGenBuffers(1, &this->vbo_data2);
         this->should_create_buffers = false;
     }
+
+    glBindVertexArray(this->vao);
+    glBindBuffer(GL_ARRAY_BUFFER, this->vbo_data1);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * draw::batch3d::concurrent_gmesh.get_vertices_data().size(), &draw::batch3d::concurrent_gmesh.get_vertices_data()[0], GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, this->vbo_data2);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * draw::batch3d::concurrent_gmesh.get_material_data().size(), &draw::batch3d::concurrent_gmesh.get_material_data()[0], GL_STATIC_DRAW);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+    glBindVertexArray(0);
+}
+
+void draw::batch3d::init() {
+    shader::load(draw::batch3d::fx_shape3d, "data/fx/fx_shape3d.vsh", "data/fx/fx_shape3d.fsh");
 }

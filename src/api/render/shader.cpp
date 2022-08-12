@@ -17,28 +17,32 @@ void fx::end() {
 	glUseProgram(0);
 }
 
-void fx::set_mat4x4(const std::string &name, float* mat4x4) {
-	glUniformMatrix4fv(glGetUniformLocation(this->program, name.c_str()), 1, GL_FALSE, mat4x4);
+void fx::setm4f(const std::string &name, const float* mat) {
+	glUniformMatrix4fv(glGetUniformLocation(this->program, name.c_str()), 1, GL_FALSE, mat);
 }
 
-void fx::set_bool(const std::string &name, bool val) {
+void fx::setb(const std::string &name, bool val) {
 	glUniform1i(glGetUniformLocation(this->program, name.c_str()), (int) val);
 }
 
-void fx::set_int(const std::string &name, int32_t val) {
+void fx::seti(const std::string &name, int32_t val) {
 	glUniform1i(glGetUniformLocation(this->program, name.c_str()), val);
 }
 
-void fx::set_float(const std::string &name, float val) {
+void fx::setf(const std::string &name, float val) {
 	glUniform1f(glGetUniformLocation(this->program, name.c_str()), val);
 }
 
-void fx::set_vec2f(const std::string &name, const float *vec) {
+void fx::set2f(const std::string &name, const float *vec) {
     glUniform2fv(glGetUniformLocation(this->program, name.c_str()), 1, vec);
 }
 
-void fx::set_vec4f(const std::string &name, const float *vec) {
+void fx::set4f(const std::string &name, const float *vec) {
     glUniform4fv(glGetUniformLocation(this->program, name.c_str()), 1, vec);
+}
+
+void fx::set3f(const std::string &name, const float *vec) {
+    glUniform3fv(glGetUniformLocation(this->program, name.c_str()), 1, vec);
 }
 
 void shader::init() {

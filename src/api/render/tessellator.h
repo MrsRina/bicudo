@@ -29,14 +29,14 @@ struct gpu_data {
  **/
 struct geometry_mesh {
 protected:
-    std::vector<float> vertice_data;
+    std::vector<float> vertices_data;
     std::vector<float> material_data;
 public:
-    std::vector<float> &get_vertice_data();
+    std::vector<float> &get_vertices_data();
     std::vector<float> &get_material_data();
 
-    void vertex(float x, float y, float z);
-    void material(float u, float v, float n1, float n2, float n3);
+    void push_back(float u, float v);
+    void push_back(float x, float y, float z);
 };
 
 /**
@@ -60,13 +60,12 @@ namespace draw {
 
         uint32_t geometry_mesh_vertices_count;
         bool should_create_buffers = true;
-
-        float pos[3];
-        float model[16];
     public:
+        static void init();
+
         void invoke();
-        void dispatch_geometry(const geometry_mesh &g_mesh);
-        void draw(const math::vec4 &model);
+        void dispatch_geometry(geometry_mesh g_mesh);
+        void draw(const glm::vec3 &pos, const glm::mat4 &model, const math::vec4 &color);
         void revoke();
     };
 

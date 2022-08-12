@@ -109,32 +109,7 @@ void math::perspective(float* mat, float fov, float aspect, float z_near, float 
     mat[i++] = (0.0f);
 }
 
-void math::look_at(float* mat, math::vec3 eye, math::vec3 center, math::vec3 up) {
-    math::vec3 f = (eye - center).normalize();
-    math::vec3 u = up.normalize();
-    math::vec3 s = (f.cross(u)).normalize();
-
-    uint8_t i = 0;
-
-    mat[i++] = (s.x);
-    mat[i++] = (u.x);
-    mat[i++] = (-f.x);
-    mat[i++] = (0.0f);
-
-    mat[i++] = (s.y);
-    mat[i++] = (u.y);
-    mat[i++] = (-f.y);
-    mat[i++] = (0.0f);
-
-    mat[i++] = (s.z);
-    mat[i++] = (u.z);
-    mat[i++] = (-f.z);
-    mat[i++] = (0.0f);
-
-    mat[i++] = (-s.dot(eye));
-    mat[i++] = (-u.dot(eye));
-    mat[i++] = (f.dot(eye));
-    mat[i++] = (1.0f);
+void math::look_at(float* mat, glm::vec3 eye, glm::vec3 center, glm::vec3 up) {
 }
 
 void math::ortho2d(float* mat, float left, float right, float bottom, float top) {

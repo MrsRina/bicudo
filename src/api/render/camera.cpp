@@ -64,7 +64,7 @@ void camera::update_camera_motion(float mx, float my, bool constrain_pitch) {
 void camera::push(fx &shader_fx) {
     bicudo::camera()->calc_camera_matrix();
 
-    shader_fx.set_mat4x4("u_mat_perspective", shader::mat4x4_perspective);
+    shader_fx.setm4f("u_mat_perspective", shader::mat4x4_perspective);
 
 }
 
