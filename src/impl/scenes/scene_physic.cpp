@@ -13,7 +13,7 @@ void scene_physic::on_start() {
     player = new rigid2d_rectangle(math::vec2(300, 10), 20.0f, 0.0001f, 0.2f, 100.0f, 50.0f);
     player->set_physic(rigidutil::physic::FULL);
 
-    for (uint32_t i = 0; i < 10; i++) {
+    for (uint32_t i = 0; i < 700; i++) {
         auto rigid2d_obj = new rigid2d_rectangle(math::vec2(rand() % 1280, 200 + rand() % 100), rand() % 100, 0.0001f,
                                                  0.2f, rand() % 75, rand() % 75);
         rigid2d_obj->set_physic(rigidutil::physic::FULL);
@@ -29,7 +29,8 @@ void scene_physic::on_start() {
     tag::set("MoveStrafeRight", false);
     tag::set("MoveBack", false);
 
-    ekg::set_font_size(28);
+    ekg::set_font("data/fonts/font-kit-jetbrains-mono/ttf/JetBrainsMono-Bold.ttf");
+    ekg::set_font_size(26);
 
     float axis = 0;
 
@@ -56,7 +57,7 @@ void scene_physic::on_start() {
     auto textbox = ekg::textbox();
     textbox->set_text("Hello this is an text box! 1234567891234567891234567890");
     textbox->set_max_rows(14);
-    textbox->set_width(200);
+    textbox->set_width(400);
     textbox->set_height(200);
 
     this->left_bar->place(combobox, 10, 50);
