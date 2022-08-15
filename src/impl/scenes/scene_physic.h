@@ -16,6 +16,8 @@ public:
     ekg_frame* right_bar;
     ekg_frame* top_bar;
     ekg_slider* gravity_setting;
+    ekg_frame* frame_text_box;
+    ekg_textbox* text_box;
 
     rigid2d* rigid_object = nullptr;
     rigid2d* player;

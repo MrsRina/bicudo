@@ -13,9 +13,9 @@ void scene_physic::on_start() {
     player = new rigid2d_rectangle(math::vec2(300, 10), 20.0f, 0.0001f, 0.2f, 100.0f, 50.0f);
     player->set_physic(rigidutil::physic::FULL);
 
-    for (uint32_t i = 0; i < 700; i++) {
+    for (uint32_t i = 0; i < 200; i++) {
         auto rigid2d_obj = new rigid2d_rectangle(math::vec2(rand() % 1280, 200 + rand() % 100), rand() % 100, 0.0001f,
-                                                 0.2f, rand() % 75, rand() % 75);
+                                                 0.2f, 75, 75);
         rigid2d_obj->set_physic(rigidutil::physic::FULL);
     }
 
@@ -33,6 +33,17 @@ void scene_physic::on_start() {
     ekg::set_font_size(26);
 
     float axis = 0;
+
+    this->frame_text_box = ekg::frame();
+    this->frame_text_box->set_resize_dock(ekg::dock::BOTTOM | ekg::dock::LEFT | ekg::dock::RIGHT);
+    this->frame_text_box->set_drag_dock(ekg::dock::TOP);
+    this->frame_text_box->set_drag_offset(30.0f);
+    this->frame_text_box->set_pos(400, 300);
+
+    this->text_box = ekg::textbox();
+    this->text_box->set_text("hi hi");
+    this->text_box->set_max_rows(30);
+    this->frame_text_box->place(this->text_box, 10, 10);
 
     this->top_bar = ekg::frame();
     this->top_bar->set_pos(0, 0);
@@ -54,15 +65,8 @@ void scene_physic::on_start() {
     combobox->set_checked(true);
     comobobobo->set_width(150);
 
-    auto textbox = ekg::textbox();
-    textbox->set_text("Hello this is an text box! 1234567891234567891234567890");
-    textbox->set_max_rows(14);
-    textbox->set_width(400);
-    textbox->set_height(200);
-
     this->left_bar->place(combobox, 10, 50);
-    this->left_bar->place(textbox, 10, combobox->get_y() + combobox->get_height() + 1);
-    this->left_bar->place(comobobobo, 10, textbox->get_y() + textbox->get_height() + 5);
+    this->left_bar->place(comobobobo, 10, combobox->get_y() + combobox->get_height() + 5);
     this->top_bar->set_height(33);
 
     ekg::core->debug_mode = false;
@@ -303,6 +307,8 @@ void scene_physic::on_update() {
     this->top_bar->set_width(static_cast<float>(game_core::screen_width));
     this->left_bar->set_pos(0, this->top_bar->get_height());
     this->left_bar->set_height(static_cast<float>(game_core::screen_height) - this->top_bar->get_height());
+    this->text_box->set_pos(10, 10);
+    this->text_box->set_size(this->frame_text_box->get_width() - (10 * 2), this->frame_text_box->get_height() - (10 * 2));
 
     if (rigid_object != nullptr) {
         x = prev_x - (rigid_object->minx + cx);
