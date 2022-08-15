@@ -42,7 +42,7 @@ void scene_physic::on_start() {
 
     this->text_box = ekg::textbox();
     this->text_box->set_text("hi hi");
-    this->text_box->set_max_rows(30);
+    this->text_box->set_max_rows(14);
     this->frame_text_box->place(this->text_box, 10, 10);
 
     this->top_bar = ekg::frame();
