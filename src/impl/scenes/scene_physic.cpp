@@ -32,6 +32,8 @@ void scene_physic::on_start() {
     ekg::set_font("data/fonts/font-kit-jetbrains-mono/ttf/JetBrainsMono-Bold.ttf");
     ekg::set_font_size(26);
 
+
+
     float axis = 0;
 
     this->frame_text_box = ekg::frame();
