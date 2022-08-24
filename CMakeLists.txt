@@ -30,21 +30,21 @@ if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ekg/")
     file(MAKE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/external/include/ekg" "${CMAKE_CURRENT_SOURCE_DIR}/external/include/ekg/api" "${CMAKE_CURRENT_SOURCE_DIR}/external/include/ekg/impl")
 
     message("-- Installing EKG core!")
-    file(GLOB EKG_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/ekg/ekg/*.hpp")
+    file(GLOB EKG_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/ekg/include/ekg/*.hpp")
 
     foreach(file_i ${EKG_HEADER_FILES})
         file(COPY "${file_i}" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/external/include/ekg")
     endforeach(file_i)
 
     message("-- Installing EKG API!")
-    file(GLOB EKG_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/ekg/ekg/api/*.hpp")
+    file(GLOB EKG_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/ekg/include/ekg/api/*.hpp")
 
     foreach(file_i ${EKG_HEADER_FILES})
         file(COPY "${file_i}" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/external/include/ekg/api")
     endforeach(file_i)
 
     message("-- Installing EKG implements!")
-    file(GLOB EKG_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/ekg/ekg/impl/*.hpp")
+    file(GLOB EKG_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/ekg/include/ekg/impl/*.hpp")
 
     foreach(file_i ${EKG_HEADER_FILES})
         file(COPY "${file_i}" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/external/include/ekg/impl")

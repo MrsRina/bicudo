@@ -15,7 +15,7 @@ void scene_physic::on_start() {
 
     for (uint32_t i = 0; i < 200; i++) {
         auto rigid2d_obj = new rigid2d_rectangle(math::vec2(rand() % 1280, 200 + rand() % 100), rand() % 100, 0.0001f,
-                                                 0.2f, 75, 75);
+                                                 0.2f, rand() % 100, rand() % 100);
         rigid2d_obj->set_physic(rigidutil::physic::FULL);
     }
 
@@ -34,20 +34,13 @@ void scene_physic::on_start() {
 
     float axis = 0;
 
-    this->frame_text_box = ekg::frame();
-    this->frame_text_box->set_resize_dock(ekg::dock::BOTTOM | ekg::dock::LEFT | ekg::dock::RIGHT);
-    this->frame_text_box->set_drag_dock(ekg::dock::TOP);
-    this->frame_text_box->set_drag_offset(30.0f);
-    this->frame_text_box->set_pos(400, 300);
-
-    this->text_box = ekg::textbox();
-    this->text_box->set_text("hi hi");
-    this->text_box->set_max_rows(14);
-    this->frame_text_box->place(this->text_box, 10, 10);
-
     this->top_bar = ekg::frame();
     this->top_bar->set_pos(0, 0);
     this->top_bar->set_drag_dock(ekg::dock::UNDEFINED);
+
+    this->text_box = ekg::textbox();
+    this->text_box->set_width(200);
+    this->text_box->set_height(200);
 
     auto check = ekg::button("Exit");
     this->top_bar->place(check, 1, 1);
@@ -56,6 +49,7 @@ void scene_physic::on_start() {
     this->left_bar->set_pos(0, 0);
     this->left_bar->set_drag_dock(ekg::dock::UNDEFINED);
     this->left_bar->set_resize_dock(ekg::dock::RIGHT);
+    this->left_bar->place(this->text_box, 10, 130);
 
     this->gravity_setting = ekg::slider(9.0f, 0.0f, 100.0f);
     this->left_bar->place(this->gravity_setting, 10, 10);
@@ -307,8 +301,6 @@ void scene_physic::on_update() {
     this->top_bar->set_width(static_cast<float>(game_core::screen_width));
     this->left_bar->set_pos(0, this->top_bar->get_height());
     this->left_bar->set_height(static_cast<float>(game_core::screen_height) - this->top_bar->get_height());
-    this->text_box->set_pos(10, 10);
-    this->text_box->set_size(this->frame_text_box->get_width() - (10 * 2), this->frame_text_box->get_height() - (10 * 2));
 
     if (rigid_object != nullptr) {
         x = prev_x - (rigid_object->minx + cx);

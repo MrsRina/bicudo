@@ -71,7 +71,7 @@ void physic_service::on_render() {
             
             BICUDO->get_camera2d().add(cx, cy, cw, ch);
 
-            this->shape_builder.build(draw::shape::RECT, math::vec4(0.0f, 0.5f, 0.5f, 1.0f));
+            this->shape_builder.build(draw::shape::RECT, math::vec4(0.0f, 1.0f, 1.0f, 1.0f));
             this->shape_builder.rotate(rigid2d_obj->angle);
             this->shape_builder.draw(cx, cy, cw, ch);
         }
