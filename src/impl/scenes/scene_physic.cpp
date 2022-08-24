@@ -113,7 +113,7 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
 
     if (ekgapi::input_up_right(sdl_event, x, y)) {
         if (this->rigid_object == nullptr) {
-            auto popup = ekg::popup("popup", {"Add"});
+            auto popup = ekg::popup("popup", {"Add", "Remove", "Edit"});
         }
     }
 
@@ -135,6 +135,11 @@ void scene_physic::on_event(SDL_Event &sdl_event) {
                    bicudo::camera2d().subtract_pos(x, y);
                    auto rigid2d_obj = new rigid2d_rectangle(math::vec2(x, y), rand() % 100, 0.0001f,
                                                              0.2f, rand() % 75, rand() % 75);
+                } else if (event->text == "popup | Remove") {
+                    if (this->rigid_object != nullptr) {
+                        delete this->rigid_object;
+                        this->rigid_object = nullptr;
+                    }
                 }
             }
 
