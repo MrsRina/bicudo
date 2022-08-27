@@ -5,7 +5,7 @@ This is a framework writen in C++ for SDL2 and OpenGL 3/4, the project use diffe
 
 What is the GUI? The GUI is built with ![ekg ez build](https://github.com/ekg-ez-build-gui) ui library.
 
-![showcase](https://github.com/MrsRina/bicudo/blob/main/splash/splash-version-3.0.0.mp4?raw=true)
+![showcase](https://github.com/MrsRina/bicudo/blob/main/splash/splash-version-3.0.0.gif?raw=true)
 
 ---
 
