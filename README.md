@@ -12,8 +12,6 @@ What is the GUI? The GUI is built with ![ekg ez build](https://github.com/ekg-ez
 
 # Building and Running
 
-Simple game base with modules system (most like scripts) with dynamic interactions,
-works for 2D and 3D.
 The build only works for Windows (MinGW GCC), consider having mingw64 installed in default path for
 windows (C:/mingw64/).
 
