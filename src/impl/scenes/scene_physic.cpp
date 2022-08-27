@@ -306,6 +306,7 @@ void scene_physic::on_update() {
     this->top_bar->set_width(static_cast<float>(game_core::screen_width));
     this->left_bar->set_pos(0, this->top_bar->get_height());
     this->left_bar->set_height(static_cast<float>(game_core::screen_height) - this->top_bar->get_height());
+    this->text_box->set_width(this->left_bar->get_width() - 20);
 
     if (rigid_object != nullptr) {
         x = prev_x - (rigid_object->minx + cx);

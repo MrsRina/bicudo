@@ -6,7 +6,7 @@ int main(int argv, char** argc) {
     std::srand(time(nullptr));
 
     // Just to update.
-    game_core::edit_client_details("Bicudo", "2.0");
+    game_core::edit_client_details("Bicudo", "3.0.0");
 
     // Init the game context.
     auto* game_cont = new game_context();
