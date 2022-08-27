@@ -1,7 +1,7 @@
 # Bicudo
 
 Hello! -
-This is a framework writen in C++ for SDL2 and OpenGL 3/4, the project use different libs: `SDL2` `glew` `ekg` `freetype` `SDL_Image`.]
+This is a framework writen in C++ for SDL2 and OpenGL 3/4, the project use different libs: `SDL2` `glew` `ekg` `freetype` `SDL_Image`.
 
 What is the GUI? The GUI is built with ![ekg ez build](https://github.com/ekg-ez-build-gui) gui library.
 
