@@ -12,7 +12,7 @@ If you are on Windows, please replace `"Unix Makefiles"` with `"MinGW Makefiles"
 `cmake -S . -B ./cmake-build-debug/ -G "Unix Makefiles" && cmake --build ./cmake-build-debug/"`
 
 Native "library" location:  
-Linux: `build/libs/linuxbicudo.so`
+Linux: `build/libs/linuxbicudo.so`  
 Windows: `build/libs/winbicudo.so`
 
 note: remember to add the ´include/´ headers too.
