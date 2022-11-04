@@ -8,7 +8,7 @@ Renderer engine of Bicudo is made in API OpenGL 4.
 
 # Building
 
-If you are on Windows, please replace '"Unix Makefiles"~ with ~"MinGW Makefiles"~, run the command:  
+If you are on Windows, please replace '"Unix Makefiles" with "MinGW Makefiles", run the command:  
 `cmake -S . -B ./cmake-build-debug/ -G "Unix Makefiles" && cmake --build ./cmake-build-debug/"`
 
 Native "library" location:  
