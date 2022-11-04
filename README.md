@@ -15,7 +15,7 @@ Native "library" location:
 Linux: `build/libs/linuxbicudo.so`  
 Windows: `build/libs/winbicudo.so`
 
-note: remember to add the ´include/´ headers too.
+note: remember to add ´include/´ headers too.
 
 # Tutorials
 
