@@ -1,5 +1,5 @@
-#ifndef BICUDO_UTI_MATH_H
-#define BICUDO_UTIL_MATH_H
+#ifndef BICUDO_API_UTI_MATH_H
+#define BICUDO_API_UTIL_MATH_H
 
 namespace bicudo {
     struct vec2 {

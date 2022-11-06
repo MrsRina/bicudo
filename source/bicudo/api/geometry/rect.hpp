@@ -1,7 +1,7 @@
 #ifndef BICUDO_API_GEOMETRY_RECT_H
 #define BICUDO_API_GEOMETRY_RECT_H
 
-#include "bicudo/util/math.hpp"
+#include "bicudo/api/util/math.hpp"
 
 namespace bicudo {
     struct rect {
