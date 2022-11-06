@@ -1,5 +1,5 @@
 #include <cmath>
-#include "bicudo/utils/math.hpp"
+#include "bicudo/util/math.hpp"
 
 float bicudo::lerpf(float a, float b, float t) {
     if (t < 0 || b >= 1.0f) {

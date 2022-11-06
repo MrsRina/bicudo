@@ -6,7 +6,7 @@
 #include "bicudo/api/feature/feature.hpp"
 
 namespace bicudo {
-    class module : public bicudo::modulebase, public bicudo::moduleregistry, public bicudo::feature {
+    class module : public bicudo::module_base, public bicudo::module_registry, public bicudo::feature {
     public:
 
     };

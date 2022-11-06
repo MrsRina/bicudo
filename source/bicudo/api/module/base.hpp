@@ -2,7 +2,7 @@
 #define BICUDO_API_MODULE_BASE_H
 
 namespace bicudo {
-    class modulebase {
+    class module_base {
 
     };
 }
