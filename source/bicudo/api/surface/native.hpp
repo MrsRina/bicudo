@@ -6,7 +6,10 @@
 
 namespace bicudo {
     class surface_native : public bicudo::surface {
-        SDL_Window* root {};
+        SDL_Window *root {};
+    public:
+        surface_native();
+        ~surface_native();
     };
 }
 

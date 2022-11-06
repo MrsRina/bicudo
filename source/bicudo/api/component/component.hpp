@@ -4,7 +4,7 @@
 #include "bicudo/api/feature/feature.hpp"
 
 template<typename t>
-class component : public feature {
+class component : public bicudo::feature {
 public:
     t object {};
 };

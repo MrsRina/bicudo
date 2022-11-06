@@ -5,6 +5,7 @@
 
 namespace bicudo {
     struct rect {
+        float x {}, y {}, w {}, h {};
         bicudo::vec2 top {}, bottom {}, left {}, right {};
     };
 }
