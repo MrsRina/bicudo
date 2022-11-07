@@ -4,7 +4,7 @@
 #include "bicudo/api/util/math.hpp"
 #include "bicudo/api/util/flag.hpp"
 #include "bicudo/core/profile.hpp"
-#include "bicudo/api/surface/native.hpp"
+#include "bicudo/api/surface/surface.hpp"
 
 namespace bicudo {
     /* The profile core of Bicudo. */
@@ -16,14 +16,14 @@ namespace bicudo {
     void init();
 
     /*
-     * Create feature (component, surface, event)
+     * Create window surface.
      */
-    void create(bicudo::feature*);
+    void create(bicudo::surface*);
 
     /*
-     * Destroy feature (component, surface, event)
+     * Destroy window surface.
      */
-    void destroy(bicudo::feature*);
+    void destroy(bicudo::surface*);
 }
 
 #endif

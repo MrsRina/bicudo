@@ -7,10 +7,10 @@ void bicudo::init() {
     bicudo::core->do_create();
 }
 
-void bicudo::create(bicudo::feature *feature) {
-    bicudo::core->do_create_feature(feature);
+void bicudo::create(bicudo::surface *surf) {
+    bicudo::core->dispatch_surface(surf);
 }
 
-void bicudo::destroy(bicudo::feature *feature) {
-    bicudo::core->do_destroy_feature(feature);
+void bicudo::destroy(bicudo::surface *) {
+
 }

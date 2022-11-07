@@ -2,7 +2,9 @@
 #define BICUDO_IMPL_GC_H
 
 namespace bicudo {
-    class gc {};
+    class gc {
+
+    };
 };
 
 #endif

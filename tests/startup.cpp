@@ -6,10 +6,14 @@ int32_t main(int32_t, char**) {
     bicudo::init();
 
     /* Create the window native surface. */
-    bicudo::surface_native window {};
+    bicudo::surface window {};
     bicudo::create(&window);
 
     window.rect = {bicudo::centered, bicudo::centered, 1280, 800};
+    window.tag = "starter - bicudo tests";
+
+    bicudo::create();
+    bicudo::mainloop();
 
     return true;
 }
