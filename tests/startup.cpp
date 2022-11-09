@@ -15,5 +15,13 @@ int32_t main(int32_t, char**) {
     bicudo::create();
     bicudo::mainloop();
 
+    bicudo::shader shader {};
+    bicudo::create(&shader, {
+        {"./v.vsh", bicudo::shadingstage::vertex},
+        {"./v.gsh", bicudo::shadingstage::geometry},
+        {"./v.fsh", bicudo::shadingstage::fragment},
+        {"./v.csh", bicudo::shadingstage::computed}
+    });
+
     return true;
 }

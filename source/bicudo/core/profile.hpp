@@ -20,10 +20,8 @@ namespace bicudo {
         void do_destroy();
         void do_loop();
 
-        /*
-         * Custom garbage collector, make sure what you handle calling this method.
-         */
-        bicudo::gc &gc();
+        bicudo::gc &custom_garbage_collector();
+        bicudo:logger* get_logger();
     };
 }
 

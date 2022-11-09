@@ -24,6 +24,21 @@ namespace bicudo {
      * Destroy window surface.
      */
     void destroy(bicudo::surface*);
+
+    /*
+     * Create shading program (shader).
+     */
+    void creat(bicudo::shader*, const std::vector<bicudo::shader>&);
+
+    /*
+     * Custom garbage collector, make sure what you handle calling this method.
+     */
+    bicudo::gc &gc();
+
+    /*
+     * Get main log.
+     */
+    bicudo::logger* log();
 }
 
 #endif

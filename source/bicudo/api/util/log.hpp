@@ -34,13 +34,25 @@ namespace bicudo {
         void set_log_save_file(bool);
         bool is_log_save_file_enabled();
 
-        void send(std::string_view);
+        void send_info(std::string_view);
+        void send_warning(std::string_view);
     };
 
     struct timing {
         uint64_t elapsed_ticks {};
         uint64_t running_ticks {};
+        bool checked {};
     };
+
+    /*
+     * Check timing difference since elapsed ticks, return true if is greater than specified ms.
+     */
+    bool reach(bicudo::timing&, uint64_t);
+
+    /*
+     * Reset timing elapsed ticks, always return true.
+     */
+    bool reset(bicudo::timing&);
 }
 
 #endif

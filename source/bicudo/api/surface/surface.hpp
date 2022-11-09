@@ -9,8 +9,17 @@ namespace bicudo {
     class surface : public bicudo::feature {
     public:
         SDL_Window* root {};
+        SDL_GL_Context context {};
+
         const char* tag {};
         bicudo::rect rect {};
+
+        uint64_t display_fps {}, locked_fps {};
+        float delta_time {};
+        bool fullscreen {}, resizable {};
+
+        void on_create() override;
+        void on_destroy() override;
     };
 }
 

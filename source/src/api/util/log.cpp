@@ -36,8 +36,14 @@ bool bicudo::logger::is_log_save_file_enabled() {
     return this->gen_file_log;
 }
 
-void bicudo::logger::send(std::string_view message) {
+void bicudo::logger::send_log(std::string_view message) {
     const std::string m_factor {this->tag_processed + message.data()};
+    this->file_log.push_back(m_factor.data());
+    bicudo::print(m_factor);
+}
+
+void bicudo::logger::send_warning(std::string_view message) {
+    const std::string m_factor {(this->tag_processed + "Warning: ") + message.data()};
     this->file_log.push_back(m_factor.data());
     bicudo::print(m_factor);
 }
@@ -61,4 +67,22 @@ void bicudo::logger::on_destroy() {
     feature::on_destroy();
 
     // todo: save file if gen save file mode is on (true)
+}
+
+bool bicudo::reach(bicudo::timing &timing, uint64_t ms) {
+    timing.checked = true;
+    timing.running_ticks = SDL_GetTicks();
+
+    return timing.running_ticks - timing.elapsed_ticks > ms;
+}
+
+bool bicudo::reset(bicudo::timing &timing) {
+    if (timing.checked) {
+        timing.elapsed_ticks = timing.running_ticks;
+        timing.checked = false;
+    } else {
+        timing.elapsed_ticks = SDL_GetTicks();
+    }
+
+    return true;
 }
