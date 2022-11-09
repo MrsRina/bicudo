@@ -11,6 +11,8 @@ namespace bicudo {
     class feature {
     protected:
         int32_t id {};
+        bool dead {};
+        bool initialised {};
     public:
         bicudo::features mode {bicudo::features::undefined};
 
@@ -19,6 +21,10 @@ namespace bicudo {
 
         void set_id(int32_t);
         int32_t get_id();
+
+        void set_dead(bool);
+        bool is_dead();
+        bool is_initialised();
     };
 }
 

@@ -36,6 +36,11 @@ namespace bicudo {
 
         void send(std::string_view);
     };
+
+    struct timing {
+        uint64_t elapsed_ticks {};
+        uint64_t running_ticks {};
+    };
 }
 
 #endif

@@ -11,14 +11,18 @@ namespace bicudo {
     protected:
         std::vector<bicudo::module*> loaded_module_list {};
         std::vector<bicudo::scene*> loaded_scene_list {};
-        std::map<int32_t, uint64_t> registry {};
 
         int32_t token {};
     public:
         void add_module(bicudo::module*);
         void add_scene(bicudo::scene*);
 
+        void load_scene(std::string_view);
+        bicudo::scene* get_scene_by_tag(std::string_view);
+        bicudo::scene* get_scene_by_id(int32_t);
 
+        bicudo::module* get_module_by_tag(std::string_view);
+        bicudo::module* get_module_by_id(int32_t);
     };
 }
 
