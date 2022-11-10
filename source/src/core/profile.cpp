@@ -2,6 +2,7 @@
 
 void bicudo::profile::do_create() {
     this->logger = new bicudo::logger {"MAIN"};
+    this->driver_impl_manager = new bicudo::driver_impl_manager {};
     this->mainloop = true;
 }
 
@@ -10,23 +11,27 @@ void bicudo::profile::do_destroy() {
 
 void bicudo::profile::do_loop() {
     if (this->surfaces.empty()) {
-        this->logger.send_warning("There is no surface, can not mainloop.");
+        this->logger->send_warning("There is no surface, can not mainloop.");
         return;
     }
 
-    // setup opengl version
-
+    this->driver_impl_manager->prepare_opengl_attributes();
     for (bicudo::surface* &surface : this->surfaces) {
         surface->on_create();
+        this->capped_fps = surface->locked_fps;
     }
 
-    // opengl init glew context
-
+    this->driver_impl_manager->create_opengl_context();
     static bicudo::timing cpu_reduce_ticks_timing {};
-    uint64_t fps_interval {1000 / };
+    uint64_t fps_interval {1000 / this->capped_fps};
 
     while (this->mainloop) {
-        if (bicudo::reach(cpu_reduce_ticks_timing, ))
+        if (bicudo::reach(cpu_reduce_ticks_timing, fps_interval)) {
+            bicudo::reset(cpu_reduce_ticks_timing);
+
+            this->driver_impl_manager->clear_buffers();
+            SDL_GL_SwapWindow(this->surfaces[0]->root);
+        }
     }
 }
 
@@ -40,10 +45,10 @@ void bicudo::profile::dispatch_surface(bicudo::surface *surf) {
 
 }
 
-bicudo::gc &bicudo::get_custom_garbage_collector() {
+bicudo::gc &bicudo::profile::get_custom_gc() {
     return this->custom_gc;
 }
 
-bicudo::logger* bicudo::get_logger() {
+bicudo::logger* bicudo::profile::get_logger() {
     return this->logger;
 }

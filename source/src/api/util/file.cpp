@@ -2,13 +2,13 @@
 #include <fstream>
 
 bool bicudo::readfile(std::string_view path, std::string &string_builder) {
-	std::ifstream ifs {path};
+	std::ifstream ifs {path.data()};
 
 	if (ifs.is_open()) {
 		std::string string_buffer {};
 		
 		while (std::getline(ifs, string_buffer)) {
-			string_builder += '/n';
+			string_builder += '\n';
 			string_builder += string_buffer;
 		}
 

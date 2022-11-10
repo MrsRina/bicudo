@@ -4,6 +4,7 @@
 #include "bicudo/api/surface/surface.hpp"
 #include "bicudo/api/util/log.hpp"
 #include "bicudo/impl/gc/gc.hpp"
+#include "bicudo/gpu/driver_impl_manager.hpp"
 
 namespace bicudo {
     class profile {
@@ -11,17 +12,21 @@ namespace bicudo {
         std::vector<bicudo::surface*> surfaces {};
         bicudo::logger* logger {nullptr};
         bicudo::gc custom_gc {};
+        bicudo::driver_impl_manager* driver_impl_manager {nullptr};
 
         bool mainloop {};
+        uint64_t capped_fps {};
     public:
         void dispatch_surface(bicudo::surface*);
+        void set_capped_fps(uint64_t);
+        void set_vsync(bool);
 
         void do_create();
         void do_destroy();
         void do_loop();
 
-        bicudo::gc &custom_garbage_collector();
-        bicudo:logger* get_logger();
+        bicudo::gc &get_custom_gc();
+        bicudo::logger* get_logger();
     };
 }
 

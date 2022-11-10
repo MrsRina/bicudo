@@ -12,7 +12,7 @@ namespace bicudo {
 
 	enum shaderstages {
 		vertex = GL_VERTEX_SHADER, geometry = GL_GEOMETRY_SHADER, fragment = GL_FRAGMENT_SHADER, computed = GL_COMPUTE_SHADER
-	}
+	};
 
 	struct resource {
 		std::string path {};

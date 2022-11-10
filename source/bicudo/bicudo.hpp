@@ -4,7 +4,9 @@
 #include "bicudo/api/util/math.hpp"
 #include "bicudo/api/util/flag.hpp"
 #include "bicudo/core/profile.hpp"
+#include "bicudo/api/shader/shader.hpp"
 #include "bicudo/api/surface/surface.hpp"
+#include "bicudo/api/util/file.hpp"
 
 namespace bicudo {
     /* The profile core of Bicudo. */
@@ -28,7 +30,12 @@ namespace bicudo {
     /*
      * Create shading program (shader).
      */
-    void creat(bicudo::shader*, const std::vector<bicudo::shader>&);
+    void create(bicudo::shader*, const std::vector<bicudo::resource>&);
+
+    /*
+     * Mainloop Bicudo.
+     */
+    void mainloop();
 
     /*
      * Custom garbage collector, make sure what you handle calling this method.
