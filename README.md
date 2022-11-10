@@ -4,7 +4,7 @@ Hello! - this is a framework writen in C++ for SDL2 and OpenGL 3/4, the project 
 
 What is the GUI? The GUI is built with ![ekg ui library](https://github.com/vokegpu/ekg-ui-library) ui library.
 
-![showcase](https://github.com/MrsRina/bicudo/blob/main/splash/splash-version-3.0.0.gif?raw=true)
+![showcase](https://github.com/MrsRina/bicudo/blob/bicudo-1-deprecated/splash/splash-version-3.0.0.gif?raw=true)
 
 ---
 
