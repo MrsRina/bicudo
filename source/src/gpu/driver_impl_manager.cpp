@@ -25,11 +25,8 @@ void bicudo::driver_impl_manager::clear_buffers() {
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 }
 
-void bicudo::driver_impl_manager::update_absolute_surface_color(float b, float g, float b) {
+void bicudo::driver_impl_manager::update_absolute_surface_color(float r, float g, float b) {
 	this->absolute_surface_color[0] = r;
 	this->absolute_surface_color[1] = g;
 	this->absolute_surface_color[2] = b;
-}
-
-void bicudo::driver_impl_manager::swap_buffers() {
 }

@@ -1,4 +1,5 @@
 #include "bicudo/api/util/log.hpp"
+#include <SDL2/SDL.h>
 
 bicudo::logger::logger(std::string_view new_tag) {
     this->set_tag(new_tag);
@@ -36,7 +37,7 @@ bool bicudo::logger::is_log_save_file_enabled() {
     return this->gen_file_log;
 }
 
-void bicudo::logger::send_log(std::string_view message) {
+void bicudo::logger::send_info(std::string_view message) {
     const std::string m_factor {this->tag_processed + message.data()};
     this->file_log.push_back(m_factor.data());
     bicudo::print(m_factor);
@@ -71,7 +72,7 @@ void bicudo::logger::on_destroy() {
 
 bool bicudo::reach(bicudo::timing &timing, uint64_t ms) {
     timing.checked = true;
-    timing.running_ticks = SDL_GetTicks();
+    timing.running_ticks = SDL_GetTicks64();
 
     return timing.running_ticks - timing.elapsed_ticks > ms;
 }
@@ -81,7 +82,7 @@ bool bicudo::reset(bicudo::timing &timing) {
         timing.elapsed_ticks = timing.running_ticks;
         timing.checked = false;
     } else {
-        timing.elapsed_ticks = SDL_GetTicks();
+        timing.elapsed_ticks = SDL_GetTicks64();
     }
 
     return true;

@@ -40,7 +40,7 @@ namespace bicudo {
     /*
      * Custom garbage collector, make sure what you handle calling this method.
      */
-    bicudo::gc &gc();
+    bicudo::garbage_collector &gc();
 
     /*
      * Get main log.

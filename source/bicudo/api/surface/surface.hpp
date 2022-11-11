@@ -9,7 +9,7 @@ namespace bicudo {
     class surface : public bicudo::feature {
     public:
         SDL_Window* root {};
-        SDL_GL_Context context {};
+        SDL_GLContext context {};
 
         const char* tag {};
         bicudo::rect rect {};

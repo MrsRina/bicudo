@@ -12,13 +12,17 @@ bool bicudo::compile_shader_stage(uint32_t &shader, int32_t stage, const char* s
 	if (!compile_status) {
 		char info_log[256];
 
+        std::string log {};
+        log += '\n';
+        log += info_log;
+        bicudo::core->get_logger()->send_warning(log);
 		return false;
 	}
 
 	return true;
 }
 
-bool bicudo::create_shading_program(uint32_t &program, std::vector<bicudo::resource> &resources) {
+bool bicudo::create_shading_program(uint32_t &program, const std::vector<bicudo::resource> &resources) {
 	program = glCreateProgram();
 	bool flag {program == 0};
 
@@ -26,7 +30,7 @@ bool bicudo::create_shading_program(uint32_t &program, std::vector<bicudo::resou
 	std::vector<uint32_t> compiled_shaders {};
 	uint32_t shader {};
 
-	for (bicudo::resource &resource : resources) {
+	for (const bicudo::resource& resource : resources) {
 		// reduce var creation.
 		shader_data = "Compiling shader... '";
 		shader_data += resource.path;
@@ -71,4 +75,6 @@ bool bicudo::create_shading_program(uint32_t &program, std::vector<bicudo::resou
 	for (uint32_t &shaders : compiled_shaders) {
 		glDeleteShader(shaders);
 	}
+
+    return link_status;
 }

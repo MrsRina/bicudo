@@ -1,25 +1,26 @@
 #include "bicudo/api/surface/surface.hpp"
 
-void bicudo::on_create() {
-	auto flags {SDL_WINDOW_OPENGL};
+void bicudo::surface::on_create() {
+    feature::on_create();
+	int32_t flags {SDL_WINDOW_OPENGL};
 
 	if (this->fullscreen) {
-		flags |= SDL_FULLSCREEN;
+		flags |= SDL_WINDOW_FULLSCREEN;
 	}
 
 	if (this->resizable) {
-		flags |= SDL_RESIZABLE;
+		flags |= SDL_WINDOW_RESIZABLE;
 	}
 
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_ACCELERATED_VISUAL, 1);
+	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 
-	this->root = SDL_CreateWindow(this->tag, this->rect.x, this->rect.y, this->rect.w, this->rect.h, flags);
-	this->context = SDL_GLCreateContext(this->root);
+	this->root = SDL_CreateWindow(this->tag, static_cast<int32_t>(this->rect.x), static_cast<int32_t>(this->rect.y), static_cast<int32_t>(this->rect.w), static_cast<int32_t>(this->rect.h), flags);
+	this->context = SDL_GL_CreateContext(this->root);
 }
 
-void bicudo::on_destroy() {
-
+void bicudo::surface::on_destroy() {
+    feature::on_destroy();
 }

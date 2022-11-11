@@ -21,4 +21,5 @@ bool bicudo::readfile(std::string_view path, std::string &string_builder) {
 
 bool bicudo::readfile(std::string_view path, std::vector<int32_t> &bytes) {
 	// todo: read file bytes.
+    return false;
 }

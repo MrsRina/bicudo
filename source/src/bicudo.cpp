@@ -18,7 +18,7 @@ void bicudo::destroy(bicudo::surface *) {
 
 }
 
-bicudo::gc &bicudo::gc() {
+bicudo::garbage_collector &bicudo::gc() {
     return bicudo::core->get_custom_gc();
 }
 

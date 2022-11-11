@@ -3,7 +3,7 @@
 
 #include "bicudo/api/surface/surface.hpp"
 #include "bicudo/api/util/log.hpp"
-#include "bicudo/impl/gc/gc.hpp"
+#include "bicudo/impl/gc/garbage_collector.hpp"
 #include "bicudo/gpu/driver_impl_manager.hpp"
 
 namespace bicudo {
@@ -11,7 +11,7 @@ namespace bicudo {
     protected:
         std::vector<bicudo::surface*> surfaces {};
         bicudo::logger* logger {nullptr};
-        bicudo::gc custom_gc {};
+        bicudo::garbage_collector custom_gc {};
         bicudo::driver_impl_manager* driver_impl_manager {nullptr};
 
         bool mainloop {};
@@ -25,7 +25,7 @@ namespace bicudo {
         void do_destroy();
         void do_loop();
 
-        bicudo::gc &get_custom_gc();
+        bicudo::garbage_collector &get_custom_gc();
         bicudo::logger* get_logger();
     };
 }

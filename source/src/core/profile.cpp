@@ -45,7 +45,7 @@ void bicudo::profile::dispatch_surface(bicudo::surface *surf) {
 
 }
 
-bicudo::gc &bicudo::profile::get_custom_gc() {
+bicudo::garbage_collector &bicudo::profile::get_custom_gc() {
     return this->custom_gc;
 }
 

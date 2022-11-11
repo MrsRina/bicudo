@@ -5,7 +5,7 @@
 #include "bicudo/api/feature/feature.hpp"
 
 namespace bicudo {
-    class gc {
+    class garbage_collector {
     protected:
         std::queue<bicudo::feature*> features_queue {};
         bool poll_features_queue {};

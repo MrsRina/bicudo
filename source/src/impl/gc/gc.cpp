@@ -1,16 +1,16 @@
-#include "bicudo/impl/gc/gc.hpp"
+#include "bicudo/impl/gc/garbage_collector.hpp"
 
-void bicudo::gc::destroy(bicudo::feature *feature) {
+void bicudo::garbage_collector::destroy(bicudo::feature *feature) {
     this->features_queue.push(feature);
     this->poll_features_queue = true;
 }
 
-void bicudo::gc::create(bicudo::feature *feature) {
+void bicudo::garbage_collector::create(bicudo::feature *feature) {
     this->features_queue.push(feature);
     this->poll_features_queue = true;
 }
 
-bool bicudo::gc::poll() {
+bool bicudo::garbage_collector::poll() {
     if (this->poll_features_queue) {
         while (!this->features_queue.empty()) {
             auto &feature {this->features_queue.front()};
