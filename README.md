@@ -6,7 +6,7 @@ The purpose of creating this framework is not only to make games but learn physi
 Physics use the concept of SAT (separation axis theorem) to repruduce displacement of collisions.
 Renderer engine of Bicudo is made in API OpenGL 4.
 
-There is bicudo-1 version, but that version is deprecated.
+There is bicudo-1 version, but that version is deprecated, but I recommend you take a look in that branch.
 
 ---
 
