@@ -7,6 +7,7 @@
 #include "bicudo/api/shader/shader.hpp"
 #include "bicudo/api/surface/surface.hpp"
 #include "bicudo/api/util/file.hpp"
+#include "bicudo/api/scene/scene.hpp"
 
 namespace bicudo {
     /* The profile core of Bicudo. */
@@ -31,6 +32,11 @@ namespace bicudo {
      * Create shading program (shader).
      */
     void create(bicudo::shader*, const std::vector<bicudo::resource>&);
+
+    /*
+     * Make current scene.
+     */
+    void makecurrent(bicudo::scene*);
 
     /*
      * Mainloop Bicudo.

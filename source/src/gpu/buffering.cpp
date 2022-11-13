@@ -1,0 +1,38 @@
+#include "bicudo/gpu/buffering.hpp"
+
+void bicudo::buffering::invoke() {
+    if (this->gpu_buffer_group == 0) {
+        glGenVertexArrays(1, &this->gpu_buffer_group);
+    }
+
+    glBindVertexArray(this->gpu_buffer_group);
+}
+
+void bicudo::buffering::revoke() {
+    glBindVertexArray(0);
+}
+
+void bicudo::buffering::set_shader_location(uint32_t location, int32_t offset, int32_t stride_begin, uint32_t stride_end) {
+    glEnableVertexAttribArray(location);
+    glVertexAttribPointer(location, offset, GL_FLOAT, GL_FALSE, stride_begin, (void*) stride_end);
+}
+
+void bicudo::buffering::send_data(uint32_t size, void *data, bicudo::datatype data_gl_reader) {
+    glBufferData(GL_ARRAY_BUFFER, size, data, data_gl_reader);
+}
+
+void bicudo::buffering::draw() {
+    glBindVertexArray(this->gpu_buffer_group);
+    // todo: add element buffer object (indexing rendering)
+    glDrawArrays(this->draw_mode, this->stride_begin, this->stride_end);
+    glBindVertexArray(0);
+}
+
+void bicudo::buffering::bind_buffer() {
+    if (this->buffer_list.size() >= this->buffer_index) {
+        this->buffer_list.emplace_back();
+        glGenBuffers(1, &this->buffer_list[this->buffer_index]);
+    }
+
+    glBindBuffer(GL_ARRAY_BUFFER, this->buffer_list[this->buffer_index++]);
+}

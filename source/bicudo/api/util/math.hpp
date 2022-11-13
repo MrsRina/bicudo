@@ -6,6 +6,10 @@ namespace bicudo {
         float x {}, y {};
     };
 
+    struct vec4 {
+        float x {}, y {}, z {}, w {};
+    };
+
     /*
      * Linear interpolation (a, b, dt)
      * Returns interpolated value between a - b in type float.

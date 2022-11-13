@@ -14,9 +14,9 @@ namespace bicudo {
         const char* tag {};
         bicudo::rect rect {};
 
-        uint64_t display_fps {}, locked_fps {};
+        uint64_t display_fps {}, locked_fps {60};
         float delta_time {};
-        bool fullscreen {}, resizable {};
+        bool fullscreen {}, resizable {}, vsync {};
 
         void on_create() override;
         void on_destroy() override;

@@ -5,24 +5,27 @@
 #include <map>
 #include "bicudo/api/module/module.hpp"
 #include "bicudo/api/scene/scene.hpp"
+#include "bicudo/api/event/event.hpp"
 
 namespace bicudo {
-    class feature_management {
+    class handler {
     protected:
-        std::vector<bicudo::module*> loaded_module_list {};
-        std::vector<bicudo::scene*> loaded_scene_list {};
-
+        std::vector<bicudo::feature*> loaded_module_list {}, loaded_scene_list {};
+        bicudo::scene* current_scene {};
         int32_t token {};
     public:
-        void add_module(bicudo::module*);
-        void add_scene(bicudo::scene*);
+        void append_module(bicudo::module*);
+        void append_scene(bicudo::scene*);
+        void set_current_scene(bicudo::scene*);
 
-        void load_scene(std::string_view);
         bicudo::scene* get_scene_by_tag(std::string_view);
         bicudo::scene* get_scene_by_id(int32_t);
 
         bicudo::module* get_module_by_tag(std::string_view);
         bicudo::module* get_module_by_id(int32_t);
+
+        void on_event(bicudo::event &event);
+        void on_native_update();
     };
 }
 

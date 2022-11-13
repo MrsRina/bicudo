@@ -5,6 +5,7 @@
 #include "bicudo/api/util/log.hpp"
 #include "bicudo/impl/gc/garbage_collector.hpp"
 #include "bicudo/gpu/driver_impl_manager.hpp"
+#include "bicudo/impl/service/handler.hpp"
 
 namespace bicudo {
     class profile {
@@ -13,9 +14,10 @@ namespace bicudo {
         bicudo::logger* logger {nullptr};
         bicudo::garbage_collector custom_gc {};
         bicudo::driver_impl_manager* driver_impl_manager {nullptr};
+        bicudo::handler *handler {nullptr};
 
         bool mainloop {};
-        uint64_t capped_fps {};
+        uint64_t cpu_interval_ticks {};
     public:
         void dispatch_surface(bicudo::surface*);
         void set_capped_fps(uint64_t);
@@ -26,7 +28,8 @@ namespace bicudo {
         void do_loop();
 
         bicudo::garbage_collector &get_custom_gc();
-        bicudo::logger* get_logger();
+        bicudo::logger *get_logger();
+        bicudo::handler *get_handler();
     };
 }
 

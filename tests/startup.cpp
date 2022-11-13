@@ -1,5 +1,21 @@
 #include <iostream>
 #include <bicudo/bicudo.hpp>
+#include "starter.hpp"
+
+void starter::on_create() {
+    feature::on_create();
+
+    bicudo::shader shader {};
+    bicudo::create(&shader, {
+            {"./vertex.vsh", bicudo::shaderstages::vertex},
+            {"./geometry.gsh", bicudo::shaderstages::geometry},
+            {"./fragment.fsh", bicudo::shaderstages::fragment}
+    });
+}
+
+void starter::on_destroy() {
+    feature::on_destroy();
+}
 
 int32_t main(int32_t, char**) {
     /* Init Bicudo framework. */
@@ -12,15 +28,10 @@ int32_t main(int32_t, char**) {
     window.rect = {bicudo::centered, bicudo::centered, 1280, 800};
     window.tag = "starter - bicudo tests";
 
-    /* Create shader program and link shaders. */
-    bicudo::shader shader {};
-    bicudo::create(&shader, {
-        {"./v.vsh", bicudo::shaderstages::vertex},
-        {"./v.gsh", bicudo::shaderstages::geometry},
-        {"./v.fsh", bicudo::shaderstages::fragment},
-        {"./v.csh", bicudo::shaderstages::computed}
-    });
-
+    /* Load the default scene. */
+    starter *scene {};
+    bicudo::makecurrent(scene);
     bicudo::mainloop();
-    return true;
+
+    return 0;
 }

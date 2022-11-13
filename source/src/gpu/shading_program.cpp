@@ -1,6 +1,8 @@
 #include "bicudo/gpu/shading_program.hpp"
 #include "bicudo/bicudo.hpp"
 
+const char* bicudo::gl_version {"#version 450 core"};
+
 bool bicudo::compile_shader_stage(uint32_t &shader, int32_t stage, const char* source) {
 	shader = glCreateShader(stage);
 	glShaderSource(shader, 1, &source, nullptr);
@@ -22,7 +24,7 @@ bool bicudo::compile_shader_stage(uint32_t &shader, int32_t stage, const char* s
 	return true;
 }
 
-bool bicudo::create_shading_program(uint32_t &program, const std::vector<bicudo::resource> &resources) {
+bool bicudo::create_shading_program(uint32_t &program, const std::vector<bicudo::resource> &resources, bool readfile) {
 	program = glCreateProgram();
 	bool flag {program == 0};
 
@@ -37,7 +39,7 @@ bool bicudo::create_shading_program(uint32_t &program, const std::vector<bicudo:
 		shader_data += "'";
 		bicudo::core->get_logger()->send_info(shader_data);
 
-		flag = flag && bicudo::readfile(resource.path, shader_data);
+        flag = flag && (readfile ? bicudo::readfile(resource.path, shader_data) : ((shader_data = resource.path).empty()));
 		flag = flag && bicudo::compile_shader_stage(shader, resource.type, shader_data.c_str());
 
 		if (!flag) {

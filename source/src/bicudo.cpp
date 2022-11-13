@@ -1,7 +1,7 @@
 #include "bicudo/bicudo.hpp"
 #include "bicudo/gpu/shading_program.hpp"
 
-bicudo::profile* bicudo::core {nullptr}; 
+bicudo::profile* bicudo::core {nullptr};
 
 void bicudo::init() {
     SDL_Init(SDL_INIT_VIDEO);
@@ -32,4 +32,8 @@ void bicudo::create(bicudo::shader *shader, const std::vector<bicudo::resource> 
 
 void bicudo::mainloop() {
     bicudo::core->do_loop();
+}
+
+void bicudo::makecurrent(bicudo::scene *scene) {
+    bicudo::core->get_handler()->set_current_scene(scene);
 }

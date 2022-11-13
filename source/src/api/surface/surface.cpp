@@ -1,4 +1,5 @@
 #include "bicudo/api/surface/surface.hpp"
+#include "bicudo/api/util/flag.hpp"
 
 void bicudo::surface::on_create() {
     feature::on_create();
@@ -17,7 +18,8 @@ void bicudo::surface::on_create() {
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 
-	this->root = SDL_CreateWindow(this->tag, static_cast<int32_t>(this->rect.x), static_cast<int32_t>(this->rect.y), static_cast<int32_t>(this->rect.w), static_cast<int32_t>(this->rect.h), flags);
+    uint32_t win_pos_x {this->rect.x == bicudo::centered ? SDL_WINDOWPOS_CENTERED : static_cast<uint32_t>(this->rect.x)}, win_pos_y {this->rect.y == bicudo::centered ? SDL_WINDOWPOS_CENTERED : static_cast<uint32_t>(this->rect.y)};
+	this->root = SDL_CreateWindow(this->tag, static_cast<int32_t>(win_pos_x), static_cast<int32_t>(win_pos_y), static_cast<int32_t>(this->rect.w), static_cast<int32_t>(this->rect.h), flags);
 	this->context = SDL_GL_CreateContext(this->root);
 }
 
