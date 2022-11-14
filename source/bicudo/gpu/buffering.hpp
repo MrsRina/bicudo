@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <GL/GLEW.h>
+#include "bicudo/api/geometry/mesh.hpp"
 
 namespace bicudo {
     enum datatype {
@@ -21,6 +22,7 @@ namespace bicudo {
         void revoke();
         void bind_buffer();
 
+        void compile_mesh(bicudo::mesh&);
         void set_shader_location(uint32_t, int32_t, int32_t, uint32_t);
         void send_data(uint32_t, void*, bicudo::datatype = bicudo::datatype::dynamic);
         void draw();

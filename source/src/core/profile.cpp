@@ -1,13 +1,13 @@
 #include "bicudo/core/profile.hpp"
 #include "bicudo/api/event/event.hpp"
-#include "bicudo/impl/render/immediate_shape.hpp"
+#include "bicudo/impl/render/immshape.hpp"
 
 void bicudo::profile::do_create() {
     this->logger = new bicudo::logger {"MAIN"};
     this->driver_impl_manager = new bicudo::driver_impl_manager {};
     this->handler = new bicudo::handler {};
     this->mainloop = true;
-    this->logger->send_info("bicudo core profile initialised!");
+    this->logger->send_info("Bicudo core profile initialised!");
 }
 
 void bicudo::profile::do_destroy() {
@@ -27,26 +27,31 @@ void bicudo::profile::do_loop() {
     }
 
     this->driver_impl_manager->create_opengl_context();
-    bicudo::immediate_shape::init();
+    bicudo::immshape::init();
 
     static bicudo::timing cpu_reduce_ticks_timing {};
     SDL_Event sdl_event {};
     bicudo::event wrapped_sdl_event {};
 
+    bicudo::immshape immshape {};
+
     while (this->mainloop) {
         if (bicudo::reach(cpu_reduce_ticks_timing, this->cpu_interval_ticks) &&  bicudo::reset(cpu_reduce_ticks_timing)) {
             while (SDL_PollEvent(&sdl_event)) {
-                if (sdl_event.type == SDL_QUIT) {
-                    this->mainloop = false;
-                    break;
-                }
-
                 wrapped_sdl_event.native = &sdl_event;
+
+                this->process_internal_events(wrapped_sdl_event);
                 this->handler->on_event(wrapped_sdl_event);
             }
 
             this->handler->on_native_update();
             this->driver_impl_manager->clear_buffers();
+
+            immshape.invoke();
+            immshape.prepare(20, 20, 200, 200, {1.0f, 1.0f, 1.0f, 1.0f});
+            immshape.draw();
+            immshape.revoke();
+            
             SDL_GL_SwapWindow(this->surfaces[0]->root);
         }
     }
@@ -59,7 +64,6 @@ void bicudo::profile::dispatch_surface(bicudo::surface *surf) {
     } else {
         this->surfaces[0] = surf;
     }
-
 }
 
 bicudo::garbage_collector &bicudo::profile::get_custom_gc() {
@@ -87,4 +91,29 @@ void bicudo::profile::set_vsync(bool vsync) {
 
 bicudo::handler *bicudo::profile::get_handler() {
     return this->handler;
+}
+
+void bicudo::profile::process_internal_events(bicudo::event &event) {
+    switch (event.native->type) {
+        case SDL_QUIT: {
+            this->mainloop = false;
+            break;
+        }
+
+        case SDL_WINDOWEVENT: {
+            switch (event.native->window.event) {
+                case SDL_WINDOWEVENT_SIZE_CHANGED: {
+                    if (!this->surfaces.empty()) {
+                        auto &surface {this->surfaces[0]};
+                        surface->rect.w = static_cast<float>(event.native->window.data1);
+                        surface->rect.w = static_cast<float>(event.native->window.data1);
+                        bicudo::orthographic(bicudo::matrix::orthographic, 0, surface->rect.w, surface->rect.h, 0);
+                        bicudo::immshape::matrix();
+                    }
+                    break;
+                }
+            }
+            break;
+        }
+    }
 }

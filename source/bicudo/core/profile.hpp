@@ -18,6 +18,7 @@ namespace bicudo {
 
         bool mainloop {};
         uint64_t cpu_interval_ticks {};
+        void process_internal_events(bicudo::event&);
     public:
         void dispatch_surface(bicudo::surface*);
         void set_capped_fps(uint64_t);

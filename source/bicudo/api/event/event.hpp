@@ -5,7 +5,7 @@
 
 namespace bicudo {
     struct event {
-        SDL_Event *native {};
+        SDL_Event *native {nullptr};
     };
 }
 

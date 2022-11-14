@@ -8,6 +8,7 @@
 #include "bicudo/api/surface/surface.hpp"
 #include "bicudo/api/util/file.hpp"
 #include "bicudo/api/scene/scene.hpp"
+#include "bicudo/impl/render/immshape.hpp"
 
 namespace bicudo {
     /* The profile core of Bicudo. */

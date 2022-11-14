@@ -19,13 +19,13 @@ namespace bicudo {
 		void set_uniform_vec4(std::string_view, const float*);
 		void set_uniform_vec3(std::string_view, const float*);
 		void set_uniform_vec2(std::string_view, const float*);
-		
+
 		void set_uniform_matrix4x4(std::string_view, const float*);
 		void set_uniform_matrix3x3(std::string_view, const float*);
 		void set_uniform_matrix2x2(std::string_view, const float*);
 	};
 
-	struct sshader {
+    struct sshader {
 	protected:
 		std::map<const char*, int32_t> uniforms_map {};
 	public:

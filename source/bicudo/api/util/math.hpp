@@ -10,6 +10,10 @@ namespace bicudo {
         float x {}, y {}, z {}, w {};
     };
 
+    struct matrix {
+        static float orthographic[16];
+    };
+
     /*
      * Linear interpolation (a, b, dt)
      * Returns interpolated value between a - b in type float.
@@ -34,6 +38,11 @@ namespace bicudo {
      * Returns normalized (between -1 and 1) axis values of a vector.
      */
     bicudo::vec2 normalize(const bicudo::vec2&);
+
+    /*
+     * Compute matrix orthographic values.
+     */
+    void orthographic(float*, float, float, float, float);
 };
 
 #endif
