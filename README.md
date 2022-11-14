@@ -59,7 +59,7 @@ int main(int, char**) {
     
     /* first you need to create one surface */
     bicudo::surface window {};
-    bicudo::create(&surface);
+    bicudo::create(&window);
     
     /* second you need to configure the surface dimensions */
     window.rect = {bicudo::centered, bicudo::centered, 1280, 800};
