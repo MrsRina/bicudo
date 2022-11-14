@@ -23,26 +23,26 @@ void bicudo::immshape::init() {
 
     std::string fragment_shader {bicudo::gl_version};
     fragment_shader += "\n"
-                     "layout (location = 0) out vec4 FragColor;\n"
-                     "in vec2 TextureCoords;\n"
-                     "in vec4 Rect;\n"
-                     "uniform vec4 Color;\n"
-                     "void main() {\n"
-                     "  FragColor = Color;\n"
-                     "}";
+                       "layout (location = 0) out vec4 FragColor;\n"
+                       "in vec2 TextureCoords;\n"
+                       "in vec4 Rect;\n"
+                       "uniform vec4 Color;\n"
+                       "void main() {\n"
+                       "  FragColor = Color;\n"
+                       "}";
 
     bicudo::create_shading_program(bicudo::immshape::shader.shading_program_id, {
-        {vertex_shader, bicudo::shaderstages::vertex},
-        {fragment_shader, bicudo::shaderstages::fragment}
+            {vertex_shader, bicudo::shaderstages::vertex},
+            {fragment_shader, bicudo::shaderstages::fragment}
     }, false);
 
     std::vector<float> vertexes {
-        0.0f, 0.0f,
-        0.0f, 1.0f,
-        1.0f, 1.0f,
-        1.0f, 1.0f,
-        1.0f, 0.0f,
-        0.0f, 0.0
+            0.0f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 1.0f,
+            1.0f, 1.0f,
+            1.0f, 0.0f,
+            0.0f, 0.0
     };
 
     bicudo::mesh mesh {vertexes, vertexes};

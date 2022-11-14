@@ -43,6 +43,6 @@ namespace bicudo {
      * Compute matrix orthographic values.
      */
     void orthographic(float*, float, float, float, float);
-};
+}
 
 #endif
