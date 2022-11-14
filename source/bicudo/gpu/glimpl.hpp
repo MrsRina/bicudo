@@ -1,10 +1,10 @@
-#ifndef BICUDO_GPU_DRIVER_IMPL_MANAGER_H
-#define BICUDO_GPU_DRIVER_IMPL_MANAGER_H
+#ifndef BICUDO_GPU_GLIMPL_H
+#define BICUDO_GPU_GLIMPL_H
 
 #include <iostream>
 
 namespace bicudo {
-	class driver_impl_manager {
+	class glimpl {
 	protected:
         const int32_t minor_opengl_version {3}, major_opengl_version {4};
 		int32_t viewport_width {}, viewport_height {};

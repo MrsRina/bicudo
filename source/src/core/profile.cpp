@@ -4,7 +4,7 @@
 
 void bicudo::profile::do_create() {
     this->logger = new bicudo::logger {"MAIN"};
-    this->driver_impl_manager = new bicudo::driver_impl_manager {};
+    this->driver_impl_manager = new bicudo::glimpl {};
     this->handler = new bicudo::handler {};
     this->mainloop = true;
     this->logger->send_info("Bicudo core profile initialised!");
@@ -28,10 +28,11 @@ void bicudo::profile::do_loop() {
 
     this->driver_impl_manager->create_opengl_context();
     bicudo::immshape::init();
+    this->update_render_matrices();
 
     static bicudo::timing cpu_reduce_ticks_timing {};
-    SDL_Event sdl_event {};
-    bicudo::event wrapped_sdl_event {};
+    static SDL_Event sdl_event {};
+    static bicudo::event wrapped_sdl_event {};
 
     bicudo::immshape immshape {};
 
@@ -40,7 +41,7 @@ void bicudo::profile::do_loop() {
             while (SDL_PollEvent(&sdl_event)) {
                 wrapped_sdl_event.native = &sdl_event;
 
-                this->process_internal_events(wrapped_sdl_event);
+                this->process_internal_event(wrapped_sdl_event);
                 this->handler->on_event(wrapped_sdl_event);
             }
 
@@ -93,7 +94,7 @@ bicudo::handler *bicudo::profile::get_handler() {
     return this->handler;
 }
 
-void bicudo::profile::process_internal_events(bicudo::event &event) {
+void bicudo::profile::process_internal_event(bicudo::event &event) {
     switch (event.native->type) {
         case SDL_QUIT: {
             this->mainloop = false;
@@ -107,8 +108,7 @@ void bicudo::profile::process_internal_events(bicudo::event &event) {
                         auto &surface {this->surfaces[0]};
                         surface->rect.w = static_cast<float>(event.native->window.data1);
                         surface->rect.w = static_cast<float>(event.native->window.data1);
-                        bicudo::orthographic(bicudo::matrix::orthographic, 0, surface->rect.w, surface->rect.h, 0);
-                        bicudo::immshape::matrix();
+                        this->update_render_matrices();
                     }
                     break;
                 }
@@ -116,4 +116,11 @@ void bicudo::profile::process_internal_events(bicudo::event &event) {
             break;
         }
     }
+}
+
+void bicudo::profile::update_render_matrices() {
+    auto &surface {this->surfaces[0]};
+
+    bicudo::orthographic(bicudo::matrix::orthographic, 0, surface->rect.w, surface->rect.h, 0);
+    bicudo::immshape::matrix();
 }

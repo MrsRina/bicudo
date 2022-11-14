@@ -1,4 +1,5 @@
 #include "bicudo/gpu/buffering.hpp"
+#include "bicudo/api/util/log.hpp"
 
 void bicudo::buffering::invoke() {
     if (this->gpu_buffer_group == 0) {
@@ -9,10 +10,11 @@ void bicudo::buffering::invoke() {
 }
 
 void bicudo::buffering::revoke() {
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 }
 
-void bicudo::buffering::set_shader_location(uint32_t location, int32_t offset, int32_t begin, uint32_t end) {
+void bicudo::buffering::set_shader_location(uint32_t location, int32_t offset, int32_t begin, size_t end) {
     glEnableVertexAttribArray(location);
     glVertexAttribPointer(location, offset, GL_FLOAT, GL_FALSE, begin, (void*) end);
 }

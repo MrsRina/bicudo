@@ -1,5 +1,6 @@
 #include "bicudo/impl/render/immshape.hpp"
 #include "bicudo/gpu/shading_program.hpp"
+#include "bicudo/bicudo.hpp"
 
 bicudo::buffering bicudo::immshape::gpu_buffering {};
 bicudo::shader bicudo::immshape::shader {};
@@ -54,7 +55,7 @@ void bicudo::immshape::init() {
 void bicudo::immshape::matrix() {
     auto &shading_program {bicudo::immshape::shader};
     shading_program.use();
-    shading_program.set_uniform_matrix2x2("MatrixProjection", bicudo::matrix::orthographic);
+    shading_program.set_uniform_matrix4x4("MatrixProjection", bicudo::matrix::orthographic);
     shading_program.unuse();
 }
 

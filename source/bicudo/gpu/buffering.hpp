@@ -16,14 +16,14 @@ namespace bicudo {
         std::vector<uint32_t> buffer_list {};
         uint32_t gpu_buffer_group {}, buffer_index {};
     public:
-        int32_t stride_begin {}, stride_end {}, draw_mode {};
+        int32_t stride_begin {}, stride_end {}, draw_mode {GL_TRIANGLES};
 
         void invoke();
         void revoke();
         void bind_buffer();
 
         void compile_mesh(bicudo::mesh&);
-        void set_shader_location(uint32_t, int32_t, int32_t, uint32_t);
+        void set_shader_location(uint32_t, int32_t, int32_t, size_t);
         void send_data(uint32_t, void*, bicudo::datatype = bicudo::datatype::dynamic);
         void draw();
     };

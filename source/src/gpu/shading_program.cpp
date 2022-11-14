@@ -31,11 +31,11 @@ bool bicudo::create_shading_program(uint32_t &program, const std::vector<bicudo:
 
 	std::string shader_data {}, compile_log {};
 	std::vector<uint32_t> compiled_shaders {};
-	uint32_t shader {}, shader_compile_count {1};
+	uint32_t shader {};
 
 	for (const bicudo::resource& resource : resources) {
         compile_log = "Compiling shader ";
-        compile_log += std::to_string(shader_compile_count);
+        compile_log += std::to_string(compiled_shaders.size() + 1);
         compile_log += " ...";
 
         if (readfile) {
