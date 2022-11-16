@@ -11,6 +11,8 @@ void starter::on_create() {
             {"./geometry.gsh", bicudo::shaderstages::geometry},
             {"./fragment.fsh", bicudo::shaderstages::fragment}
     });
+
+    bicudo::rigid *first {new bicudo::rigid {{20, 20}, {200, 200}, 0.0f, 1.0f, 0.2f}};
 }
 
 void starter::on_destroy() {

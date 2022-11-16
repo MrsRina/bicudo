@@ -1,11 +1,13 @@
 #include "bicudo/core/profile.hpp"
 #include "bicudo/api/event/event.hpp"
 #include "bicudo/impl/render/immshape.hpp"
+#include <thread>
 
 void bicudo::profile::do_create() {
     this->logger = new bicudo::logger {"MAIN"};
     this->driver_impl_manager = new bicudo::glimpl {};
     this->handler = new bicudo::handler {};
+    this->physic = new bicudo::physic {};
     this->mainloop = true;
     this->logger->send_info("Bicudo core profile initialised!");
 }
@@ -33,8 +35,7 @@ void bicudo::profile::do_loop() {
     static bicudo::timing cpu_reduce_ticks_timing {};
     static SDL_Event sdl_event {};
     static bicudo::event wrapped_sdl_event {};
-
-    bicudo::immshape immshape {};
+    static std::thread unsafe_thread {bicudo::unsafe, this};
 
     while (this->mainloop) {
         if (bicudo::reach(cpu_reduce_ticks_timing, this->cpu_interval_ticks) &&  bicudo::reset(cpu_reduce_ticks_timing)) {
@@ -45,17 +46,24 @@ void bicudo::profile::do_loop() {
                 this->handler->on_event(wrapped_sdl_event);
             }
 
-            this->handler->on_native_update();
-            this->driver_impl_manager->clear_buffers();
+            if (this->async_quit_stage == 2) {
+                this->mainloop = false;
+                break;
+            }
 
-            immshape.invoke();
-            immshape.prepare(20, 20, 200, 200, {1.0f, 1.0f, 1.0f, 1.0f});
-            immshape.draw();
-            immshape.revoke();
-            
+            bicudo::dt = static_cast<float>(cpu_reduce_ticks_timing.delta_ticks) / 100;
+
+            this->handler->on_native_update();
+            this->physic->on_native_update();
+            this->driver_impl_manager->clear_buffers();
+            this->physic->on_native_render();
+
             SDL_GL_SwapWindow(this->surfaces[0]->root);
         }
     }
+
+    this->logger->send_info("Main-thread shutdown.");
+    unsafe_thread.detach();
 }
 
 void bicudo::profile::dispatch_surface(bicudo::surface *surf) {
@@ -97,7 +105,7 @@ bicudo::handler *bicudo::profile::get_handler() {
 void bicudo::profile::process_internal_event(bicudo::event &event) {
     switch (event.native->type) {
         case SDL_QUIT: {
-            this->mainloop = false;
+            this->async_quit_stage = 1;
             break;
         }
 
@@ -123,4 +131,31 @@ void bicudo::profile::update_render_matrices() {
 
     bicudo::orthographic(bicudo::matrix::orthographic, 0, surface->rect.w, surface->rect.h, 0);
     bicudo::immshape::matrix();
+}
+
+bool bicudo::profile::is_mainloop_running() {
+    return this->mainloop && this->async_quit_stage == 0;
+}
+
+void bicudo::profile::end_mainloop() {
+    this->async_quit_stage = 2;
+    this->logger->send_info("Unsafe thread shutdown.");
+}
+
+bicudo::physic *bicudo::profile::get_physic() {
+    return this->physic;
+}
+
+void bicudo::profile::do_unsafe_update() {
+    this->physic->on_native_unsafe_update();
+}
+
+void bicudo::unsafe(bicudo::profile *profile) {
+    while (profile->is_mainloop_running()) {
+        profile->do_unsafe_update();
+        std::this_thread::sleep_for(std::chrono::milliseconds(16));
+    }
+
+    profile->end_mainloop();
+    profile->get_logger()->send_info("Unsafe thread destroyed.");
 }

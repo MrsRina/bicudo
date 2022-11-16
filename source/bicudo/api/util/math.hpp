@@ -2,8 +2,23 @@
 #define BICUDO_API_UTIL_MATH_H
 
 namespace bicudo {
+    extern float dt;
+
     struct vec2 {
         float x {}, y {};
+
+        vec2 operator * (float) const;
+        vec2 operator + (float) const;
+        vec2 operator - (float) const;
+        vec2 operator / (float) const;
+
+        vec2 operator + (const vec2&) const;
+        vec2 operator - (const vec2&) const;
+
+        void operator *= (float);
+        void operator -= (const vec2&);
+        void operator += (const vec2&);
+        void operator /= (float);
     };
 
     struct vec4 {
@@ -32,6 +47,11 @@ namespace bicudo {
      */
     float length(const bicudo::vec2&);
 
+    /*
+     * Rotate (vec)
+     * Returns rotated vec based on radians angle.
+     */
+    bicudo::vec2 rotate(const bicudo::vec2&, const bicudo::vec2&, float);
 
     /*
      * Normalize (vec)

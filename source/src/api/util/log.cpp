@@ -74,7 +74,7 @@ bool bicudo::reach(bicudo::timing &timing, uint64_t ms) {
     timing.checked = true;
     timing.running_ticks = SDL_GetTicks64();
 
-    return timing.running_ticks - timing.elapsed_ticks > ms;
+    return (timing.delta_ticks = timing.running_ticks - timing.elapsed_ticks) > ms;
 }
 
 bool bicudo::reset(bicudo::timing &timing) {

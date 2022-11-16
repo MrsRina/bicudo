@@ -1,6 +1,7 @@
 #include "bicudo/api/util/math.hpp"
 #include <cmath>
 
+float bicudo::dt {};
 float bicudo::matrix::orthographic[16] {};
 
 float bicudo::lerpf(float a, float b, float t) {
@@ -58,4 +59,59 @@ void bicudo::orthographic(float* m, float left, float right, float bottom, float
     m[13] = -(top + bottom) * invy;
     m[14] = -(max_depth + min_depth) * invz;
     m[15] = 1.0f;
+}
+
+bicudo::vec2 bicudo::rotate(const bicudo::vec2 &vec, const bicudo::vec2 &center, float angle) {
+    auto centered {vec - center};
+    bicudo::vec2 rotated {};
+
+    rotated.x = centered.x * cosf(angle) - centered.y * sinf(angle);
+    rotated.x = centered.x * sinf(angle) + centered.y * cosf(angle);
+    rotated += center;
+
+    return rotated;
+}
+
+bicudo::vec2 bicudo::vec2::operator*(float v) const {
+    return {this->x * v, this->y * v};
+}
+
+bicudo::vec2 bicudo::vec2::operator+(float v) const {
+    return {this->x + v, this->y + v};
+}
+
+bicudo::vec2 bicudo::vec2::operator-(float v) const {
+    return {this->x - v, this->y - v};
+}
+
+bicudo::vec2 bicudo::vec2::operator/(float v) const {
+    return {this->x / v, this->y / v};
+}
+
+bicudo::vec2 bicudo::vec2::operator+(const bicudo::vec2 &vec) const {
+    return {this->x + vec.x, this->y + vec.y};
+}
+
+bicudo::vec2 bicudo::vec2::operator-(const bicudo::vec2 & vec) const {
+    return {this->x - vec.x, this->y - vec.y};
+}
+
+void bicudo::vec2::operator*=(float v) {
+    this->x = this->x + v;
+    this->y = this->y + v;
+}
+
+void bicudo::vec2::operator-=(const bicudo::vec2 &vec) {
+    this->x = this->x - vec.x;
+    this->y = this->y - vec.y;
+}
+
+void bicudo::vec2::operator+=(const bicudo::vec2 &vec) {
+    this->x = this->x + vec.x;
+    this->y = this->y + vec.y;
+}
+
+void bicudo::vec2::operator/=(float v) {
+    this->x = this->x / v;
+    this->y = this->y / v;
 }

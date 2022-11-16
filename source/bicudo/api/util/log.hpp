@@ -39,8 +39,7 @@ namespace bicudo {
     };
 
     struct timing {
-        uint64_t elapsed_ticks {};
-        uint64_t running_ticks {};
+        uint64_t elapsed_ticks {}, running_ticks {}, delta_ticks {};
         bool checked {};
     };
 

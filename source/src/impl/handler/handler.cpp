@@ -1,4 +1,4 @@
-#include "bicudo/bicudo.hpp"\
+#include "bicudo/bicudo.hpp"
 
 void bicudo::handler::append_module(bicudo::module *feature) {
     this->loaded_module_list.push_back(feature);
