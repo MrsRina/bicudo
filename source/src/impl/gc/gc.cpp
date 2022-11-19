@@ -1,4 +1,5 @@
 #include "bicudo/impl/gc/garbage_collector.hpp"
+#include "bicudo/api/util/log.hpp"
 
 void bicudo::garbage_collector::destroy(bicudo::feature *feature) {
     this->features_queue.push(feature);
@@ -10,10 +11,10 @@ void bicudo::garbage_collector::create(bicudo::feature *feature) {
     this->poll_features_queue = true;
 }
 
-bool bicudo::garbage_collector::poll() {
+void bicudo::garbage_collector::on_native_update() {
     if (this->poll_features_queue) {
         while (!this->features_queue.empty()) {
-            auto &feature {this->features_queue.front()};
+            auto &feature {this->features_queue.back()};
             this->features_queue.pop();
 
             if (feature == nullptr) {
@@ -29,8 +30,6 @@ bool bicudo::garbage_collector::poll() {
             }
         }
 
-        return true;
+        this->poll_features_queue = false;
     }
-
-    return false;
 }

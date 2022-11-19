@@ -1,5 +1,5 @@
-#ifndef BICUDO_IMPL_PHYSIC_H
-#define BICUDO_IMPL_PHYSIC_H
+#ifndef BICUDO_IMPL_PHYSIC_COLLISION_H
+#define BICUDO_IMPL_PHYSIC_COLLISION_H
 
 #include "bicudo/api/rigid/rigid.hpp"
 #include <vector>

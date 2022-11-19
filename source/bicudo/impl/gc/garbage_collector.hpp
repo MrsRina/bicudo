@@ -12,7 +12,7 @@ namespace bicudo {
     public:
         void destroy(bicudo::feature*);
         void create(bicudo::feature*);
-        bool poll();
+        void on_native_update();
     };
 };
 

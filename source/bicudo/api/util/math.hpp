@@ -29,6 +29,11 @@ namespace bicudo {
         static float orthographic[16];
     };
 
+    struct collideinfo {
+        bicudo::vec2 start {}, end {}, normal {};
+        float depth {};
+    };
+
     /*
      * Linear interpolation (a, b, dt)
      * Returns interpolated value between a - b in type float.
@@ -42,20 +47,26 @@ namespace bicudo {
     double lerpd(double, double, double);
 
     /*
+     * Dot (vec)
+     * Return the dot product of vector.
+     */
+    float dot(const bicudo::vec2&, const bicudo::vec2&);
+
+    /*
      * Length (vec)
-     * Returns magnitude of a vector.
+     * Return magnitude of a vector.
      */
     float length(const bicudo::vec2&);
 
     /*
      * Rotate (vec)
-     * Returns rotated vec based on radians angle.
+     * Return rotated vec based on radians angle.
      */
     bicudo::vec2 rotate(const bicudo::vec2&, const bicudo::vec2&, float);
 
     /*
      * Normalize (vec)
-     * Returns normalized (between -1 and 1) axis values of a vector.
+     * Return normalized (between -1 and 1) axis values of a vector.
      */
     bicudo::vec2 normalize(const bicudo::vec2&);
 

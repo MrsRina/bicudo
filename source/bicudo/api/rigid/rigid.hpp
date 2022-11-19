@@ -15,6 +15,7 @@ namespace bicudo {
         bicudo::vec2 pos {}, size {}, acceleration {}, velocity {}, min {}, max {};
         float angle {}, angular_velocity {}, angular_acceleration {};
         float friction {}, mass {}, inertia {}, restitution {};
+        bool collided {};
 
         rigid(const bicudo::vec2&, const bicudo::vec2&, float, float, float);
         ~rigid();
@@ -26,6 +27,16 @@ namespace bicudo {
         void on_create() override;
         void on_destroy() override;
         void on_update();
+
+        /*
+         * Get rigid vertices data.
+         */
+        bicudo::vec2 *vdata();
+
+        /*
+         * Get rigid normals data.
+         */
+        bicudo::vec2 *ndata();
     };
 }
 

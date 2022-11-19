@@ -30,6 +30,6 @@ void bicudo::physic::on_native_render() {
         this->immediate_shape.prepare(rigid->min.x, rigid->min.y, rigid->size.x, rigid->size.y, {255, 255, 255, 255});
         this->immediate_shape.draw();
     }
-    
+
     this->immediate_shape.revoke();
 }

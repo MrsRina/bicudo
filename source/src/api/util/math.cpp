@@ -72,6 +72,10 @@ bicudo::vec2 bicudo::rotate(const bicudo::vec2 &vec, const bicudo::vec2 &center,
     return rotated;
 }
 
+float bicudo::dot(const bicudo::vec2 &v1, const bicudo::vec2 &v2) {
+    return v1.x * v2.x + v1.y * v2.y;
+}
+
 bicudo::vec2 bicudo::vec2::operator*(float v) const {
     return {this->x * v, this->y * v};
 }

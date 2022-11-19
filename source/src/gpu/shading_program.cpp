@@ -36,7 +36,7 @@ bool bicudo::create_shading_program(uint32_t &program, const std::vector<bicudo:
     for (const bicudo::resource& resource : resources) {
         compile_log = "Compiling shader ";
         compile_log += std::to_string(compiled_shaders.size() + 1);
-        compile_log += " ...";
+        compile_log += " ... ";
 
         if (readfile) {
             compile_log += "'";
@@ -51,6 +51,7 @@ bool bicudo::create_shading_program(uint32_t &program, const std::vector<bicudo:
         flag = flag && bicudo::compile_shader_stage(shader, resource.type, shader_data.c_str());
 
         if (!flag) {
+            bicudo::core->get_logger()->send_warning("Could not compile all shaders.");
             break;
         }
 

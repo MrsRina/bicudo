@@ -12,11 +12,19 @@ void starter::on_create() {
             {"./fragment.fsh", bicudo::shaderstages::fragment}
     });
 
-    bicudo::rigid *first {new bicudo::rigid {{20, 20}, {200, 200}, 0.0f, 1.0f, 0.2f}};
+    this->rigid = new bicudo::rigid {{20, 20}, {200, 200}, 0.0f, 1.0f, 0.2f};
 }
 
 void starter::on_destroy() {
     feature::on_destroy();
+}
+
+void starter::on_event(bicudo::event &event) {
+    scene::on_event(event);
+}
+
+void starter::on_update() {
+    scene::on_update();
 }
 
 int32_t main(int32_t, char**) {
@@ -31,7 +39,7 @@ int32_t main(int32_t, char**) {
     window.tag = "starter - bicudo tests";
 
     /* Load the default scene. */
-    starter *scene {};
+    starter *scene {new starter {}};
     bicudo::makecurrent(scene);
     bicudo::mainloop();
 

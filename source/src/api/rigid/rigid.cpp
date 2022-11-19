@@ -95,7 +95,7 @@ bicudo::rigid::~rigid() {
 }
 
 bicudo::rigid::rigid(const bicudo::vec2 &position, const bicudo::vec2 &dimension, float the_mass, float the_friction, float the_restitution) {
-    this->pos = position + dimension;
+    this->pos = position + (dimension / 2);
     this->size = dimension;
     this->friction = the_friction;
     this->restitution = the_restitution;
@@ -106,4 +106,12 @@ bicudo::rigid::rigid(const bicudo::vec2 &position, const bicudo::vec2 &dimension
 
     this->update_inertia();
     bicudo::core->get_physic()->append(this);
+}
+
+bicudo::vec2 *bicudo::rigid::vdata() {
+    return this->vertexes;
+}
+
+bicudo::vec2 *bicudo::rigid::ndata() {
+    return this->normals;
 }

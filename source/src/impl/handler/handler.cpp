@@ -9,7 +9,7 @@ void bicudo::handler::append_scene(bicudo::scene *feature) {
 }
 
 void bicudo::handler::set_current_scene(bicudo::scene *feature) {
-    if (feature == nullptr && this->current_scene == nullptr) {
+    if (feature != nullptr && this->current_scene == nullptr) {
         this->current_scene = feature;
         bicudo::core->get_custom_gc().create(this->current_scene);
     } else if (feature != nullptr && this->current_scene != nullptr && feature != this->current_scene) {

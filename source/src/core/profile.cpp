@@ -53,6 +53,7 @@ void bicudo::profile::do_loop() {
 
             bicudo::dt = static_cast<float>(cpu_reduce_ticks_timing.delta_ticks) / 100;
 
+            this->custom_gc.on_native_update();
             this->handler->on_native_update();
             this->physic->on_native_update();
             this->driver_impl_manager->clear_buffers();
