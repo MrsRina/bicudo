@@ -6,7 +6,8 @@ The purpose of creating this framework is not only to make games but learn physi
 Physics use the concept of SAT (separation axis theorem) to compute displacement of collisions.
 Renderer engine of Bicudo is made in API OpenGL 4.
 
-There is bicudo-1 version, but that version is deprecated, but I recommend you take a look in that branch.
+There is bicudo-1 version, but that version is deprecated, but I recommend you take a look in that branch.  
+Bicudo-2 physics engine is in progress, the renderer engine is initialy done.
 
 ---
 
@@ -65,7 +66,7 @@ int main(int, char**) {
     window.rect = {bicudo::centered, bicudo::centered, 1280, 800};
     window.tag = "Bird Game";
     
-    /* Create the first scene, in this case is game_scene */
+    /* create the first scene, in this case is game_scene */
     /* you do not need to worry about the ptr, bicudo is memory safe */
     game_scene *defaut_scene {new game_scene {}};
     bicudo::makecurrent(default_scene);
