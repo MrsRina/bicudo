@@ -37,3 +37,11 @@ void bicudo::mainloop() {
 void bicudo::makecurrent(bicudo::scene *scene) {
     bicudo::core->get_handler()->set_current_scene(scene);
 }
+
+bool bicudo::listen(std::string_view input_name) {
+    return bicudo::core->get_input()->listen(input_name);
+}
+
+bicudo::input *bicudo::getinput() {
+    return bicudo::core->get_input();
+}

@@ -3,7 +3,6 @@
 
 void bicudo::rigid::on_update() {
     this->velocity += this->acceleration * bicudo::dt;
-    this->angle += this->angular_acceleration;
 
     auto vel {this->velocity * bicudo::dt};
     this->pos += vel;
@@ -17,15 +16,18 @@ void bicudo::rigid::on_update() {
     this->min.x = 10000.0f;
     this->min.y = 10000.0f;
 
-    for (auto &vertex : this->vertexes) {
+    for (auto &vertex : this->vertices) {
         vertex += vel;
-        vertex = bicudo::rotate(this->vertexes[0], this->pos, vel_angular);
 
         this->min.x = std::min(this->min.x, vertex.x);
         this->min.y = std::min(this->min.y, vertex.y);
         this->max.x = std::max(this->max.x, vertex.x);
         this->max.y = std::max(this->max.y, vertex.y);
+
+        vertex = bicudo::rotate(vertex, this->pos, vel_angular);
     }
+
+    this->update_normals();
 }
 
 void bicudo::rigid::set_size(float w, float h) {
@@ -35,28 +37,36 @@ void bicudo::rigid::set_size(float w, float h) {
     float dw {w / 2};
     float dh {h / 2};
 
-    this->vertexes[0] = {this->pos.x - dw, this->pos.y - dh};
-    this->vertexes[1] = {this->pos.x + dw, this->pos.y - dh};
-    this->vertexes[2] = {this->pos.x + dw, this->pos.y + dh};
-    this->vertexes[3] = {this->pos.x - dw, this->pos.y + dh};
+    this->vertices[0].x = this->pos.x - dw;
+    this->vertices[0].y = this->pos.y - dh;
+
+    this->vertices[1].x = this->pos.x + dw;
+    this->vertices[1].y = this->pos.y - dh;
+
+    this->vertices[2].x = this->pos.x + dw;
+    this->vertices[2].y = this->pos.y + dh;
+
+    this->vertices[3].x = this->pos.x - dw;
+    this->vertices[3].y = this->pos.y + dh;
+
     this->update_normals();
 }
 
 void bicudo::rigid::set_rotation(float amount) {
     this->angle += amount;
 
-    this->vertexes[0] = bicudo::rotate(this->vertexes[0], this->pos, amount);
-    this->vertexes[1] = bicudo::rotate(this->vertexes[1], this->pos, amount);
-    this->vertexes[2] = bicudo::rotate(this->vertexes[2], this->pos, amount);
-    this->vertexes[3] = bicudo::rotate(this->vertexes[3], this->pos, amount);
+    this->vertices[0] = bicudo::rotate(this->vertices[0], this->pos, amount);
+    this->vertices[1] = bicudo::rotate(this->vertices[1], this->pos, amount);
+    this->vertices[2] = bicudo::rotate(this->vertices[2], this->pos, amount);
+    this->vertices[3] = bicudo::rotate(this->vertices[3], this->pos, amount);
     this->update_normals();
 }
 
 void bicudo::rigid::update_normals() {
-    this->normals[0] = bicudo::normalize(this->vertexes[3] - this->vertexes[0]);
-    this->normals[1] = bicudo::normalize(this->vertexes[0] - this->vertexes[1]);
-    this->normals[2] = bicudo::normalize(this->vertexes[1] - this->vertexes[2]);
-    this->normals[3] = bicudo::normalize(this->vertexes[2] - this->vertexes[3]);
+    this->normals[0] = bicudo::normalize(this->vertices[1] - this->vertices[2]);
+    this->normals[1] = bicudo::normalize(this->vertices[2] - this->vertices[3]);
+    this->normals[2] = bicudo::normalize(this->vertices[3] - this->vertices[0]);
+    this->normals[3] = bicudo::normalize(this->vertices[0] - this->vertices[1]);
 }
 
 void bicudo::rigid::on_create() {
@@ -95,13 +105,15 @@ bicudo::rigid::~rigid() {
 }
 
 bicudo::rigid::rigid(const bicudo::vec2 &position, const bicudo::vec2 &dimension, float the_mass, float the_friction, float the_restitution) {
-    this->pos = position + (dimension / 2);
+    this->pos = position - (dimension / 2);
     this->size = dimension;
+    this->set_size(this->size.x, this->size.y);
     this->friction = the_friction;
     this->restitution = the_restitution;
 
     if (the_mass != 0) {
         this->mass = 1 / the_mass;
+        this->acceleration.y = 5;
     }
 
     this->update_inertia();
@@ -109,7 +121,7 @@ bicudo::rigid::rigid(const bicudo::vec2 &position, const bicudo::vec2 &dimension
 }
 
 bicudo::vec2 *bicudo::rigid::vdata() {
-    return this->vertexes;
+    return this->vertices;
 }
 
 bicudo::vec2 *bicudo::rigid::ndata() {

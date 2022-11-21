@@ -70,3 +70,10 @@ bool bicudo::find_axis_least_penetration(bicudo::collideinfo &collide_info, bicu
 
     return found_support;
 }
+
+bool bicudo::check_collide_mask(bicudo::rigid *r1, bicudo::rigid *r2) {
+    return r1->min.x <= r2->max.x &&
+           r1->min.y <= r1->max.y &&
+           r1->max.x >= r1->min.y &&
+           r2->max.y >= r1->min.y;
+}

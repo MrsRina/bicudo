@@ -8,6 +8,8 @@ void bicudo::profile::do_create() {
     this->driver_impl_manager = new bicudo::glimpl {};
     this->handler = new bicudo::handler {};
     this->physic = new bicudo::physic {};
+    this->input = new bicudo::input {};
+
     this->mainloop = true;
     this->logger->send_info("Bicudo core profile initialised!");
 }
@@ -38,29 +40,30 @@ void bicudo::profile::do_loop() {
     static std::thread unsafe_thread {bicudo::unsafe, this};
 
     while (this->mainloop) {
-        if (bicudo::reach(cpu_reduce_ticks_timing, this->cpu_interval_ticks) &&  bicudo::reset(cpu_reduce_ticks_timing)) {
-            while (SDL_PollEvent(&sdl_event)) {
-                wrapped_sdl_event.native = &sdl_event;
+        while (SDL_PollEvent(&sdl_event)) {
+            wrapped_sdl_event.native = &sdl_event;
 
-                this->process_internal_event(wrapped_sdl_event);
-                this->handler->on_event(wrapped_sdl_event);
-            }
-
-            if (this->async_quit_stage == 2) {
-                this->mainloop = false;
-                break;
-            }
-
-            bicudo::dt = static_cast<float>(cpu_reduce_ticks_timing.delta_ticks) / 100;
-
-            this->custom_gc.on_native_update();
-            this->handler->on_native_update();
-            this->physic->on_native_update();
-            this->driver_impl_manager->clear_buffers();
-            this->physic->on_native_render();
-
-            SDL_GL_SwapWindow(this->surfaces[0]->root);
+            this->process_internal_event(wrapped_sdl_event);
+            this->input->on_native_event(wrapped_sdl_event);
+            this->handler->on_event(wrapped_sdl_event);
         }
+
+        if (this->async_quit_stage == 2) {
+            this->mainloop = false;
+            break;
+        }
+
+        bicudo::dt = static_cast<float>(this->cpu_interval_ticks) / 100;
+
+        this->custom_gc.on_native_update();
+        this->handler->on_native_update();
+        this->physic->on_native_update();
+        this->input->on_native_update();
+        this->driver_impl_manager->clear_buffers();
+        this->physic->on_native_render();
+
+        SDL_GL_SwapWindow(this->surfaces[0]->root);
+        SDL_Delay(this->cpu_interval_ticks);
     }
 
     this->logger->send_info("Main-thread shutdown.");
@@ -149,6 +152,10 @@ bicudo::physic *bicudo::profile::get_physic() {
 
 void bicudo::profile::do_unsafe_update() {
     this->physic->on_native_unsafe_update();
+}
+
+bicudo::input *bicudo::profile::get_input() {
+    return this->input;
 }
 
 void bicudo::unsafe(bicudo::profile *profile) {

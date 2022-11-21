@@ -45,6 +45,11 @@ namespace bicudo {
     void mainloop();
 
     /*
+     * Listen input by name and return the state of input.
+     */
+    bool listen(std::string_view);
+
+    /*
      * Custom garbage collector, make sure what you handle calling this method.
      */
     bicudo::garbage_collector &gc();
@@ -52,7 +57,12 @@ namespace bicudo {
     /*
      * Get main log.
      */
-    bicudo::logger* log();
+    bicudo::logger *log();
+
+    /*
+     * Get input service.
+     */
+    bicudo::input *getinput();
 }
 
 #endif

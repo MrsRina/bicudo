@@ -7,6 +7,7 @@
 #include "bicudo/gpu/glimpl.hpp"
 #include "bicudo/impl/handler/handler.hpp"
 #include "bicudo/impl/physic/physic.hpp"
+#include "bicudo/impl/input/input.hpp"
 
 namespace bicudo {
     class profile {
@@ -17,6 +18,7 @@ namespace bicudo {
         bicudo::glimpl *driver_impl_manager {nullptr};
         bicudo::handler *handler {nullptr};
         bicudo::physic *physic {};
+        bicudo::input *input {};
 
         bool mainloop {};
         uint8_t async_quit_stage {};
@@ -38,6 +40,7 @@ namespace bicudo {
         bicudo::logger *get_logger();
         bicudo::handler *get_handler();
         bicudo::physic *get_physic();
+        bicudo::input *get_input();
 
         bool is_mainloop_running();
         void end_mainloop();

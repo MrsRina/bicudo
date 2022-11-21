@@ -11,8 +11,6 @@ void starter::on_create() {
             {"./geometry.gsh", bicudo::shaderstages::geometry},
             {"./fragment.fsh", bicudo::shaderstages::fragment}
     });
-
-    this->rigid = new bicudo::rigid {{20, 20}, {200, 200}, 0.0f, 1.0f, 0.2f};
 }
 
 void starter::on_destroy() {
@@ -21,6 +19,11 @@ void starter::on_destroy() {
 
 void starter::on_event(bicudo::event &event) {
     scene::on_event(event);
+
+    if (bicudo::listen("mouse0") && event.native->type == SDL_MOUSEBUTTONDOWN) {
+        auto mouse_pos {bicudo::getinput()->get_mouse_pos()};
+        auto boo {new bicudo::rigid {mouse_pos, {200, 200}, 0.0f, 1.0f, 0.2f}};
+    }
 }
 
 void starter::on_update() {

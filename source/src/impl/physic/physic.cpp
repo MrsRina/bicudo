@@ -1,5 +1,6 @@
 #include "bicudo/impl/physic/physic.hpp"
 #include "bicudo/bicudo.hpp"
+#include "bicudo/impl/physic/collision.hpp"
 
 void bicudo::physic::on_create() {
 
@@ -16,6 +17,14 @@ void bicudo::physic::on_native_update() {
 void bicudo::physic::on_native_unsafe_update() {
     for (auto &rigid : this->loaded_rigid_list) {
         rigid->on_update();
+    }
+
+    for (auto &r1 : this->loaded_rigid_list) {
+        for (auto &r2 : this->loaded_rigid_list) {
+            if (r1 != r2 && bicudo::check_collide_mask(r1, r2)) {
+                bicudo::print("hiii");
+            }
+        }
     }
 }
 

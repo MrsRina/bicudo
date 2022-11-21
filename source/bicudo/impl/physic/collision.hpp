@@ -7,6 +7,7 @@
 namespace bicudo {
     bool find_axis_least_penetration(bicudo::collideinfo&, bicudo::rigid*, bicudo::rigid*);
     bool check_collideinfo(bicudo::collideinfo&, bicudo::rigid*, bicudo::rigid*);
+    bool check_collide_mask(bicudo::rigid*, bicudo::rigid*);
 }
 
 #endif

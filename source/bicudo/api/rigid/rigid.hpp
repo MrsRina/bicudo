@@ -7,7 +7,7 @@
 namespace bicudo {
     class rigid : public bicudo::feature {
     protected:
-        bicudo::vec2 vertexes[4] {}, normals[4] {};
+        bicudo::vec2 vertices[4] {}, normals[4] {};
 
         void update_normals();
         void update_inertia();
