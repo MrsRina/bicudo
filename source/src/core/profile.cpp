@@ -34,12 +34,16 @@ void bicudo::profile::do_loop() {
     bicudo::immshape::init();
     this->update_render_matrices();
 
-    static bicudo::timing cpu_reduce_ticks_timing {};
     static SDL_Event sdl_event {};
     static bicudo::event wrapped_sdl_event {};
     static std::thread unsafe_thread {bicudo::unsafe, this};
+    uint64_t cpu_ticks_now {}, cpu_ticks_last {};
 
     while (this->mainloop) {
+        cpu_ticks_last = cpu_ticks_now;
+        cpu_ticks_now = SDL_GetPerformanceCounter();
+        bicudo::dt = static_cast<float>(cpu_ticks_now - cpu_ticks_last) / static_cast<float>(SDL_GetPerformanceFrequency());
+
         while (SDL_PollEvent(&sdl_event)) {
             wrapped_sdl_event.native = &sdl_event;
 
@@ -53,8 +57,6 @@ void bicudo::profile::do_loop() {
             break;
         }
 
-        bicudo::dt = static_cast<float>(this->cpu_interval_ticks) / 100;
-
         this->custom_gc.on_native_update();
         this->handler->on_native_update();
         this->physic->on_native_update();
@@ -63,7 +65,7 @@ void bicudo::profile::do_loop() {
         this->physic->on_native_render();
 
         SDL_GL_SwapWindow(this->surfaces[0]->root);
-        SDL_Delay(this->cpu_interval_ticks);
+        SDL_Delay(this->cpu_ticks_interval);
     }
 
     this->logger->send_info("Main-thread shutdown.");
@@ -91,7 +93,7 @@ void bicudo::profile::set_capped_fps(uint64_t fps) {
     fps = fps < 0 ? fps + 1 : fps;
     if (!this->surfaces.empty()) {
         this->surfaces[0]->locked_fps = fps;
-        this->cpu_interval_ticks = 1000 / fps;
+        this->cpu_ticks_interval = 1000 / fps;
     }
 }
 

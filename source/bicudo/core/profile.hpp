@@ -22,7 +22,7 @@ namespace bicudo {
 
         bool mainloop {};
         uint8_t async_quit_stage {};
-        uint64_t cpu_interval_ticks {};
+        uint64_t cpu_ticks_interval {};
 
         void update_render_matrices();
         void process_internal_event(bicudo::event&);
