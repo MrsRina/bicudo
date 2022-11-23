@@ -79,6 +79,7 @@ int main(int, char**) {
 }
 ```
 
-# License
+# Credits & License
 
+Thanks for Michael Tanaya, Huaming Chen, Jebediah Pavleas & Kelvin Sung. They published one awesome book!
 Bicudo use MIT license, we do not care for what purpose you use it, just follow the MIT terms.
