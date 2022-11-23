@@ -76,6 +76,13 @@ float bicudo::dot(const bicudo::vec2 &v1, const bicudo::vec2 &v2) {
     return v1.x * v2.x + v1.y * v2.y;
 }
 
+void bicudo::set(bicudo::collideinfo &collideinfo, float depth, bicudo::vec2 normal, bicudo::vec2 start) {
+    collideinfo.depth = depth;
+    collideinfo.normal = normal;
+    collideinfo.start = start;
+    collideinfo.end = start + normal * depth;
+}
+
 bicudo::vec2 bicudo::vec2::operator*(float v) const {
     return {this->x * v, this->y * v};
 }

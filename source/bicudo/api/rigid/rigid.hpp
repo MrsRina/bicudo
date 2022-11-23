@@ -23,6 +23,7 @@ namespace bicudo {
         void set_size(float, float);
         void set_rotation(float);
         void update_mass(float);
+        void update_position(bicudo::vec2);
 
         void on_create() override;
         void on_destroy() override;

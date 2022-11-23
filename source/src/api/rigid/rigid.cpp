@@ -23,8 +23,6 @@ void bicudo::rigid::on_update() {
         this->min.y = std::min(this->min.y, vertex.y);
         this->max.x = std::max(this->max.x, vertex.x);
         this->max.y = std::max(this->max.y, vertex.y);
-
-        vertex = bicudo::rotate(vertex, this->pos, vel_angular);
     }
 
     this->update_normals();
@@ -113,7 +111,7 @@ bicudo::rigid::rigid(const bicudo::vec2 &position, const bicudo::vec2 &dimension
 
     if (the_mass != 0) {
         this->mass = 1 / the_mass;
-        this->acceleration.y = 5;
+        this->acceleration.y = 10;
     }
 
     this->update_inertia();
@@ -126,4 +124,23 @@ bicudo::vec2 *bicudo::rigid::vdata() {
 
 bicudo::vec2 *bicudo::rigid::ndata() {
     return this->normals;
+}
+
+void bicudo::rigid::update_position(bicudo::vec2 vel) {
+    this->max.x = -10000.0f;
+    this->max.y = -10000.0f;
+    this->min.x = 10000.0f;
+    this->min.y = 10000.0f;
+
+    for (auto &vertex : this->vertices) {
+        vertex += vel;
+
+        this->min.x = std::min(this->min.x, vertex.x);
+        this->min.y = std::min(this->min.y, vertex.y);
+        this->max.x = std::max(this->max.x, vertex.x);
+        this->max.y = std::max(this->max.y, vertex.y);
+    }
+
+    this->pos += vel;
+    this->update_normals();
 }

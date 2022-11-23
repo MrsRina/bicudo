@@ -42,7 +42,7 @@ void bicudo::profile::do_loop() {
     while (this->mainloop) {
         cpu_ticks_last = cpu_ticks_now;
         cpu_ticks_now = SDL_GetPerformanceCounter();
-        bicudo::dt = static_cast<float>(cpu_ticks_now - cpu_ticks_last) / static_cast<float>(SDL_GetPerformanceFrequency());
+        bicudo::dt = (static_cast<float>(cpu_ticks_now - cpu_ticks_last) / static_cast<float>(SDL_GetPerformanceFrequency())) * 10;
 
         while (SDL_PollEvent(&sdl_event)) {
             wrapped_sdl_event.native = &sdl_event;

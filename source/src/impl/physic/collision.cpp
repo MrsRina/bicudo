@@ -8,17 +8,12 @@ bool bicudo::check_collideinfo(bicudo::collideinfo &collide_info, bicudo::rigid 
 
     if (r1_collide_info.depth < r2_collide_info.depth) {
         bicudo::vec2 depth {r1_collide_info.normal * r1_collide_info.depth};
-        collide_info.normal = r1_collide_info.normal;
-        collide_info.depth = r1_collide_info.depth;
-        collide_info.start = r1_collide_info.start - depth;
+        bicudo::set(collide_info, r1_collide_info.depth, r1_collide_info.normal, r1_collide_info.start - depth);
     } else {
-        collide_info.normal = r2_collide_info.normal * -1.0f;
-        collide_info.depth = r2_collide_info.depth;
-        collide_info.start = r2_collide_info.start;
+        bicudo::set(collide_info, r2_collide_info.depth, r2_collide_info.normal * -1.0f, r2_collide_info.start);
     }
 
-    collide_info.end = collide_info.start + collide_info.normal * collide_info.depth;
-    return false;
+    return true;
 }
 
 bool bicudo::find_axis_least_penetration(bicudo::collideinfo &collide_info, bicudo::rigid *r1, bicudo::rigid *r2) {
@@ -72,8 +67,6 @@ bool bicudo::find_axis_least_penetration(bicudo::collideinfo &collide_info, bicu
 }
 
 bool bicudo::check_collide_mask(bicudo::rigid *r1, bicudo::rigid *r2) {
-    return r1->min.x <= r2->max.x &&
-           r1->min.y <= r1->max.y &&
-           r1->max.x >= r1->min.y &&
-           r2->max.y >= r1->min.y;
+    // todo optimize collision check based on aligned box
+    return true;
 }

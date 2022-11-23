@@ -10,6 +10,8 @@ namespace bicudo {
     protected:
         std::vector<bicudo::rigid*> loaded_rigid_list {};
         bicudo::immshape immediate_shape {};
+        int32_t id_token_feature {1};
+        bicudo::collideinfo collideinfo {};
     public:
         void on_create();
         void on_destroy();

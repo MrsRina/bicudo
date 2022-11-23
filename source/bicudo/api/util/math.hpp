@@ -34,6 +34,8 @@ namespace bicudo {
         float depth {};
     };
 
+    void set(bicudo::collideinfo&, float, bicudo::vec2, bicudo::vec2);
+
     /*
      * Linear interpolation (a, b, dt)
      * Returns interpolated value between a - b in type float.
