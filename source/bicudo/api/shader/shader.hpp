@@ -1,7 +1,6 @@
 #ifndef BICUDO_API_SHADER_H
 #define BICUDO_API_SHADER_H
 
-#include <GL/GLEW.h>
 #include <map>
 #include <iostream>
 

@@ -1,7 +1,7 @@
 #include "bicudo/api/util/math.hpp"
 #include <cmath>
 
-float bicudo::dt {};
+float bicudo::dt {}, bicudo::unsafe_dt {;
 float bicudo::matrix::orthographic[16] {};
 
 float bicudo::lerpf(float a, float b, float t) {
@@ -31,6 +31,10 @@ bicudo::vec2 bicudo::normalize(const bicudo::vec2 &vec) {
     }
 
     return {vec.x * l, vec.y * l};
+}
+
+float bicudo::cross(const bicudo::vec2& v1, const bicudo::vec2& v2) {
+    return v1.x * v2.y - v1.y * v2.x;
 }
 
 void bicudo::orthographic(float* m, float left, float right, float bottom, float top) {
@@ -103,13 +107,16 @@ bicudo::vec2 bicudo::vec2::operator+(const bicudo::vec2 &vec) const {
     return {this->x + vec.x, this->y + vec.y};
 }
 
-bicudo::vec2 bicudo::vec2::operator-(const bicudo::vec2 & vec) const {
+bicudo::vec2 bicudo::vec2::operator-(const bicudo::vec2 &vec) const {
     return {this->x - vec.x, this->y - vec.y};
 }
 
-void bicudo::vec2::operator*=(float v) {
-    this->x = this->x + v;
-    this->y = this->y + v;
+bicudo::vec2 bicudo::vec2::operator*(const bicudo::vec2 &vec) const {
+    return {this->x * vec.x, this->y * vec.y};
+}
+
+bicudo::vec2 bicudo::vec2::operator/(const bicudo::vec2 &vec) const {
+    return {this->x / vec.x, this->y / vec.y};
 }
 
 void bicudo::vec2::operator-=(const bicudo::vec2 &vec) {
@@ -122,7 +129,22 @@ void bicudo::vec2::operator+=(const bicudo::vec2 &vec) {
     this->y = this->y + vec.y;
 }
 
+void bicudo::vec2::operator+=(float v) {
+    this->x = this->x + v;
+    this->y = this->y + v;
+}
+
+void bicudo::vec2::operator-=(float v) {
+    this->x = this->x - v;
+    this->y = this->y - v;
+}
+
+void bicudo::vec2::operator*=(float v) {
+    this->x = this->x * v;
+    this->y = this->y * v;
+}
+
 void bicudo::vec2::operator/=(float v) {
-    this->x = this->x / v;
-    this->y = this->y / v;
+    this->x = this->x * v;
+    this->y = this->y * v;
 }

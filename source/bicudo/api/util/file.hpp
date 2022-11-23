@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <vector>
-#include <GL/GLEW.h>
+#include "GL/glew.h"
 
 namespace bicudo {
     enum imageformats {

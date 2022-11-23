@@ -2,23 +2,26 @@
 #define BICUDO_API_UTIL_MATH_H
 
 namespace bicudo {
-    extern float dt;
+    extern float dt, dt_unsafe;
 
     struct vec2 {
         float x {}, y {};
 
-        vec2 operator * (float) const;
-        vec2 operator + (float) const;
-        vec2 operator - (float) const;
-        vec2 operator / (float) const;
+        vec2 operator *(float) const;
+        vec2 operator +(float) const;
+        vec2 operator -(float) const;
+        vec2 operator /(float) const;
+        vec2 operator +(const vec2&) const;
+        vec2 operator -(const vec2&) const;
+        vec2 operator *(const vec2&) const;
+        vec2 operator /(const vec2&) const;
 
-        vec2 operator + (const vec2&) const;
-        vec2 operator - (const vec2&) const;
-
-        void operator *= (float);
-        void operator -= (const vec2&);
-        void operator += (const vec2&);
-        void operator /= (float);
+        void operator -=(const vec2&);
+        void operator +=(const vec2&);
+        void operator *=(float);
+        void operator +=(float);
+        void operator -=(float);
+        void operator /=(float);
     };
 
     struct vec4 {
@@ -34,6 +37,10 @@ namespace bicudo {
         float depth {};
     };
 
+    /*
+     * Set collide info (depth, normal, start)
+     * End is the product of (start + normal * depth)
+     */
     void set(bicudo::collideinfo&, float, bicudo::vec2, bicudo::vec2);
 
     /*
@@ -59,6 +66,12 @@ namespace bicudo {
      * Return magnitude of a vector.
      */
     float length(const bicudo::vec2&);
+
+    /*
+     * Cross (v1, v2)
+     * Return the cross X product (x1 * y2 + y1 * x2) 
+     */
+    float cross(const bicudo::vec2&, const bicudo::vec2&);
 
     /*
      * Rotate (vec)

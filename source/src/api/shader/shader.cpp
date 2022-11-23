@@ -1,5 +1,5 @@
 #include "bicudo/api/shader/shader.hpp"
-#include <GL/GLEW.h>
+#include "GL/glew.h"
 
 void bicudo::shader::use() const {
     glUseProgram(this->shading_program_id);

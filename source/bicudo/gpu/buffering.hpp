@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <vector>
-#include <GL/GLEW.h>
+#include "GL/glew.h"
 #include "bicudo/api/geometry/mesh.hpp"
 
 namespace bicudo {

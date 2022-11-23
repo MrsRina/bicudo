@@ -163,6 +163,7 @@ bicudo::input *bicudo::profile::get_input() {
 void bicudo::unsafe(bicudo::profile *profile) {
     while (profile->is_mainloop_running()) {
         profile->do_unsafe_update();
+        bicudo::unsafe_dt = 0.16f;
         std::this_thread::sleep_for(std::chrono::milliseconds(16));
     }
 

@@ -1,5 +1,5 @@
 #include "bicudo/gpu/glimpl.hpp"
-#include <GL/GLEW.h>
+#include "GL/glew.h"
 #include <SDL2/SDL.h>
 
 void bicudo::glimpl::prepare_opengl_attributes() {

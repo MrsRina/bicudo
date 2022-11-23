@@ -2,13 +2,13 @@
 #include "bicudo/bicudo.hpp"
 
 void bicudo::rigid::on_update() {
-    this->velocity += this->acceleration * bicudo::dt;
+    this->velocity += this->acceleration * bicudo::unsafe_dt;
 
-    auto vel {this->velocity * bicudo::dt};
+    auto vel {this->velocity * bicudo::unsafe_dt};
     this->pos += vel;
 
-    this->angular_velocity += this->angular_acceleration * bicudo::dt;
-    auto vel_angular {this->angular_velocity * bicudo::dt};
+    this->angular_velocity += this->angular_acceleration * bicudo::unsafe_dt;
+    auto vel_angular {this->angular_velocity * bicudo::unsafe_dt};
     this->angle += vel_angular;
 
     this->max.x = -10000.0f;
@@ -18,11 +18,13 @@ void bicudo::rigid::on_update() {
 
     for (auto &vertex : this->vertices) {
         vertex += vel;
+        vertex = bicudo::rotate(vertex, this->pos, vel_angular);
 
         this->min.x = std::min(this->min.x, vertex.x);
         this->min.y = std::min(this->min.y, vertex.y);
         this->max.x = std::max(this->max.x, vertex.x);
         this->max.y = std::max(this->max.y, vertex.y);
+
     }
 
     this->update_normals();
