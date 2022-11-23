@@ -20,7 +20,7 @@ bool bicudo::find_axis_least_penetration(bicudo::collideinfo &collide_info, bicu
     bicudo::vec2 norm {}, support_point {}, point {}, r1_direction {}, r1_vertex {}, r2_edge {}, r2_vertex {};
 
     uint8_t best_index {}, r1_it {}, r2_it {};
-    float best_distance {}, distance {}, projection {};
+    float best_distance {99999}, distance {}, projection {};
 
     auto *r1_vertices {r1->vdata()}, *r1_normals {r1->ndata()}, *r2_vertices {r2->vdata()};
     auto found_support {true};
@@ -32,7 +32,7 @@ bool bicudo::find_axis_least_penetration(bicudo::collideinfo &collide_info, bicu
 
         /* try to find support point */
         found_support = false;
-        distance = -90000;
+        distance = -99999;
 
         for (r2_it = 0; r2_it < 4; r2_it++) {
             r2_vertex = r2_vertices[r2_it];
@@ -46,8 +46,8 @@ bool bicudo::find_axis_least_penetration(bicudo::collideinfo &collide_info, bicu
             }
         }
 
-        if (found_support && projection < best_distance) {
-            best_distance = projection;
+        if (found_support && distance < best_distance) {
+            best_distance = distance;
             best_index = r1_it;
             support_point = point;
         }
