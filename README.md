@@ -81,5 +81,5 @@ int main(int, char**) {
 
 # Credits & License
 
-Thank you Michael Tanaya, Huaming Chen, Jebediah Pavleas & Kelvin Sung. Thanks for the awesome published ![book](https://www.amazon.com.br/Building-Game-Physics-Engine-JavaScript/dp/1484225821) by Aprees.
+Thank you Michael Tanaya, Huaming Chen, Jebediah Pavleas & Kelvin Sung. Thanks for the awesome published ![book](https://www.amazon.com.br/Building-Game-Physics-Engine-JavaScript/dp/1484225821) by Aprees.  
 Bicudo use MIT license, we do not care for what purpose you use it, just follow the MIT terms.
