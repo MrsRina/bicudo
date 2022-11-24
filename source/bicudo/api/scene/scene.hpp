@@ -13,6 +13,7 @@ namespace bicudo {
 
         virtual void on_event(bicudo::event&);
         virtual void on_update();
+        virtual void on_unsafe_update();
     };
 }
 

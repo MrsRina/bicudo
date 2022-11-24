@@ -12,7 +12,7 @@
 
 namespace bicudo {
     /* The profile core of Bicudo. */
-    extern bicudo::profile* core;
+    extern bicudo::profile *core;
 
     /*
      * Init bicudo framework.

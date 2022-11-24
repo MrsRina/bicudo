@@ -30,6 +30,10 @@ void starter::on_update() {
     scene::on_update();
 }
 
+void starter::on_unsafe_update() {
+    scene::on_unsafe_update();
+}
+
 int32_t main(int32_t, char**) {
     /* Init Bicudo framework. */
     bicudo::init();

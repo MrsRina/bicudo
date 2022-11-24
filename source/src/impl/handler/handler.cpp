@@ -35,7 +35,7 @@ bicudo::module *bicudo::handler::get_module_by_id(int32_t) {
     return nullptr;
 }
 
-void bicudo::handler::on_event(bicudo::event &event) {
+void bicudo::handler::on_native_event(bicudo::event &event) {
     if (this->current_scene != nullptr) {
         this->current_scene->on_event(event);
     }
@@ -44,5 +44,11 @@ void bicudo::handler::on_event(bicudo::event &event) {
 void bicudo::handler::on_native_update() {
     if (this->current_scene != nullptr) {
         this->current_scene->on_update();
+    }
+}
+
+void bicudo::handler::on_native_unsafe_update() {
+    if (this->current_scene != nullptr) {
+        this->current_scene->on_unsafe_update();
     }
 }

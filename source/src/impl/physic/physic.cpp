@@ -50,12 +50,12 @@ void bicudo::physic::on_native_unsafe_update() {
                 r1_vel = r1->velocity;
                 empty.x = -1.0f * r1->angular_velocity * r1_dir.y;
                 empty.y = r1->angular_velocity * r1_dir.x;
-                r1_vel = r1_vel * empty;
+                r1_vel += empty;
 
                 r2_vel = r2->velocity;
                 empty.x = -1.0f * r2->angular_velocity * r2_dir.y;
                 empty.y = r2->angular_velocity * r2_dir.x;
-                r2_vel = r2_vel * empty;
+                r2_vel += empty;
 
                 r1r2_vel_dir = r2_vel - r1_vel;
                 r1r2_ndot = bicudo::dot(r1r2_vel_dir, n);
@@ -79,8 +79,11 @@ void bicudo::physic::on_native_unsafe_update() {
                 r1->angular_velocity -= r1_cross * jn * r1->inertia;
                 r2->angular_velocity += r2_cross * jn * r2->inertia;
 
-                bicudo::vec2 tangent = r1r2_vel_dir - n * bicudo::dot(r1r2_vel_dir, n);
+                bicudo::vec2 tangent = r1r2_vel_dir - n * r1r2_ndot;
                 tangent = bicudo::normalize(tangent) * -1.0f;
+
+                r1_cross = bicudo::cross(r1_dir, tangent);
+                r2_cross = bicudo::cross(r2_dir, tangent);
 
                 jt = -(1.0f + restitution) * bicudo::dot(r1r2_vel_dir, tangent) * friction;
                 jt /= (r1_mass + r2_mass + r1_cross * r1_cross + r1_mass + r2_cross * r2_cross * r2->inertia);
@@ -107,6 +110,7 @@ void bicudo::physic::on_native_render() {
     this->immediate_shape.invoke();
     for (auto &rigid : this->loaded_rigid_list) {
         this->immediate_shape.prepare(rigid->min.x, rigid->min.y, rigid->size.x, rigid->size.y, {255, 255, 255, 255});
+        this->immediate_shape.rotate(rigid->angle);
         this->immediate_shape.draw();
     }
 

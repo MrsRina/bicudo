@@ -49,7 +49,7 @@ void bicudo::profile::do_loop() {
 
             this->process_internal_event(wrapped_sdl_event);
             this->input->on_native_event(wrapped_sdl_event);
-            this->handler->on_event(wrapped_sdl_event);
+            this->handler->on_native_event(wrapped_sdl_event);
         }
 
         if (this->async_quit_stage == 2) {
@@ -153,6 +153,7 @@ bicudo::physic *bicudo::profile::get_physic() {
 }
 
 void bicudo::profile::do_unsafe_update() {
+    this->handler->on_native_unsafe_update();
     this->physic->on_native_unsafe_update();
 }
 
@@ -162,8 +163,8 @@ bicudo::input *bicudo::profile::get_input() {
 
 void bicudo::unsafe(bicudo::profile *profile) {
     while (profile->is_mainloop_running()) {
-        profile->do_unsafe_update();
         bicudo::unsafe_dt = 0.16f;
+        profile->do_unsafe_update();
         std::this_thread::sleep_for(std::chrono::milliseconds(16));
     }
 

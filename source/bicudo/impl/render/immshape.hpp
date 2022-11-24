@@ -12,13 +12,14 @@ namespace bicudo {
         static bicudo::buffering gpu_buffering;
 
         float shape_color[4] {}, rect[4] {};
-        float depth_testing {};
+        float depth_testing {}, angular_rotation {};
     public:
         static void init();
         static void matrix();
 
         void invoke(float = 0.0f);
         void prepare(float, float, float, float, const bicudo::vec4&);
+        void rotate(float);
         void draw();
         void revoke();
     };

@@ -76,6 +76,10 @@ void bicudo::immshape::prepare(float x, float y, float w, float h, const bicudo:
     this->shape_color[3] = color.w;
 }
 
+void bicudo::immshape::rotate(float angle) {
+    angular_rotation
+}
+
 void bicudo::immshape::draw() {
     auto &shading_program {bicudo::immshape::shader};
     shading_program.set_uniform_vec4("DataRect", this->rect);

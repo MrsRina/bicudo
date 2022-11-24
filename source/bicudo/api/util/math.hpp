@@ -2,7 +2,7 @@
 #define BICUDO_API_UTIL_MATH_H
 
 namespace bicudo {
-    extern float dt, dt_unsafe;
+    extern float dt, unsafe_dt;
 
     struct vec2 {
         float x {}, y {};
@@ -28,6 +28,11 @@ namespace bicudo {
         float x {}, y {}, z {}, w {};
     };
 
+    struct mat4 {
+        float data[16] {};
+        mat4(float = 1.0f);
+    };
+
     struct matrix {
         static float orthographic[16];
     };
@@ -36,6 +41,12 @@ namespace bicudo {
         bicudo::vec2 start {}, end {}, normal {};
         float depth {};
     };
+
+    /*
+     * Translate matrix 4x4 (matrix, position)
+     * Translate matrix by given a pos.
+     */
+    void translate(bicudo::mat4&, const bicudo::vec3&);
 
     /*
      * Set collide info (depth, normal, start)

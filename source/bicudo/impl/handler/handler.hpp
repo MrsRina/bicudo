@@ -24,8 +24,9 @@ namespace bicudo {
         bicudo::module* get_module_by_tag(std::string_view);
         bicudo::module* get_module_by_id(int32_t);
 
-        void on_event(bicudo::event &event);
+        void on_native_event(bicudo::event &event);
         void on_native_update();
+        void on_native_unsafe_update();
     };
 }
 

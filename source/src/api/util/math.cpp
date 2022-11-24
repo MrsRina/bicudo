@@ -1,8 +1,19 @@
 #include "bicudo/api/util/math.hpp"
 #include <cmath>
 
-float bicudo::dt {}, bicudo::unsafe_dt {;
+float bicudo::dt {}, bicudo::unsafe_dt {};
 float bicudo::matrix::orthographic[16] {};
+
+bicudo::mat4 mat4(float z) {
+    this->data[3] = z;
+    this->data[7] = z;
+    this->data[11] = z;
+    this->data[15] = z;
+}
+
+void bicudo::translate(bicudo::mat4 &mat, const bicudo::vec3 &pos) {
+    
+}
 
 float bicudo::lerpf(float a, float b, float t) {
     if (t < 0 || b >= 1.0f) {
@@ -37,6 +48,21 @@ float bicudo::cross(const bicudo::vec2& v1, const bicudo::vec2& v2) {
     return v1.x * v2.y - v1.y * v2.x;
 }
 
+bicudo::vec2 bicudo::rotate(const bicudo::vec2 &vec, const bicudo::vec2 &center, float angle) {
+    auto centered {vec - center};
+    bicudo::vec2 rotated {};
+
+    rotated.x = centered.x * cosf(angle) - centered.y * sinf(angle);
+    rotated.y = centered.x * sinf(angle) + centered.y * cosf(angle);
+    rotated += center;
+
+    return rotated;
+}
+
+float bicudo::dot(const bicudo::vec2 &v1, const bicudo::vec2 &v2) {
+    return v1.x * v2.x + v1.y * v2.y;
+}
+
 void bicudo::orthographic(float* m, float left, float right, float bottom, float top) {
     const float min_depth = -1.0f;
     const float max_depth = 1.0f;
@@ -63,21 +89,6 @@ void bicudo::orthographic(float* m, float left, float right, float bottom, float
     m[13] = -(top + bottom) * invy;
     m[14] = -(max_depth + min_depth) * invz;
     m[15] = 1.0f;
-}
-
-bicudo::vec2 bicudo::rotate(const bicudo::vec2 &vec, const bicudo::vec2 &center, float angle) {
-    auto centered {vec - center};
-    bicudo::vec2 rotated {};
-
-    rotated.x = centered.x * cosf(angle) - centered.y * sinf(angle);
-    rotated.x = centered.x * sinf(angle) + centered.y * cosf(angle);
-    rotated += center;
-
-    return rotated;
-}
-
-float bicudo::dot(const bicudo::vec2 &v1, const bicudo::vec2 &v2) {
-    return v1.x * v2.x + v1.y * v2.y;
 }
 
 void bicudo::set(bicudo::collideinfo &collideinfo, float depth, bicudo::vec2 normal, bicudo::vec2 start) {
