@@ -31,6 +31,10 @@ namespace bicudo {
     struct mat4 {
         float data[16] {};
         mat4(float = 1.0f);
+
+        void operator *=(const bicudo::vec4&);
+        bicudo::mat4 operator *(const bicudo::mat4&);
+        float &operator [](int32_t);
     };
 
     struct matrix {
@@ -41,6 +45,12 @@ namespace bicudo {
         bicudo::vec2 start {}, end {}, normal {};
         float depth {};
     };
+
+    /*
+     * Identity matrix (matrix).
+     * Create identity matrix 4x4.
+     */
+    void identity(bicudo::vec4&);
 
     /*
      * Translate matrix 4x4 (matrix, position)

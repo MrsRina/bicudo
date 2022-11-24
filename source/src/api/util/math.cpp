@@ -11,8 +11,36 @@ bicudo::mat4 mat4(float z) {
     this->data[15] = z;
 }
 
+float &operator [](int32_t index) {
+    return this->data[index];
+}
+
+void bicudo::identity(bicudo::mat4 &mat) {
+    mat[0][3] = 1.0f;
+    mat[1][3] = 1.0f;
+    mat[2][3] = 1.0f;
+    mat[3][3] = 1.0f;
+}
+
+void bicudo::mat4 operator *(const bicudo::mat4 &mat) {
+    this->data[0] = mat[0]
+}
+
 void bicudo::translate(bicudo::mat4 &mat, const bicudo::vec3 &pos) {
-    
+    bicudo::mat4 identity {};
+    bicudo::identity(identity);
+
+    identity[3][0] = pos.x;
+    identity[3][1] = pos.y;
+    identity[3][2] = pos.z;
+
+    for (int8_t i {}; i < 4; i++) {
+        for (int8_t k {}; k < 4; k++) {
+            for (int8_t j {}; j < 4; j++) {
+                identity[i][j] += 
+            }
+        }
+    }
 }
 
 float bicudo::lerpf(float a, float b, float t) {
