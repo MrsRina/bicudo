@@ -20,6 +20,19 @@ float &bicudo::mat4::operator [](char index) {
     return this->data[index];
 }
 
+
+void bicudo::operator *=(const bicudo::mat4 &m) {
+    bicudo::mat4 r {};
+    r = *this;
+
+    this->data[bicudo::matrix::I11] = (r[bicudo::matrix::I11] * m[bicudo::matrix::I11]) + (r[bicudo::matrix::I12] * m[bicudo::matrix::I21]) + (r[bicudo::matrix::I13] * m[bicudo::matrix::I31]) + (r[bicudo::matrix::I14] * m[bicudo::matrix::I41]);
+    this->data[bicudo::matrix::I12] = (r[bicudo::matrix::I11] * m[bicudo::matrix::I12]) + (r[bicudo::matrix::I12] * m[bicudo::matrix::I22]) + (r[bicudo::matrix::I13] * m[bicudo::matrix::I32]) + (r[bicudo::matrix::I14] * m[bicudo::matrix::I42]);
+    this->data[bicudo::matrix::I13] = (r[bicudo::matrix::I11] * m[bicudo::matrix::I13]) + (r[bicudo::matrix::I12] * m[bicudo::matrix::I23]) + (r[bicudo::matrix::I13] * m[bicudo::matrix::I33]) + (r[bicudo::matrix::I14] * m[bicudo::matrix::I43]);
+    this->data[bicudo::matrix::I14] = (r[bicudo::matrix::I11] * m[bicudo::matrix::I14]) + (r[bicudo::matrix::I12] * m[bicudo::matrix::I24]) + (r[bicudo::matrix::I14] * m[bicudo::matrix::I34]) + (r[bicudo::matrix::I14] * m[bicudo::matrix::I44]);
+}
+
+bicudo::mat4 operator *(const bicudo::mat4&);
+
 bicudo::mat4::~mat4() {
 
 }
@@ -32,14 +45,9 @@ void bicudo::identity(bicudo::mat4 &mat) {
 }
 
 void bicudo::translate(bicudo::mat4 &mat, const bicudo::vec3 &pos) {
-    bicudo::mat4 identity {}, result {};
-    bicudo::identity(identity);
-
-    identity[bicudo::matrix::I41] = pos.x;
-    identity[bicudo::matrix::I42] = pos.y;
-    identity[bicudo::matrix::I43] = pos.z;
-
+    bicudo::mat4 result {};
     result = mat;
+
     result[bicudo::matrix::I41] = (mat[bicudo::matrix::I11] * pos.x) + (mat[bicudo::matrix::I21] * pos.y) + (mat[bicudo::matrix::I31] * pos.z + mat[bicudo::matrix::I41]);
     result[bicudo::matrix::I42] = (mat[bicudo::matrix::I12] * pos.x) + (mat[bicudo::matrix::I22] * pos.y) + (mat[bicudo::matrix::I32] * pos.z + mat[bicudo::matrix::I42]);
     result[bicudo::matrix::I43] = (mat[bicudo::matrix::I13] * pos.x) + (mat[bicudo::matrix::I23] * pos.y) + (mat[bicudo::matrix::I33] * pos.z + mat[bicudo::matrix::I43]);

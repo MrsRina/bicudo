@@ -41,6 +41,9 @@ namespace bicudo {
 
         float *operator ~();
         float &operator [](char);
+
+        void operator *=(const bicudo::mat4&);
+        bicudo::mat4 operator *(const bicudo::mat4&);
     };
 
     struct matrix {
