@@ -12,7 +12,7 @@ namespace bicudo {
         static bicudo::buffering gpu_buffering;
 
         float shape_color[4] {}, rect[4] {};
-        float depth_testing {}, angular_rotation {};
+        float depth_testing {}, angular_amount {};
     public:
         static void init();
         static void matrix();

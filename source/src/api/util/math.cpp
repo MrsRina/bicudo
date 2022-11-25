@@ -2,45 +2,49 @@
 #include <cmath>
 
 float bicudo::dt {}, bicudo::unsafe_dt {};
-float bicudo::matrix::orthographic[16] {};
+bicudo::mat4 bicudo::matrix::orthographic {};
 
-bicudo::mat4 mat4(float z) {
-    this->data[3] = z;
-    this->data[7] = z;
-    this->data[11] = z;
-    this->data[15] = z;
+bicudo::mat4::mat4(float z) {
+    /* create an identity matrix */
+    this->data[bicudo::matrix::I11] = z;
+    this->data[bicudo::matrix::I22] = z;
+    this->data[bicudo::matrix::I33] = z;
+    this->data[bicudo::matrix::I44] = z;
 }
 
-float &operator [](int32_t index) {
+float *bicudo::mat4::operator ~() {
+    return this->data;
+}
+
+float &bicudo::mat4::operator [](char index) {
     return this->data[index];
 }
 
-void bicudo::identity(bicudo::mat4 &mat) {
-    mat[0][3] = 1.0f;
-    mat[1][3] = 1.0f;
-    mat[2][3] = 1.0f;
-    mat[3][3] = 1.0f;
+bicudo::mat4::~mat4() {
+
 }
 
-void bicudo::mat4 operator *(const bicudo::mat4 &mat) {
-    this->data[0] = mat[0]
+void bicudo::identity(bicudo::mat4 &mat) {
+    mat[bicudo::matrix::I11] = 1.0f;
+    mat[bicudo::matrix::I22] = 1.0f;
+    mat[bicudo::matrix::I33] = 1.0f;
+    mat[bicudo::matrix::I44] = 1.0f;
 }
 
 void bicudo::translate(bicudo::mat4 &mat, const bicudo::vec3 &pos) {
-    bicudo::mat4 identity {};
+    bicudo::mat4 identity {}, result {};
     bicudo::identity(identity);
 
-    identity[3][0] = pos.x;
-    identity[3][1] = pos.y;
-    identity[3][2] = pos.z;
+    identity[bicudo::matrix::I41] = pos.x;
+    identity[bicudo::matrix::I42] = pos.y;
+    identity[bicudo::matrix::I43] = pos.z;
 
-    for (int8_t i {}; i < 4; i++) {
-        for (int8_t k {}; k < 4; k++) {
-            for (int8_t j {}; j < 4; j++) {
-                identity[i][j] += 
-            }
-        }
-    }
+    result = mat;
+    result[bicudo::matrix::I41] = (mat[bicudo::matrix::I11] * pos.x) + (mat[bicudo::matrix::I21] * pos.y) + (mat[bicudo::matrix::I31] * pos.z + mat[bicudo::matrix::I41]);
+    result[bicudo::matrix::I42] = (mat[bicudo::matrix::I12] * pos.x) + (mat[bicudo::matrix::I22] * pos.y) + (mat[bicudo::matrix::I32] * pos.z + mat[bicudo::matrix::I42]);
+    result[bicudo::matrix::I43] = (mat[bicudo::matrix::I13] * pos.x) + (mat[bicudo::matrix::I23] * pos.y) + (mat[bicudo::matrix::I33] * pos.z + mat[bicudo::matrix::I43]);
+    result[bicudo::matrix::I44] = (mat[bicudo::matrix::I14] * pos.x) + (mat[bicudo::matrix::I24] * pos.y) + (mat[bicudo::matrix::I34] * pos.z + mat[bicudo::matrix::I44]);
+    mat = result;
 }
 
 float bicudo::lerpf(float a, float b, float t) {
@@ -91,32 +95,32 @@ float bicudo::dot(const bicudo::vec2 &v1, const bicudo::vec2 &v2) {
     return v1.x * v2.x + v1.y * v2.y;
 }
 
-void bicudo::orthographic(float* m, float left, float right, float bottom, float top) {
+void bicudo::orthographic(bicudo::mat4 &mat, float left, float right, float bottom, float top) {
     const float min_depth = -1.0f;
     const float max_depth = 1.0f;
     const float invz = 1.0f / (max_depth - min_depth);
     const float invy = 1.0f / (top - bottom);
     const float invx = 1.0f / (right - left);
 
-    m[0] = 2.0f * invx;
-    m[1] = 0.0f;
-    m[2] = 0.0f;
-    m[3] = 0.0f;
+    mat[bicudo::matrix::I11] = 2.0f * invx;
+    mat[bicudo::matrix::I12] = 0.0f;
+    mat[bicudo::matrix::I13] = 0.0f;
+    mat[bicudo::matrix::I14] = 0.0f;
 
-    m[4] = 0.0f;
-    m[5] = 2.0f * invy;;
-    m[6] = 0.0f;
-    m[7] = 0.0f;
+    mat[bicudo::matrix::I21] = 0.0f;
+    mat[bicudo::matrix::I22] = 2.0f * invy;;
+    mat[bicudo::matrix::I23] = 0.0f;
+    mat[bicudo::matrix::I24] = 0.0f;
 
-    m[8] = 0.0f;
-    m[9] = 0.0f;
-    m[10] = -2.0f * invz;
-    m[11] = 0.0f;
+    mat[bicudo::matrix::I31] = 0.0f;
+    mat[bicudo::matrix::I32] = 0.0f;
+    mat[bicudo::matrix::I33] = -2.0f * invz;
+    mat[bicudo::matrix::I34] = 0.0f;
     
-    m[12] = -(right + left) * invx;
-    m[13] = -(top + bottom) * invy;
-    m[14] = -(max_depth + min_depth) * invz;
-    m[15] = 1.0f;
+    mat[bicudo::matrix::I41] = -(right + left) * invx;
+    mat[bicudo::matrix::I42] = -(top + bottom) * invy;
+    mat[bicudo::matrix::I43] = -(max_depth + min_depth) * invz;
+    mat[bicudo::matrix::I44] = 1.0f;
 }
 
 void bicudo::set(bicudo::collideinfo &collideinfo, float depth, bicudo::vec2 normal, bicudo::vec2 start) {

@@ -24,21 +24,31 @@ namespace bicudo {
         void operator /=(float);
     };
 
+    struct vec3 {
+        float x {}, y {}, z {};
+    };
+
     struct vec4 {
         float x {}, y {}, z {}, w {};
     };
 
     struct mat4 {
+    protected:
         float data[16] {};
-        mat4(float = 1.0f);
+    public:
+        mat4(float = 0.0f);
+        ~mat4();
 
-        void operator *=(const bicudo::vec4&);
-        bicudo::mat4 operator *(const bicudo::mat4&);
-        float &operator [](int32_t);
+        float *operator ~();
+        float &operator [](char);
     };
 
     struct matrix {
-        static float orthographic[16];
+        static bicudo::mat4 orthographic;
+        const static char I11 {0},  I12 {1},  I13 {2},  I14{3},
+                          I21 {4},  I22 {5},  I23 {6},  I24{7},
+                          I31 {8},  I32 {9},  I33 {10}, I34{11},
+                          I41 {12}, I42 {13}, I43 {14}, I44{14};
     };
 
     struct collideinfo {
@@ -50,7 +60,7 @@ namespace bicudo {
      * Identity matrix (matrix).
      * Create identity matrix 4x4.
      */
-    void identity(bicudo::vec4&);
+    void identity(bicudo::mat4&);
 
     /*
      * Translate matrix 4x4 (matrix, position)
@@ -109,7 +119,7 @@ namespace bicudo {
     /*
      * Compute matrix orthographic values.
      */
-    void orthographic(float*, float, float, float, float);
+    void orthographic(bicudo::mat4&, float, float, float, float);
 }
 
 #endif

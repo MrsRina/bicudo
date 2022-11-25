@@ -55,7 +55,7 @@ void bicudo::immshape::init() {
 void bicudo::immshape::matrix() {
     auto &shading_program {bicudo::immshape::shader};
     shading_program.use();
-    shading_program.set_uniform_matrix4x4("MatrixProjection", bicudo::matrix::orthographic);
+    shading_program.set_uniform_matrix4x4("MatrixProjection", ~bicudo::matrix::orthographic);
     shading_program.unuse();
 }
 
@@ -77,7 +77,7 @@ void bicudo::immshape::prepare(float x, float y, float w, float h, const bicudo:
 }
 
 void bicudo::immshape::rotate(float angle) {
-    angular_rotation
+    this->angular_amount = angle;
 }
 
 void bicudo::immshape::draw() {
