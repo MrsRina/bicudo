@@ -42,16 +42,16 @@ namespace bicudo {
         float *operator ~();
         float &operator [](char);
 
-        void operator *=(const bicudo::mat4&);
-        bicudo::mat4 operator *(const bicudo::mat4&);
+        void operator *=(bicudo::mat4&);
+        bicudo::mat4 operator *(bicudo::mat4&);
     };
 
-    struct matrix {
+    struct mat {
         static bicudo::mat4 orthographic;
         const static char I11 {0},  I12 {1},  I13 {2},  I14{3},
                           I21 {4},  I22 {5},  I23 {6},  I24{7},
                           I31 {8},  I32 {9},  I33 {10}, I34{11},
-                          I41 {12}, I42 {13}, I43 {14}, I44{14};
+                          I41 {12}, I42 {13}, I43 {14}, I44{15};
     };
 
     struct collideinfo {
@@ -70,6 +70,12 @@ namespace bicudo {
      * Translate matrix by given a pos.
      */
     void translate(bicudo::mat4&, const bicudo::vec3&);
+
+    /*
+     * Rotate matrix 4x4 (matrix, angle, axis)
+     * Rotate matrix based on axis target, angle need to be radians.
+     */
+    void rotate(bicudo::mat4&, float, const bicudo::vec3&);
 
     /*
      * Set collide info (depth, normal, start)

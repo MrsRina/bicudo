@@ -12,11 +12,11 @@ void bicudo::immshape::init() {
                      "layout (location = 1) in vec2 VertexTextureCoords;\n"
                      "out vec4 Rect;\n"
                      "out vec2 TextureCoords;\n"
-                     "uniform mat4 MatrixProjection;\n"
+                     "uniform mat4 MatrixPerspectiveModel;\n"
                      "uniform vec4 DataRect;\n"
                      "uniform float LayerLevel;\n"
                      "void main() {\n"
-                     "  gl_Position = MatrixProjection * vec4((VertexPosition * DataRect.zw) + DataRect.xy, LayerLevel, 1);\n"
+                     "  gl_Position = MatrixPerspectiveModel * vec4((VertexPosition * DataRect.zw) + DataRect.xy, LayerLevel, 1);\n"
                      "  Rect = DataRect;\n"
                      "  TextureCoords = VertexTextureCoords;\n"
                      "}";
@@ -36,7 +36,7 @@ void bicudo::immshape::init() {
             {fragment_shader, bicudo::shaderstages::fragment}
     }, false);
 
-    std::vector<float> vertexes {
+    std::vector<float> vertices {
             0.0f, 0.0f,
             0.0f, 1.0f,
             1.0f, 1.0f,
@@ -45,7 +45,7 @@ void bicudo::immshape::init() {
             0.0f, 0.0
     };
 
-    bicudo::mesh mesh {vertexes, vertexes};
+    bicudo::mesh mesh {vertices, vertices};
     auto &buffering {bicudo::immshape::gpu_buffering};
     buffering.invoke();
     buffering.compile_mesh(mesh);
@@ -53,10 +53,6 @@ void bicudo::immshape::init() {
 }
 
 void bicudo::immshape::matrix() {
-    auto &shading_program {bicudo::immshape::shader};
-    shading_program.use();
-    shading_program.set_uniform_matrix4x4("MatrixProjection", ~bicudo::matrix::orthographic);
-    shading_program.unuse();
 }
 
 void bicudo::immshape::invoke(float initial_depth_testing) {
@@ -81,11 +77,20 @@ void bicudo::immshape::rotate(float angle) {
 }
 
 void bicudo::immshape::draw() {
+    float cx {this->rect[0] + (this->rect[2] / 2)}, cy {this->rect[1] + (this->rect[3] / 2)};
+
+    this->model = bicudo::mat4 {1.0f};
+    bicudo::translate(this->model, {cx, cy, 0});
+    bicudo::rotate(this->model, this->angular_amount, {0, 0, 1});
+    bicudo::translate(this->model, {-cx, -cy});
+    this->model = bicudo::mat::orthographic * this->model;
+
     auto &shading_program {bicudo::immshape::shader};
     shading_program.set_uniform_vec4("DataRect", this->rect);
     shading_program.set_uniform_vec4("Color", this->shape_color);
     shading_program.set_uniform("LayerLevel", this->depth_testing);
-    
+    shading_program.set_uniform_matrix4x4("MatrixPerspectiveModel", ~this->model);
+
     bicudo::immshape::gpu_buffering.draw();
     this->depth_testing += 0.001f;
 }

@@ -135,7 +135,7 @@ void bicudo::profile::process_internal_event(bicudo::event &event) {
 void bicudo::profile::update_render_matrices() {
     auto &surface {this->surfaces[0]};
 
-    bicudo::orthographic(bicudo::matrix::orthographic, 0, surface->rect.w, surface->rect.h, 0);
+    bicudo::orthographic(bicudo::mat::orthographic, 0, surface->rect.w, surface->rect.h, 0);
     bicudo::immshape::matrix();
 }
 
