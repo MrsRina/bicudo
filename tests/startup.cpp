@@ -48,6 +48,12 @@ int32_t main(int32_t, char**) {
     /* Load the default scene. */
     starter *scene {new starter {}};
     bicudo::makecurrent(scene);
+
+    bicudo::mixin post_context_created {nullptr, [](void*) {
+        bicudo::print("Post SDL window GL context created!");
+    }};
+
+    bicudo::inject(bicudo::runtime::initialisation, post_context_created);
     bicudo::mainloop();
 
     return 0;

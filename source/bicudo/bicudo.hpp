@@ -50,6 +50,11 @@ namespace bicudo {
     bool listen(std::string_view);
 
     /*
+     * Inject small callbacks code into core of Bicudo.
+     */
+    void inject(bicudo::runtime, bicudo::mixin&);
+
+    /*
      * Custom garbage collector, make sure what you handle calling this method.
      */
     bicudo::garbage_collector &gc();

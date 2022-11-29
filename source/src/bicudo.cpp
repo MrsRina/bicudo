@@ -42,6 +42,10 @@ bool bicudo::listen(std::string_view input_name) {
     return bicudo::core->get_input()->listen(input_name);
 }
 
+void bicudo::inject(bicudo::runtime runtime_type, bicudo::mixin &runtime_callback) {
+    bicudo::core->inject(runtime_type, runtime_callback);
+}
+
 bicudo::input *bicudo::getinput() {
     return bicudo::core->get_input();
 }

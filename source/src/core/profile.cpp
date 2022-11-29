@@ -3,6 +3,40 @@
 #include "bicudo/impl/render/immshape.hpp"
 #include <thread>
 
+void bicudo::profile::inject(bicudo::runtime runtime_type, bicudo::mixin &runtime_callback) {
+    switch (runtime_type) {
+        case bicudo::runtime::initialisation: {
+            this->runtime_initialisation = runtime_callback;
+            this->logger->send_info("Mixin injection initialisation called!");
+            break;
+        }
+
+        case bicudo::runtime::eventlistener: {
+            this->runtime_eventlistener = runtime_callback;
+            this->logger->send_info("Mixin injection event listener called!");
+            break;
+        }
+
+        case bicudo::runtime::update: {
+            this->runtime_update = runtime_callback;
+            this->logger->send_info("Mixin injection update called!");
+            break;
+        }
+
+        case bicudo::runtime::unsafeupdate: {
+            this->runtime_unsafeupdate = runtime_callback;
+            this->logger->send_info("Mixin injection unsafe update called!");
+            break;
+        }
+
+        case bicudo::runtime::render: {
+            this->runtime_render = runtime_callback;
+            this->logger->send_info("Mixin injection render called!");
+            break;
+        }
+    }
+}
+
 void bicudo::profile::do_create() {
     this->logger = new bicudo::logger {"MAIN"};
     this->driver_impl_manager = new bicudo::glimpl {};
@@ -31,6 +65,8 @@ void bicudo::profile::do_loop() {
     }
 
     this->driver_impl_manager->create_opengl_context();
+    this->runtime_initialisation.callback(this->runtime_initialisation.data);
+
     bicudo::immshape::init();
     this->update_render_matrices();
 
@@ -46,6 +82,7 @@ void bicudo::profile::do_loop() {
 
         while (SDL_PollEvent(&sdl_event)) {
             wrapped_sdl_event.native = &sdl_event;
+            this->runtime_eventlistener.callback(&sdl_event);
 
             this->process_internal_event(wrapped_sdl_event);
             this->input->on_native_event(wrapped_sdl_event);
@@ -57,11 +94,14 @@ void bicudo::profile::do_loop() {
             break;
         }
 
+        this->runtime_update.callback(this->runtime_update.data);
         this->custom_gc.on_native_update();
         this->handler->on_native_update();
         this->physic->on_native_update();
         this->input->on_native_update();
+
         this->driver_impl_manager->clear_buffers();
+        this->runtime_render.callback(this->runtime_render.data);
         this->physic->on_native_render();
 
         SDL_GL_SwapWindow(this->surfaces[0]->root);
@@ -153,6 +193,7 @@ bicudo::physic *bicudo::profile::get_physic() {
 }
 
 void bicudo::profile::do_unsafe_update() {
+    this->runtime_unsafeupdate.callback(this->runtime_unsafeupdate.data);
     this->handler->on_native_unsafe_update();
     this->physic->on_native_unsafe_update();
 }

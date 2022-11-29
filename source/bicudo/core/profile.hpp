@@ -8,11 +8,14 @@
 #include "bicudo/impl/handler/handler.hpp"
 #include "bicudo/impl/physic/physic.hpp"
 #include "bicudo/impl/input/input.hpp"
+#include "bicudo/core/mixin.hpp"
 
 namespace bicudo {
     class profile {
     protected:
         std::vector<bicudo::surface*> surfaces {};
+        bicudo::mixin runtime_initialisation {}, runtime_eventlistener {}, runtime_update {}, runtime_unsafeupdate {}, runtime_render {};
+
         bicudo::logger* logger {nullptr};
         bicudo::garbage_collector custom_gc {};
         bicudo::glimpl *driver_impl_manager {nullptr};
@@ -42,6 +45,7 @@ namespace bicudo {
         bicudo::physic *get_physic();
         bicudo::input *get_input();
 
+        void inject(bicudo::runtime, bicudo::mixin&);
         bool is_mainloop_running();
         void end_mainloop();
     };
