@@ -71,6 +71,18 @@ int main(int, char**) {
     game_scene *defaut_scene {new game_scene {}};
     bicudo::makecurrent(default_scene);
     
+    /*
+     * Basic, if you need to initialise some external library without init into scene object,
+     * you should use this to reduce object virtual method calls.
+     *
+     * The first ptr is paramater of lambda functional [](void *pdata) {...
+     */
+    bicudo::mixin post_context_created {nullptr, [](void*) {
+        bicudo::print("Post SDL window GL context created!");
+    }};
+
+    bicudo::inject(bicudo::runtime::initialisation, post_context_created);
+    
     /* run main thread mainloop */
     bicudo::mainloop();
 
