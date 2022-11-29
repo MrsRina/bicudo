@@ -81,6 +81,7 @@ int main(int, char**) {
         bicudo::print("Post SDL window GL context created!");
     }};
 
+    /* there is more runtime options to inject mixin, not only initialisation. */
     bicudo::inject(bicudo::runtime::initialisation, post_context_created);
     
     /* run main thread mainloop */
