@@ -17,8 +17,8 @@ If you are on Windows, please replace `"Unix Makefiles"` with `"MinGW Makefiles"
 `cmake -S . -B ./cmake-build-debug/ -G "Unix Makefiles" && cmake --build ./cmake-build-debug/"`
 
 Native "library" location:  
-Linux: `build/libs/win32/libbicudo.a`  
-Windows: `build/libs/linux/libbicudo.a`
+Linux: `build/libs/linux/libbicudo.a`  
+Windows: `build/libs/win32/libbicudo.a (win32 but bicudo native library is actually 64)`
 
 note: remember to add `include/` headers too.
 
