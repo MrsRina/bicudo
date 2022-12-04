@@ -13,10 +13,11 @@ void bicudo::immshape::init() {
                      "out vec4 Rect;\n"
                      "out vec2 TextureCoords;\n"
                      "uniform mat4 MatrixPerspectiveModel;\n"
+                     "uniform mat4 MatrixRotation;\n"
                      "uniform vec4 DataRect;\n"
                      "uniform float LayerLevel;\n"
                      "void main() {\n"
-                     "  gl_Position = MatrixPerspectiveModel * vec4((VertexPosition * DataRect.zw) + DataRect.xy, LayerLevel, 1);\n"
+                     "  gl_Position = MatrixPerspectiveModel * (MatrixRotation * vec4((VertexPosition * DataRect.zw) + DataRect.xy, LayerLevel, 1));\n"
                      "  Rect = DataRect;\n"
                      "  TextureCoords = VertexTextureCoords;\n"
                      "}";
@@ -83,13 +84,13 @@ void bicudo::immshape::draw() {
     bicudo::translate(this->model, {cx, cy, 0});
     bicudo::rotate(this->model, this->angular_amount, {0, 0, 1});
     bicudo::translate(this->model, {-cx, -cy});
-    this->model = bicudo::mat::orthographic * this->model;
 
     auto &shading_program {bicudo::immshape::shader};
     shading_program.set_uniform_vec4("DataRect", this->rect);
     shading_program.set_uniform_vec4("Color", this->shape_color);
     shading_program.set_uniform("LayerLevel", this->depth_testing);
-    shading_program.set_uniform_matrix4x4("MatrixPerspectiveModel", ~this->model);
+    shading_program.set_uniform_matrix4x4("MatrixPerspectiveModel", ~bicudo::mat::orthographic);
+    shading_program.set_uniform_matrix4x4("MatrixRotation", ~this->model);
 
     bicudo::immshape::gpu_buffering.draw();
     this->depth_testing += 0.001f;

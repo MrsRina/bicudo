@@ -33,9 +33,9 @@ namespace bicudo {
     };
 
     struct mat4 {
-    protected:
-        float data[16] {};
     public:
+        float data[16] {};
+
         mat4(float = 0.0f);
         ~mat4();
 
@@ -47,6 +47,7 @@ namespace bicudo {
     };
 
     struct mat {
+        static float *m1[4], *m2[4], *m3[4];
         static bicudo::mat4 orthographic;
         const static char I11 {0},  I12 {1},  I13 {2},  I14{3},
                           I21 {4},  I22 {5},  I23 {6},  I24{7},
@@ -58,6 +59,16 @@ namespace bicudo {
         bicudo::vec2 start {}, end {}, normal {};
         float depth {};
     };
+
+    /*
+     * Insert one dimensional array matrix into two dimensional array matrix..
+     */
+    void alloc_matrix(float**, float*);
+
+    /*
+     * Convert two dimensioanl array matrix to one dimensional array matrix.
+     */
+    void read_matrix(float *, float**);
 
     /*
      * Identity matrix (matrix).

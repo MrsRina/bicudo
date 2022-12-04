@@ -4,6 +4,10 @@
 float bicudo::dt {}, bicudo::unsafe_dt {};
 bicudo::mat4 bicudo::mat::orthographic {};
 
+float *bicudo::mat::m1[4] {new float {}, new float {}, new float {}, new float {}};
+float *bicudo::mat::m2[4] {new float {}, new float {}, new float {}, new float {}};
+float *bicudo::mat::m3[4] {new float {}, new float {}, new float {}, new float {}};
+
 bicudo::mat4::mat4(float z) {
     /* create an identity matrix */
     this->data[bicudo::mat::I11] = z;
@@ -21,59 +25,107 @@ float &bicudo::mat4::operator [](char index) {
 }
 
 void bicudo::mat4::operator *=(bicudo::mat4 &m) {
-    bicudo::mat4 r {};
-    r = *this;
+    auto m1 {bicudo::mat::m1}, m2 {bicudo::mat::m2}, m3 {bicudo::mat::m3};
+    bicudo::alloc_matrix(bicudo::mat::m1, this->data);
+    bicudo::alloc_matrix(bicudo::mat::m2, m.data);
 
-    this->data[bicudo::mat::I11] = (r[bicudo::mat::I11] * m[bicudo::mat::I11]) + (r[bicudo::mat::I12] * m[bicudo::mat::I21]) + (r[bicudo::mat::I13] * m[bicudo::mat::I31]) + (r[bicudo::mat::I14] * m[bicudo::mat::I41]);
-    this->data[bicudo::mat::I12] = (r[bicudo::mat::I11] * m[bicudo::mat::I21]) + (r[bicudo::mat::I12] * m[bicudo::mat::I22]) + (r[bicudo::mat::I13] * m[bicudo::mat::I32]) + (r[bicudo::mat::I14] * m[bicudo::mat::I42]);
-    this->data[bicudo::mat::I13] = (r[bicudo::mat::I11] * m[bicudo::mat::I31]) + (r[bicudo::mat::I12] * m[bicudo::mat::I32]) + (r[bicudo::mat::I13] * m[bicudo::mat::I33]) + (r[bicudo::mat::I14] * m[bicudo::mat::I34]);
-    this->data[bicudo::mat::I14] = (r[bicudo::mat::I11] * m[bicudo::mat::I41]) + (r[bicudo::mat::I12] * m[bicudo::mat::I42]) + (r[bicudo::mat::I13] * m[bicudo::mat::I43]) + (r[bicudo::mat::I14] * m[bicudo::mat::I44]);
+    m3[0][0] = (m1[0][0] * m2[0][0]) + (m1[0][1] * m2[1][0]) + (m1[0][2] * m2[2][0]) + (m1[0][3] * m2[3][0]);
+    m3[0][1] = (m1[0][0] * m2[0][1]) + (m1[0][1] * m2[1][1]) + (m1[0][2] * m2[2][1]) + (m1[0][3] * m2[3][1]);
+    m3[0][2] = (m1[0][0] * m2[0][2]) + (m1[0][1] * m2[1][2]) + (m1[0][2] * m2[2][2]) + (m1[0][3] * m2[3][2]);
+    m3[0][3] = (m1[0][0] * m2[0][3]) + (m1[0][1] * m2[1][3]) + (m1[0][2] * m2[2][3]) + (m1[0][3] * m2[3][3]);
 
-    this->data[bicudo::mat::I21] = (r[bicudo::mat::I21] * m[bicudo::mat::I11]) + (r[bicudo::mat::I22] * m[bicudo::mat::I21]) + (r[bicudo::mat::I23] * m[bicudo::mat::I31]) + (r[bicudo::mat::I24] * m[bicudo::mat::I41]);
-    this->data[bicudo::mat::I22] = (r[bicudo::mat::I21] * m[bicudo::mat::I21]) + (r[bicudo::mat::I22] * m[bicudo::mat::I22]) + (r[bicudo::mat::I23] * m[bicudo::mat::I32]) + (r[bicudo::mat::I24] * m[bicudo::mat::I42]);
-    this->data[bicudo::mat::I23] = (r[bicudo::mat::I21] * m[bicudo::mat::I31]) + (r[bicudo::mat::I22] * m[bicudo::mat::I32]) + (r[bicudo::mat::I23] * m[bicudo::mat::I33]) + (r[bicudo::mat::I24] * m[bicudo::mat::I34]);
-    this->data[bicudo::mat::I24] = (r[bicudo::mat::I21] * m[bicudo::mat::I41]) + (r[bicudo::mat::I22] * m[bicudo::mat::I42]) + (r[bicudo::mat::I23] * m[bicudo::mat::I43]) + (r[bicudo::mat::I24] * m[bicudo::mat::I44]);
+    m3[1][0] = (m1[1][0] * m2[0][0]) + (m1[1][1] * m2[1][0]) + (m1[1][2] * m2[2][0]) + (m1[1][3] * m2[3][0]);
+    m3[1][1] = (m1[1][0] * m2[0][1]) + (m1[1][1] * m2[1][1]) + (m1[1][2] * m2[2][1]) + (m1[1][3] * m2[3][1]);
+    m3[1][2] = (m1[1][0] * m2[0][2]) + (m1[1][1] * m2[1][2]) + (m1[1][2] * m2[2][2]) + (m1[1][3] * m2[3][2]);
+    m3[1][3] = (m1[1][0] * m2[0][3]) + (m1[1][1] * m2[1][3]) + (m1[1][2] * m2[2][3]) + (m1[1][3] * m2[3][3]);
 
-    this->data[bicudo::mat::I31] = (r[bicudo::mat::I31] * m[bicudo::mat::I11]) + (r[bicudo::mat::I32] * m[bicudo::mat::I21]) + (r[bicudo::mat::I33] * m[bicudo::mat::I31]) + (r[bicudo::mat::I34] * m[bicudo::mat::I41]);
-    this->data[bicudo::mat::I32] = (r[bicudo::mat::I31] * m[bicudo::mat::I21]) + (r[bicudo::mat::I32] * m[bicudo::mat::I22]) + (r[bicudo::mat::I33] * m[bicudo::mat::I32]) + (r[bicudo::mat::I34] * m[bicudo::mat::I42]);
-    this->data[bicudo::mat::I33] = (r[bicudo::mat::I31] * m[bicudo::mat::I31]) + (r[bicudo::mat::I32] * m[bicudo::mat::I32]) + (r[bicudo::mat::I33] * m[bicudo::mat::I33]) + (r[bicudo::mat::I34] * m[bicudo::mat::I34]);
-    this->data[bicudo::mat::I34] = (r[bicudo::mat::I31] * m[bicudo::mat::I41]) + (r[bicudo::mat::I32] * m[bicudo::mat::I42]) + (r[bicudo::mat::I33] * m[bicudo::mat::I43]) + (r[bicudo::mat::I34] * m[bicudo::mat::I44]);
+    m3[2][0] = (m1[2][0] * m2[0][0]) + (m1[2][1] * m2[1][0]) + (m1[2][2] * m2[2][0]) + (m1[2][3] * m2[3][0]);
+    m3[2][1] = (m1[2][0] * m2[0][1]) + (m1[2][1] * m2[1][1]) + (m1[2][2] * m2[2][1]) + (m1[2][3] * m2[3][1]);
+    m3[2][2] = (m1[2][0] * m2[0][2]) + (m1[2][1] * m2[1][2]) + (m1[2][2] * m2[2][2]) + (m1[2][3] * m2[3][2]);
+    m3[2][3] = (m1[2][0] * m2[0][3]) + (m1[2][1] * m2[1][3]) + (m1[2][2] * m2[2][3]) + (m1[2][3] * m2[3][3]);
 
-    this->data[bicudo::mat::I41] = (r[bicudo::mat::I41] * m[bicudo::mat::I11]) + (r[bicudo::mat::I42] * m[bicudo::mat::I21]) + (r[bicudo::mat::I43] * m[bicudo::mat::I31]) + (r[bicudo::mat::I44] * m[bicudo::mat::I41]);
-    this->data[bicudo::mat::I42] = (r[bicudo::mat::I41] * m[bicudo::mat::I21]) + (r[bicudo::mat::I42] * m[bicudo::mat::I22]) + (r[bicudo::mat::I43] * m[bicudo::mat::I32]) + (r[bicudo::mat::I44] * m[bicudo::mat::I42]);
-    this->data[bicudo::mat::I43] = (r[bicudo::mat::I41] * m[bicudo::mat::I31]) + (r[bicudo::mat::I42] * m[bicudo::mat::I32]) + (r[bicudo::mat::I43] * m[bicudo::mat::I33]) + (r[bicudo::mat::I44] * m[bicudo::mat::I34]);
-    this->data[bicudo::mat::I44] = (r[bicudo::mat::I41] * m[bicudo::mat::I41]) + (r[bicudo::mat::I42] * m[bicudo::mat::I42]) + (r[bicudo::mat::I43] * m[bicudo::mat::I43]) + (r[bicudo::mat::I44] * m[bicudo::mat::I44]);
+    m3[3][0] = (m1[3][0] * m2[0][0]) + (m1[3][1] * m2[1][0]) + (m1[3][2] * m2[2][0]) + (m1[3][3] * m2[3][0]);
+    m3[3][1] = (m1[3][0] * m2[0][1]) + (m1[3][1] * m2[1][1]) + (m1[3][2] * m2[2][1]) + (m1[3][3] * m2[3][1]);
+    m3[3][2] = (m1[3][0] * m2[0][2]) + (m1[3][1] * m2[1][2]) + (m1[3][2] * m2[2][2]) + (m1[3][3] * m2[3][2]);
+    m3[3][3] = (m1[3][0] * m2[0][3]) + (m1[3][1] * m2[1][3]) + (m1[3][2] * m2[2][3]) + (m1[3][3] * m2[3][3]);
+    bicudo::read_matrix(this->data, bicudo::mat::m3);
 }
 
 bicudo::mat4 bicudo::mat4::operator *(bicudo::mat4 &m) {
-    bicudo::mat4 r {}, result {};
-    r = *this;
+    bicudo::mat4 result {};
+    auto m1 {bicudo::mat::m1}, m2 {bicudo::mat::m2}, m3 {bicudo::mat::m3};
+    bicudo::alloc_matrix(bicudo::mat::m1, this->data);
+    bicudo::alloc_matrix(bicudo::mat::m2, m.data);
 
-    result[bicudo::mat::I11] = (r[bicudo::mat::I11] * m[bicudo::mat::I11]) + (r[bicudo::mat::I12] * m[bicudo::mat::I21]) + (r[bicudo::mat::I13] * m[bicudo::mat::I31]) + (r[bicudo::mat::I14] * m[bicudo::mat::I41]);
-    result[bicudo::mat::I12] = (r[bicudo::mat::I11] * m[bicudo::mat::I21]) + (r[bicudo::mat::I12] * m[bicudo::mat::I22]) + (r[bicudo::mat::I13] * m[bicudo::mat::I32]) + (r[bicudo::mat::I14] * m[bicudo::mat::I42]);
-    result[bicudo::mat::I13] = (r[bicudo::mat::I11] * m[bicudo::mat::I31]) + (r[bicudo::mat::I12] * m[bicudo::mat::I32]) + (r[bicudo::mat::I13] * m[bicudo::mat::I33]) + (r[bicudo::mat::I14] * m[bicudo::mat::I34]);
-    result[bicudo::mat::I14] = (r[bicudo::mat::I11] * m[bicudo::mat::I41]) + (r[bicudo::mat::I12] * m[bicudo::mat::I42]) + (r[bicudo::mat::I13] * m[bicudo::mat::I43]) + (r[bicudo::mat::I14] * m[bicudo::mat::I44]);
+    m3[0][0] = (m1[0][0] * m2[0][0]) + (m1[0][1] * m2[1][0]) + (m1[0][2] * m2[2][0]) + (m1[0][3] * m2[3][0]);
+    m3[0][1] = (m1[0][0] * m2[0][1]) + (m1[0][1] * m2[1][1]) + (m1[0][2] * m2[2][1]) + (m1[0][3] * m2[3][1]);
+    m3[0][2] = (m1[0][0] * m2[0][2]) + (m1[0][1] * m2[1][2]) + (m1[0][2] * m2[2][2]) + (m1[0][3] * m2[3][2]);
+    m3[0][3] = (m1[0][0] * m2[0][3]) + (m1[0][1] * m2[1][3]) + (m1[0][2] * m2[2][3]) + (m1[0][3] * m2[3][3]);
 
-    result[bicudo::mat::I21] = (r[bicudo::mat::I21] * m[bicudo::mat::I12]) + (r[bicudo::mat::I22] * m[bicudo::mat::I21]) + (r[bicudo::mat::I23] * m[bicudo::mat::I31]) + (r[bicudo::mat::I24] * m[bicudo::mat::I41]);
-    result[bicudo::mat::I22] = (r[bicudo::mat::I21] * m[bicudo::mat::I12]) + (r[bicudo::mat::I22] * m[bicudo::mat::I12]) + (r[bicudo::mat::I23] * m[bicudo::mat::I32]) + (r[bicudo::mat::I24] * m[bicudo::mat::I42]);
-    result[bicudo::mat::I23] = (r[bicudo::mat::I21] * m[bicudo::mat::I12]) + (r[bicudo::mat::I22] * m[bicudo::mat::I12]) + (r[bicudo::mat::I23] * m[bicudo::mat::I33]) + (r[bicudo::mat::I24] * m[bicudo::mat::I34]);
-    result[bicudo::mat::I24] = (r[bicudo::mat::I21] * m[bicudo::mat::I12]) + (r[bicudo::mat::I22] * m[bicudo::mat::I12]) + (r[bicudo::mat::I23] * m[bicudo::mat::I43]) + (r[bicudo::mat::I24] * m[bicudo::mat::I44]);
+    m3[1][0] = (m1[1][0] * m2[0][0]) + (m1[1][1] * m2[1][0]) + (m1[1][2] * m2[2][0]) + (m1[1][3] * m2[3][0]);
+    m3[1][1] = (m1[1][0] * m2[0][1]) + (m1[1][1] * m2[1][1]) + (m1[1][2] * m2[2][1]) + (m1[1][3] * m2[3][1]);
+    m3[1][2] = (m1[1][0] * m2[0][2]) + (m1[1][1] * m2[1][2]) + (m1[1][2] * m2[2][2]) + (m1[1][3] * m2[3][2]);
+    m3[1][3] = (m1[1][0] * m2[0][3]) + (m1[1][1] * m2[1][3]) + (m1[1][2] * m2[2][3]) + (m1[1][3] * m2[3][3]);
 
-    result[bicudo::mat::I31] = (r[bicudo::mat::I31] * m[bicudo::mat::I11]) + (r[bicudo::mat::I32] * m[bicudo::mat::I21]) + (r[bicudo::mat::I33] * m[bicudo::mat::I31]) + (r[bicudo::mat::I34] * m[bicudo::mat::I41]);
-    result[bicudo::mat::I32] = (r[bicudo::mat::I31] * m[bicudo::mat::I21]) + (r[bicudo::mat::I32] * m[bicudo::mat::I22]) + (r[bicudo::mat::I33] * m[bicudo::mat::I32]) + (r[bicudo::mat::I34] * m[bicudo::mat::I42]);
-    result[bicudo::mat::I33] = (r[bicudo::mat::I31] * m[bicudo::mat::I31]) + (r[bicudo::mat::I32] * m[bicudo::mat::I32]) + (r[bicudo::mat::I33] * m[bicudo::mat::I33]) + (r[bicudo::mat::I34] * m[bicudo::mat::I34]);
-    result[bicudo::mat::I34] = (r[bicudo::mat::I31] * m[bicudo::mat::I41]) + (r[bicudo::mat::I32] * m[bicudo::mat::I42]) + (r[bicudo::mat::I33] * m[bicudo::mat::I43]) + (r[bicudo::mat::I34] * m[bicudo::mat::I44]);
+    m3[2][0] = (m1[2][0] * m2[0][0]) + (m1[2][1] * m2[1][0]) + (m1[2][2] * m2[2][0]) + (m1[2][3] * m2[3][0]);
+    m3[2][1] = (m1[2][0] * m2[0][1]) + (m1[2][1] * m2[1][1]) + (m1[2][2] * m2[2][1]) + (m1[2][3] * m2[3][1]);
+    m3[2][2] = (m1[2][0] * m2[0][2]) + (m1[2][1] * m2[1][2]) + (m1[2][2] * m2[2][2]) + (m1[2][3] * m2[3][2]);
+    m3[2][3] = (m1[2][0] * m2[0][3]) + (m1[2][1] * m2[1][3]) + (m1[2][2] * m2[2][3]) + (m1[2][3] * m2[3][3]);
 
-    result[bicudo::mat::I41] = (r[bicudo::mat::I41] * m[bicudo::mat::I11]) + (r[bicudo::mat::I42] * m[bicudo::mat::I21]) + (r[bicudo::mat::I43] * m[bicudo::mat::I31]) + (r[bicudo::mat::I44] * m[bicudo::mat::I41]);
-    result[bicudo::mat::I42] = (r[bicudo::mat::I41] * m[bicudo::mat::I21]) + (r[bicudo::mat::I42] * m[bicudo::mat::I22]) + (r[bicudo::mat::I43] * m[bicudo::mat::I32]) + (r[bicudo::mat::I44] * m[bicudo::mat::I42]);
-    result[bicudo::mat::I43] = (r[bicudo::mat::I41] * m[bicudo::mat::I31]) + (r[bicudo::mat::I42] * m[bicudo::mat::I32]) + (r[bicudo::mat::I43] * m[bicudo::mat::I33]) + (r[bicudo::mat::I44] * m[bicudo::mat::I34]);
-    result[bicudo::mat::I44] = (r[bicudo::mat::I41] * m[bicudo::mat::I41]) + (r[bicudo::mat::I42] * m[bicudo::mat::I42]) + (r[bicudo::mat::I43] * m[bicudo::mat::I43]) + (r[bicudo::mat::I44] * m[bicudo::mat::I44]);
-
+    m3[3][0] = (m1[3][0] * m2[0][0]) + (m1[3][1] * m2[1][0]) + (m1[3][2] * m2[2][0]) + (m1[3][3] * m2[3][0]);
+    m3[3][1] = (m1[3][0] * m2[0][1]) + (m1[3][1] * m2[1][1]) + (m1[3][2] * m2[2][1]) + (m1[3][3] * m2[3][1]);
+    m3[3][2] = (m1[3][0] * m2[0][2]) + (m1[3][1] * m2[1][2]) + (m1[3][2] * m2[2][2]) + (m1[3][3] * m2[3][2]);
+    m3[3][3] = (m1[3][0] * m2[0][3]) + (m1[3][1] * m2[1][3]) + (m1[3][2] * m2[2][3]) + (m1[3][3] * m2[3][3]);
+    bicudo::read_matrix(result.data, bicudo::mat::m3);
     return result;
 }
 
 bicudo::mat4::~mat4() {
 
+}
+
+void bicudo::alloc_matrix(float **m, float *data) {
+    m[0][0] = data[0];
+    m[0][1] = data[1];
+    m[0][2] = data[2];
+    m[0][3] = data[3];
+
+    m[1][0] = data[4];
+    m[1][1] = data[5];
+    m[1][2] = data[6];
+    m[1][3] = data[7];
+
+    m[2][0] = data[8];
+    m[2][1] = data[9];
+    m[2][2] = data[10];
+    m[2][3] = data[11];
+
+    m[3][0] = data[12];
+    m[3][1] = data[13];
+    m[3][2] = data[14];
+    m[3][3] = data[15];
+}
+
+void bicudo::read_matrix(float *data, float **m) {
+    data[0] = m[0][0];
+    data[1] = m[0][1];
+    data[2] = m[0][2];
+    data[3] = m[0][3];
+
+    data[4] = m[1][0];
+    data[5] = m[1][1];
+    data[6] = m[1][2];
+    data[7] = m[1][3];
+
+    data[8] = m[2][0];
+    data[9] = m[2][1];
+    data[10] = m[2][2];
+    data[11] = m[2][3];
+
+    data[12] = m[3][0];
+    data[13] = m[3][1];
+    data[14] = m[3][2];
+    data[15] = m[3][3];
 }
 
 void bicudo::identity(bicudo::mat4 &mat) {
@@ -84,13 +136,15 @@ void bicudo::identity(bicudo::mat4 &mat) {
 }
 
 void bicudo::translate(bicudo::mat4 &m, const bicudo::vec3 &v) {
-    bicudo::mat4 identity {};
-    bicudo::identity(identity);
+    bicudo::mat4 identity {1.0f};
+    bicudo::alloc_matrix(bicudo::mat::m1, identity.data);
 
-    identity[bicudo::mat::I41] = v.x;
-    identity[bicudo::mat::I42] = v.y;
-    identity[bicudo::mat::I43] = v.z;
-    m = m * identity;
+    bicudo::mat::m1[3][0] = v.x;
+    bicudo::mat::m1[3][1] = v.y;
+    bicudo::mat::m1[3][2] = v.z;
+
+    bicudo::read_matrix(identity.data, bicudo::mat::m1);
+    m *= identity;
 }
 
 float bicudo::lerpf(float a, float b, float t) {
@@ -177,26 +231,30 @@ void bicudo::set(bicudo::collideinfo &collideinfo, float depth, bicudo::vec2 nor
 }
 
 void bicudo::rotate(bicudo::mat4 &m, float a, const bicudo::vec3 &v) {
+    bicudo::alloc_matrix(bicudo::mat::m1, m.data);
+
     if (v.x != 0) {
-        m[bicudo::mat::I22] = cosf(a);
-        m[bicudo::mat::I23] = -sinf(a);
-        m[bicudo::mat::I31] = sinf(a);
-        m[bicudo::mat::I33] = cosf(a);
+        bicudo::mat::m1[1][1] = cosf(a);
+        bicudo::mat::m1[1][2] = -sinf(a);
+        bicudo::mat::m1[2][1] = sinf(a);
+        bicudo::mat::m1[2][2] = cosf(a);
     }
 
     if (v.y != 0) {
-        m[bicudo::mat::I11] = cosf(a);
-        m[bicudo::mat::I31] = -sinf(a);
-        m[bicudo::mat::I13] = sinf(a);
-        m[bicudo::mat::I33] = cosf(a);
+        bicudo::mat::m1[0][0] = cosf(a);
+        bicudo::mat::m1[2][0] = -sinf(a);
+        bicudo::mat::m1[0][2] = sinf(a);
+        bicudo::mat::m1[2][2] = cosf(a);
     }
 
     if (v.z != 0) {
-        m[bicudo::mat::I11] = cosf(a);
-        m[bicudo::mat::I12] = -sinf(a);
-        m[bicudo::mat::I21] = sinf(a);
-        m[bicudo::mat::I22] = cosf(a);
+        bicudo::mat::m1[0][0] = cosf(a);
+        bicudo::mat::m1[0][1] = -sinf(a);
+        bicudo::mat::m1[1][0] = sinf(a);
+        bicudo::mat::m1[1][1] = cosf(a);
     }
+
+    bicudo::read_matrix(m.data, bicudo::mat::m1);
 }
 
 bicudo::vec2 bicudo::vec2::operator*(float v) const {
