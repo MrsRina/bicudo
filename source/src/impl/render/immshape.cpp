@@ -81,9 +81,9 @@ void bicudo::immshape::draw() {
     float cx {this->rect[0] + (this->rect[2] / 2)}, cy {this->rect[1] + (this->rect[3] / 2)};
 
     this->model = bicudo::mat4 {1.0f};
-    bicudo::translate(this->model, {cx, cy, 0});
-    bicudo::rotate(this->model, this->angular_amount, {0, 0, 1});
-    bicudo::translate(this->model, {-cx, -cy});
+    this->model = bicudo::translate(this->model, {cx, cy, 0});
+    this->model = bicudo::rotate(this->model, this->angular_amount, {0, 0, 1});
+    this->model = bicudo::translate(this->model, {-cx, -cy, 0});
 
     auto &shading_program {bicudo::immshape::shader};
     shading_program.set_uniform_vec4("DataRect", this->rect);

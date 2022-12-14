@@ -14,6 +14,10 @@ bicudo::mat4::mat4(float z) {
     this->data[bicudo::mat::I22] = z;
     this->data[bicudo::mat::I33] = z;
     this->data[bicudo::mat::I44] = z;
+
+    this->data[bicudo::mat::I41] = 0;
+    this->data[bicudo::mat::I42] = 0;
+    this->data[bicudo::mat::I43] = 0;
 }
 
 float *bicudo::mat4::operator ~() {
@@ -51,11 +55,12 @@ void bicudo::mat4::operator *=(bicudo::mat4 &m) {
     bicudo::read_matrix(this->data, bicudo::mat::m3);
 }
 
-bicudo::mat4 bicudo::mat4::operator *(bicudo::mat4 &m) {
-    bicudo::mat4 result {};
+bicudo::mat4 bicudo::mat4::operator *(const bicudo::mat4 &m) {
+    bicudo::mat4 result {m};
     auto m1 {bicudo::mat::m1}, m2 {bicudo::mat::m2}, m3 {bicudo::mat::m3};
-    bicudo::alloc_matrix(bicudo::mat::m1, this->data);
-    bicudo::alloc_matrix(bicudo::mat::m2, m.data);
+
+    bicudo::alloc_matrix(bicudo::mat::m1, (*this).data);
+    bicudo::alloc_matrix(bicudo::mat::m2, result.data);
 
     m3[0][0] = (m1[0][0] * m2[0][0]) + (m1[0][1] * m2[1][0]) + (m1[0][2] * m2[2][0]) + (m1[0][3] * m2[3][0]);
     m3[0][1] = (m1[0][0] * m2[0][1]) + (m1[0][1] * m2[1][1]) + (m1[0][2] * m2[2][1]) + (m1[0][3] * m2[3][1]);
@@ -84,7 +89,7 @@ bicudo::mat4::~mat4() {
 
 }
 
-void bicudo::alloc_matrix(float **m, float *data) {
+float **bicudo::alloc_matrix(float **m, float *data) {
     m[0][0] = data[0];
     m[0][1] = data[1];
     m[0][2] = data[2];
@@ -104,9 +109,11 @@ void bicudo::alloc_matrix(float **m, float *data) {
     m[3][1] = data[13];
     m[3][2] = data[14];
     m[3][3] = data[15];
+
+    return m;
 }
 
-void bicudo::read_matrix(float *data, float **m) {
+float *bicudo::read_matrix(float *data, float **m) {
     data[0] = m[0][0];
     data[1] = m[0][1];
     data[2] = m[0][2];
@@ -126,17 +133,16 @@ void bicudo::read_matrix(float *data, float **m) {
     data[13] = m[3][1];
     data[14] = m[3][2];
     data[15] = m[3][3];
+
+    return data;
 }
 
-void bicudo::identity(bicudo::mat4 &mat) {
-    mat[bicudo::mat::I11] = 1.0f;
-    mat[bicudo::mat::I22] = 1.0f;
-    mat[bicudo::mat::I33] = 1.0f;
-    mat[bicudo::mat::I44] = 1.0f;
+bicudo::mat4 bicudo::identity(float p) {
+    return {p};
 }
 
-void bicudo::translate(bicudo::mat4 &m, const bicudo::vec3 &v) {
-    bicudo::mat4 identity {1.0f};
+bicudo::mat4 bicudo::translate(const bicudo::mat4 &m, const bicudo::vec3 &v) {
+    bicudo::mat4 identity {1.0f}, result {};
     bicudo::alloc_matrix(bicudo::mat::m1, identity.data);
 
     bicudo::mat::m1[3][0] = v.x;
@@ -144,7 +150,69 @@ void bicudo::translate(bicudo::mat4 &m, const bicudo::vec3 &v) {
     bicudo::mat::m1[3][2] = v.z;
 
     bicudo::read_matrix(identity.data, bicudo::mat::m1);
-    m *= identity;
+    result = m;
+    return result * identity;
+}
+
+bicudo::mat4 &bicudo::orthographic(bicudo::mat4 &mat, float left, float right, float bottom, float top) {
+    const float min_depth = -1.0f;
+    const float max_depth = 1.0f;
+    const float invz = 1.0f / (max_depth - min_depth);
+    const float invy = 1.0f / (top - bottom);
+    const float invx = 1.0f / (right - left);
+
+    mat[bicudo::mat::I11] = 2.0f * invx;
+    mat[bicudo::mat::I12] = 0.0f;
+    mat[bicudo::mat::I13] = 0.0f;
+    mat[bicudo::mat::I14] = 0.0f;
+
+    mat[bicudo::mat::I21] = 0.0f;
+    mat[bicudo::mat::I22] = 2.0f * invy;;
+    mat[bicudo::mat::I23] = 0.0f;
+    mat[bicudo::mat::I24] = 0.0f;
+
+    mat[bicudo::mat::I31] = 0.0f;
+    mat[bicudo::mat::I32] = 0.0f;
+    mat[bicudo::mat::I33] = -2.0f * invz;
+    mat[bicudo::mat::I34] = 0.0f;
+    
+    mat[bicudo::mat::I41] = -(right + left) * invx;
+    mat[bicudo::mat::I42] = -(top + bottom) * invy;
+    mat[bicudo::mat::I43] = -(max_depth + min_depth) * invz;
+    mat[bicudo::mat::I44] = 1.0f;
+    return mat;
+}
+
+bicudo::mat4 bicudo::rotate(const bicudo::mat4 &m, float a, const bicudo::vec3 &v) {
+    bicudo::mat4 identity {1.0f}, result {};
+    bicudo::alloc_matrix(bicudo::mat::m1, identity.data);
+
+    if (v.x != 0.0f) {
+        bicudo::mat::m1[1][1] = cosf(a);
+        bicudo::mat::m1[1][2] = -sinf(a);
+        bicudo::mat::m1[2][1] = sinf(a);
+        bicudo::mat::m1[2][2] = cosf(a);
+    }
+
+    if (v.y != 0.0f) {
+        bicudo::mat::m1[0][0] = cosf(a);
+        bicudo::mat::m1[2][0] = -sinf(a);
+        bicudo::mat::m1[0][2] = sinf(a);
+        bicudo::mat::m1[2][2] = cosf(a);
+    }
+
+    if (v.z != 0.0f) {
+        bicudo::mat::m1[0][0] = cosf(a);
+        bicudo::mat::m1[0][1] = -sinf(a);
+        bicudo::mat::m1[1][0] = sinf(a);
+        bicudo::mat::m1[1][1] = cosf(a);
+    }
+
+    bicudo::read_matrix(identity.data, bicudo::mat::m1);
+
+    result = m;
+    result *= identity;
+    return result;
 }
 
 float bicudo::lerpf(float a, float b, float t) {
@@ -195,66 +263,11 @@ float bicudo::dot(const bicudo::vec2 &v1, const bicudo::vec2 &v2) {
     return v1.x * v2.x + v1.y * v2.y;
 }
 
-void bicudo::orthographic(bicudo::mat4 &mat, float left, float right, float bottom, float top) {
-    const float min_depth = -1.0f;
-    const float max_depth = 1.0f;
-    const float invz = 1.0f / (max_depth - min_depth);
-    const float invy = 1.0f / (top - bottom);
-    const float invx = 1.0f / (right - left);
-
-    mat[bicudo::mat::I11] = 2.0f * invx;
-    mat[bicudo::mat::I12] = 0.0f;
-    mat[bicudo::mat::I13] = 0.0f;
-    mat[bicudo::mat::I14] = 0.0f;
-
-    mat[bicudo::mat::I21] = 0.0f;
-    mat[bicudo::mat::I22] = 2.0f * invy;;
-    mat[bicudo::mat::I23] = 0.0f;
-    mat[bicudo::mat::I24] = 0.0f;
-
-    mat[bicudo::mat::I31] = 0.0f;
-    mat[bicudo::mat::I32] = 0.0f;
-    mat[bicudo::mat::I33] = -2.0f * invz;
-    mat[bicudo::mat::I34] = 0.0f;
-    
-    mat[bicudo::mat::I41] = -(right + left) * invx;
-    mat[bicudo::mat::I42] = -(top + bottom) * invy;
-    mat[bicudo::mat::I43] = -(max_depth + min_depth) * invz;
-    mat[bicudo::mat::I44] = 1.0f;
-}
-
 void bicudo::set(bicudo::collideinfo &collideinfo, float depth, bicudo::vec2 normal, bicudo::vec2 start) {
     collideinfo.depth = depth;
     collideinfo.normal = normal;
     collideinfo.start = start;
     collideinfo.end = start + normal * depth;
-}
-
-void bicudo::rotate(bicudo::mat4 &m, float a, const bicudo::vec3 &v) {
-    bicudo::alloc_matrix(bicudo::mat::m1, m.data);
-
-    if (v.x != 0) {
-        bicudo::mat::m1[1][1] = cosf(a);
-        bicudo::mat::m1[1][2] = -sinf(a);
-        bicudo::mat::m1[2][1] = sinf(a);
-        bicudo::mat::m1[2][2] = cosf(a);
-    }
-
-    if (v.y != 0) {
-        bicudo::mat::m1[0][0] = cosf(a);
-        bicudo::mat::m1[2][0] = -sinf(a);
-        bicudo::mat::m1[0][2] = sinf(a);
-        bicudo::mat::m1[2][2] = cosf(a);
-    }
-
-    if (v.z != 0) {
-        bicudo::mat::m1[0][0] = cosf(a);
-        bicudo::mat::m1[0][1] = -sinf(a);
-        bicudo::mat::m1[1][0] = sinf(a);
-        bicudo::mat::m1[1][1] = cosf(a);
-    }
-
-    bicudo::read_matrix(m.data, bicudo::mat::m1);
 }
 
 bicudo::vec2 bicudo::vec2::operator*(float v) const {

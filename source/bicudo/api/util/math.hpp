@@ -43,7 +43,7 @@ namespace bicudo {
         float &operator [](char);
 
         void operator *=(bicudo::mat4&);
-        bicudo::mat4 operator *(bicudo::mat4&);
+        bicudo::mat4 operator *(const bicudo::mat4&);
     };
 
     struct mat {
@@ -61,32 +61,42 @@ namespace bicudo {
     };
 
     /*
-     * Insert one dimensional array matrix into two dimensional array matrix..
+     * Insert one dimensional array matrix into two dimensional array matrix.
      */
-    void alloc_matrix(float**, float*);
+    float **alloc_matrix(float**, float*);
 
     /*
      * Convert two dimensioanl array matrix to one dimensional array matrix.
      */
-    void read_matrix(float *, float**);
+    float *read_matrix(float *, float**);
 
     /*
      * Identity matrix (matrix).
      * Create identity matrix 4x4.
      */
-    void identity(bicudo::mat4&);
+    bicudo::mat4 identity(float);
 
     /*
      * Translate matrix 4x4 (matrix, position)
-     * Translate matrix by given a pos.
+     * Translate matrix by a given pos.
      */
-    void translate(bicudo::mat4&, const bicudo::vec3&);
+    bicudo::mat4 translate(const bicudo::mat4&, const bicudo::vec3&);
 
     /*
      * Rotate matrix 4x4 (matrix, angle, axis)
-     * Rotate matrix based on axis target, angle need to be radians.
+     * Rotate matrix based on axis target, angles is converted to radians.
      */
-    void rotate(bicudo::mat4&, float, const bicudo::vec3&);
+    bicudo::mat4 rotate(const bicudo::mat4&, float, const bicudo::vec3&);
+
+    /*
+     * Orthographic matrix 4x4 (matrix, left, right, bottom, top).
+     */
+    bicudo::mat4 &orthographic(bicudo::mat4&, float, float, float, float);
+
+    /*
+     * Convert degress value to radians.
+     */
+    float radians(float);
 
     /*
      * Set collide info (depth, normal, start)
@@ -135,11 +145,6 @@ namespace bicudo {
      * Return normalized (between -1 and 1) axis values of a vector.
      */
     bicudo::vec2 normalize(const bicudo::vec2&);
-
-    /*
-     * Compute matrix orthographic values.
-     */
-    void orthographic(bicudo::mat4&, float, float, float, float);
 }
 
 #endif
