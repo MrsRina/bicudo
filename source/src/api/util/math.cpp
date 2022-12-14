@@ -14,10 +14,6 @@ bicudo::mat4::mat4(float z) {
     this->data[bicudo::mat::I22] = z;
     this->data[bicudo::mat::I33] = z;
     this->data[bicudo::mat::I44] = z;
-
-    this->data[bicudo::mat::I41] = 0;
-    this->data[bicudo::mat::I42] = 0;
-    this->data[bicudo::mat::I43] = 0;
 }
 
 float *bicudo::mat4::operator ~() {
@@ -185,7 +181,7 @@ bicudo::mat4 &bicudo::orthographic(bicudo::mat4 &mat, float left, float right, f
 
 bicudo::mat4 bicudo::rotate(const bicudo::mat4 &m, float a, const bicudo::vec3 &v) {
     bicudo::mat4 identity {1.0f}, result {};
-    bicudo::alloc_matrix(bicudo::mat::m1, identity.data);
+    a = bicudo::radians(a);
 
     if (v.x != 0.0f) {
         bicudo::mat::m1[1][1] = cosf(a);
@@ -201,14 +197,12 @@ bicudo::mat4 bicudo::rotate(const bicudo::mat4 &m, float a, const bicudo::vec3 &
         bicudo::mat::m1[2][2] = cosf(a);
     }
 
-    if (v.z != 0.0f) {
-        bicudo::mat::m1[0][0] = cosf(a);
-        bicudo::mat::m1[0][1] = -sinf(a);
-        bicudo::mat::m1[1][0] = sinf(a);
-        bicudo::mat::m1[1][1] = cosf(a);
+    if (v.z == 1) {
+        identity.data[bicudo::mat::I11] = cosf(a);
+        identity.data[bicudo::mat::I12] = -sinf(a);
+        identity.data[bicudo::mat::I21] = sinf(a);
+        identity.data[bicudo::mat::I22] = cosf(a);
     }
-
-    bicudo::read_matrix(identity.data, bicudo::mat::m1);
 
     result = m;
     result *= identity;
@@ -229,6 +223,10 @@ double bicudo::lerpd(double a, double b, double t) {
     }
 
     return a + (b - a) * t;
+}
+
+float bicudo::radians(float degress) {
+    return degress * M_PI / 180;
 }
 
 float bicudo::length(const bicudo::vec2 &vec) {

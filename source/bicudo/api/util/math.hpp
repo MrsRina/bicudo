@@ -94,11 +94,6 @@ namespace bicudo {
     bicudo::mat4 &orthographic(bicudo::mat4&, float, float, float, float);
 
     /*
-     * Convert degress value to radians.
-     */
-    float radians(float);
-
-    /*
      * Set collide info (depth, normal, start)
      * End is the product of (start + normal * depth)
      */
@@ -115,6 +110,11 @@ namespace bicudo {
      * Returns interpolated value between a - b in type double.
      */
     double lerpd(double, double, double);
+
+    /*
+     * Convert degress value to radians.
+     */
+    float radians(float);
 
     /*
      * Dot (vec)
