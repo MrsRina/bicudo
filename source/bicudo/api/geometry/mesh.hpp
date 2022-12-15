@@ -5,10 +5,31 @@
 #include <vector>
 
 namespace bicudo {
+    enum class meshing {
+        vertex, texture, normal, ivertex, itexture, inormal
+    };
+
     struct mesh {
-        std::vector<float> vertices {}, uvs, normals {};
-        std::vector<uint32_t> vertices_indexing {}, uvs_indexing {}, normals_indexing {};
-        int32_t per_vertices_length {2}, per_uvs_length {2}, per_normals_length {2};
+    protected:
+        std::vector<float> v {},
+                           t {},
+                           vn {};
+
+        std::vector<uint32_t> iv {},
+                              it {},
+                              ivn {};
+
+        int32_t v_vec_len {2},
+                t_vec_len {2},
+                vn_vec_len {2};
+    public:
+        void append(const std::vector<float>&, bicudo::meshing);
+        void append(const std::vector<uint32_t>&, bicudo::meshing);
+        void set_vec_len(int32_t, bicudo::meshing);
+
+        std::vector<float> &get_position_mesh(bicudo::meshing);
+        std::vector<uint32_t> &get_index_mesh(bicudo::meshing);
+        int32_t get_vec_len(bicudo::meshing);
     };
 }
 
