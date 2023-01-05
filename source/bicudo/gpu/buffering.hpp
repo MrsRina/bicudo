@@ -5,35 +5,31 @@
 #include <vector>
 #include "GL/glew.h"
 #include "bicudo/api/geometry/mesh.hpp"
+#include "bicudo/api/util/math.hpp"
 
 namespace bicudo {
-    enum buffer {
-        immutable = 1,
-        dynamic   = 2,
-        stream    = 4,
-        typefloat = 8,
-        typeuint  = 16,
-        ebo       = 32,
-        vbo       = 64
-    };
-
     class buffering {
     protected:
+        static uint32_t current_buffer_preset[2];
+
         std::vector<uint32_t> buffer_list {};
-        uint32_t gpu_buffer_group {}, buffer_index {};
-        GLenum shader_array_type {};
-        int32_t buffer_ebo {}, indexing_rendering_size {};
+        uint32_t buffer_vao {};
+        uint32_t buffer_ebo {};
+
+        bool instanced {};
+        uint32_t buffer_list_size {};
     public:
-        int32_t stride_begin {}, stride_end {}, draw_mode {GL_TRIANGLES};
+        int32_t stride[3] {};
+        int32_t primitive {GL_TRIANGLES};
 
         void invoke();
+        void bind(const vec2 &buffer_type);
+        void send(int32_t size, void *p_data, int32_t gl_driver_read_mode);
+        void attach(uint32_t location, int32_t vec, const vec2 &shader_stride);
         void revoke();
-        void bind_buffer(uint16_t = bicudo::buffer::vbo);
-
-        void compile_mesh(bicudo::mesh&);
-        void set_shader_location(uint32_t, int32_t, int32_t, size_t);
-        void send_data(uint32_t, void*, uint16_t);
         void draw();
+
+        void compile_mesh(bicudo::mesh &mesh);
     };
 }
 

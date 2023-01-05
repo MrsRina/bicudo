@@ -27,8 +27,8 @@ namespace bicudo {
         void append(const std::vector<uint32_t>&, bicudo::meshing);
         void set_vec_len(int32_t, bicudo::meshing);
 
-        std::vector<float> &get_position_mesh(bicudo::meshing);
-        std::vector<uint32_t> &get_index_mesh(bicudo::meshing);
+        std::vector<float> &get_float_list(bicudo::meshing);
+        std::vector<uint32_t> &get_uint_list(bicudo::meshing);
         int32_t get_vec_len(bicudo::meshing);
     };
 }

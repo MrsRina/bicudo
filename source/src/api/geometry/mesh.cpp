@@ -16,6 +16,8 @@ void bicudo::mesh::append(const std::vector<float> &list, bicudo::meshing meshin
 			this->vn.insert(this->vn.cend(), list.cbegin(), list.cend());
 			break;
 		}
+
+        default: break;
 	}
 }
 
@@ -35,6 +37,8 @@ void bicudo::mesh::append(const std::vector<uint32_t> &list, bicudo::meshing mes
 			this->ivn.insert(this->ivn.cend(), list.cbegin(), list.cend());
 			break;
 		}
+
+        default: break;
 	}
 }
 
@@ -54,10 +58,12 @@ void bicudo::mesh::set_vec_len(int32_t len, bicudo::meshing meshing) {
 			this->vn_vec_len = len;
 			break;
 		}
+
+        default: break;
 	}
 }
 
-std::vector<float> &bicudo::mesh::get_position_mesh(bicudo::meshing meshing) {
+std::vector<float> &bicudo::mesh::get_float_list(bicudo::meshing meshing) {
 	switch (meshing) {
 		case bicudo::meshing::vertex: {
 			return this->v;
@@ -70,12 +76,14 @@ std::vector<float> &bicudo::mesh::get_position_mesh(bicudo::meshing meshing) {
 		case bicudo::meshing::normal: {
 			return this->vn;
 		}
+
+        default: break;
 	}
 
 	return this->v;
 }
 
-std::vector<uint32_t> &bicudo::mesh::get_index_mesh(bicudo::meshing meshing) {
+std::vector<uint32_t> &bicudo::mesh::get_uint_list(bicudo::meshing meshing) {
 	switch (meshing) {
 		case bicudo::meshing::ivertex: {
 			return this->iv;
@@ -88,6 +96,8 @@ std::vector<uint32_t> &bicudo::mesh::get_index_mesh(bicudo::meshing meshing) {
 		case bicudo::meshing::inormal: {
 			return this->ivn;
 		}
+
+        default: break;
 	}
 
 	return this->iv;
@@ -106,6 +116,8 @@ int32_t bicudo::mesh::get_vec_len(bicudo::meshing meshing) {
 		case bicudo::meshing::normal: {
 			return this->vn_vec_len;
 		}
+
+        default: break;
 	}
 
 	return 0;

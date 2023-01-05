@@ -1,150 +1,69 @@
 #ifndef BICUDO_API_UTIL_MATH_H
 #define BICUDO_API_UTIL_MATH_H
 
+#include <cmath>
+#include <cfloat>
+
+#define CMP(x, y) \
+(fabsf((x) - (y))) <= FLT_EPSILON * fmaxf(1.0f, fmaxf(fabsf(x), fabsf(y)))
+
+#define RAD2DEG(x) ((x * 57.295754f))
+#define DEG2RAD(x) ((x * 0.0174533f))
+
 namespace bicudo {
     extern float dt, unsafe_dt;
 
-    struct vec2 {
-        float x {}, y {};
+    typedef struct vec2 {
+        union {
+            struct {
+                float x;
+                float y;
+            };
 
-        vec2 operator *(float) const;
-        vec2 operator +(float) const;
-        vec2 operator -(float) const;
-        vec2 operator /(float) const;
-        vec2 operator +(const vec2&) const;
-        vec2 operator -(const vec2&) const;
-        vec2 operator *(const vec2&) const;
-        vec2 operator /(const vec2&) const;
+            float data[2];
+        };
 
-        void operator -=(const vec2&);
-        void operator +=(const vec2&);
-        void operator *=(float);
-        void operator +=(float);
-        void operator -=(float);
-        void operator /=(float);
-    };
+        float &operator[](unsigned char i) {
+            return data[i];
+        }
+    } vec2;
 
-    struct vec3 {
-        float x {}, y {}, z {};
-    };
+    vec2 operator+(const vec2 &l, const vec2 &r);
+    vec2 operator-(const vec2 &l, const vec2 &r);
+    vec2 operator*(const vec2 &l, const vec2 &r);
+    vec2 operator*(const vec2 &l, float r);
 
-    struct vec4 {
-        float x {}, y {}, z {}, w {};
-    };
+    bool operator==(const vec2 &l, const vec2 &r);
+    bool operator!=(const vec2 &l, const vec2 &r);
 
-    struct mat4 {
-    public:
-        float data[16] {};
+    float dot(const vec2 &l, const vec2 &r);
+    float length(const vec2 &l);
 
-        mat4(float = 0.0f);
-        ~mat4();
+    float lengthsq(const vec2 &l);
+    float distance(const vec2 &l, const vec2 &r);
 
-        float *operator ~();
-        float &operator [](char);
+    vec2 normalize(const vec2 &l);
+    float angle(const vec2 &l, const vec2 &r);
 
-        void operator *=(bicudo::mat4&);
-        bicudo::mat4 operator *(const bicudo::mat4&);
-    };
+    float degree(float r);
+    float radians(float d);
 
-    struct mat {
-        static float *m1[4], *m2[4], *m3[4];
-        static bicudo::mat4 orthographic;
-        const static char I11 {0},  I12 {1},  I13 {2},  I14{3},
-                          I21 {4},  I22 {5},  I23 {6},  I24{7},
-                          I31 {8},  I32 {9},  I33 {10}, I34{11},
-                          I41 {12}, I42 {13}, I43 {14}, I44{15};
-    };
+    typedef struct vec4 {
+        union {
+            struct {
+                float x;
+                float y;
+                float z;
+                float w;
+            };
 
-    struct collideinfo {
-        bicudo::vec2 start {}, end {}, normal {};
-        float depth {};
-    };
+            float data[4];
+        };
 
-    /*
-     * Insert one dimensional array matrix into two dimensional array matrix.
-     */
-    float **alloc_matrix(float**, float*);
-
-    /*
-     * Convert two dimensioanl array matrix to one dimensional array matrix.
-     */
-    float *read_matrix(float *, float**);
-
-    /*
-     * Identity matrix (matrix).
-     * Create identity matrix 4x4.
-     */
-    bicudo::mat4 identity(float);
-
-    /*
-     * Translate matrix 4x4 (matrix, position)
-     * Translate matrix by a given pos.
-     */
-    bicudo::mat4 translate(const bicudo::mat4&, const bicudo::vec3&);
-
-    /*
-     * Rotate matrix 4x4 (matrix, angle, axis)
-     * Rotate matrix based on axis target, angles is converted to radians.
-     */
-    bicudo::mat4 rotate(const bicudo::mat4&, float, const bicudo::vec3&);
-
-    /*
-     * Orthographic matrix 4x4 (matrix, left, right, bottom, top).
-     */
-    bicudo::mat4 &orthographic(bicudo::mat4&, float, float, float, float);
-
-    /*
-     * Set collide info (depth, normal, start)
-     * End is the product of (start + normal * depth)
-     */
-    void set(bicudo::collideinfo&, float, bicudo::vec2, bicudo::vec2);
-
-    /*
-     * Linear interpolation (a, b, dt)
-     * Returns interpolated value between a - b in type float.
-     */
-    float lerpf(float, float, float);
-
-    /*
-     * Linear interpolation (a, b, dt)
-     * Returns interpolated value between a - b in type double.
-     */
-    double lerpd(double, double, double);
-
-    /*
-     * Convert degress value to radians.
-     */
-    float radians(float);
-
-    /*
-     * Dot (vec)
-     * Return the dot product of vector.
-     */
-    float dot(const bicudo::vec2&, const bicudo::vec2&);
-
-    /*
-     * Length (vec)
-     * Return magnitude of a vector.
-     */
-    float length(const bicudo::vec2&);
-
-    /*
-     * Cross (v1, v2)
-     * Return the cross X product (x1 * y2 + y1 * x2) 
-     */
-    float cross(const bicudo::vec2&, const bicudo::vec2&);
-
-    /*
-     * Rotate (vec)
-     * Return rotated vec based on radians angle.
-     */
-    bicudo::vec2 rotate(const bicudo::vec2&, const bicudo::vec2&, float);
-
-    /*
-     * Normalize (vec)
-     * Return normalized (between -1 and 1) axis values of a vector.
-     */
-    bicudo::vec2 normalize(const bicudo::vec2&);
+        float & operator[](unsigned char i) {
+            return data[i];
+        }
+    } vec4;
 }
 
 #endif

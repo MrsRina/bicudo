@@ -13,7 +13,6 @@ namespace bicudo {
 
         float shape_color[4] {}, rect[4] {};
         float depth_testing {}, angular_amount {};
-        bicudo::mat4 model {};
     public:
         static void init();
         static void matrix();
