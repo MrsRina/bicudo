@@ -44,6 +44,7 @@ int32_t main(int32_t, char**) {
 
     window.rect = {bicudo::centered, bicudo::centered, 1280, 800};
     window.tag = "starter - bicudo tests";
+    window.resizable = true;
 
     /* Load the default scene. */
     starter *scene {new starter {}};
