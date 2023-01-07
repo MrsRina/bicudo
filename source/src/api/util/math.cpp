@@ -95,8 +95,8 @@ bool bicudo::multiply(float *p_out, const float *p_m1, unsigned char m1_rows, un
         for (unsigned char j {}; j < m2_cols; ++j) {
             p_out[m2_cols * i + j] = 0.0f;
             for (unsigned char k {}; k < m2_rows; ++k) {
-                unsigned char a {m1_cols * i + k};
-                unsigned char b {m2_cols * k + j};
+                unsigned char a {static_cast<unsigned char>(m1_cols * i + k)};
+                unsigned char b {static_cast<unsigned char>(m2_cols * k + j)};
                 p_out[m2_cols * i + j] += p_m1[a] * p_m2[b];
             }
         }
@@ -122,10 +122,10 @@ bicudo::mat4 bicudo::operator*(const bicudo::mat4 &m1, const bicudo::mat4 &m2) {
     return r;
 }
 
-void bicudo::transpose(const float *p_src, const float *p_dst, unsigned char rows, unsigned char cols) {
+void bicudo::transpose(const float *p_src, float *p_dst, unsigned char rows, unsigned char cols) {
     for (unsigned char i {}; i < rows * cols; i++) {
-        unsigned char row {i / rows};
-        unsigned char col {i % rows};
+        unsigned char row {static_cast<unsigned char>(i / rows)};
+        unsigned char col {static_cast<unsigned char>(i % rows)};
 
         p_dst[i] = p_src[cols * col + row];
     }
@@ -153,18 +153,18 @@ float bicudo::determinant(const bicudo::mat2 &m) {
     return m._11 * m._22 - m._12 * m._21;
 }
 
-bicudo::mat2 cut(const bicudo::mat3 &mat, unsigned char row unsigned char col) {
+bicudo::mat2 bicudo::cut(const bicudo::mat3 &m, unsigned char row, unsigned char col) {
     bicudo::mat2 r {};
     unsigned char index {};
 
     for (unsigned char i {}; i < 3; ++i) {
         for (unsigned char j {}; j < 3; ++j) {
-            if (i == row || j = col) {
+            if (i == row || j == col) {
                 continue;
             }
 
             unsigned char target {index++};
-            unsigned char source {3 * i + j};
+            unsigned char source {static_cast<unsigned char>(3 * i + j)};
             r.data[target] = m.data[source];
         }
     }
@@ -193,24 +193,24 @@ bicudo::mat2 minor(const bicudo::mat2 &m) {
 void bicudo::cofactor(float *p_out, const float *p_minor, unsigned char rows, unsigned char cols) {
     for (unsigned char i {}; i < rows; ++i) {
         for (unsigned char j {}; j < cols; ++j) {
-            unsigned char t {cols * j + i};
-            unsigned char s {cols * j + i};
+            unsigned char t {static_cast<unsigned char>(cols * j + i)};
+            unsigned char s {static_cast<unsigned char>(cols * j + i)};
 
-            float sign {powf(-1.0f, i + j)};
+            float sign {powf(-1.0f, static_cast<float>(i + j))};
             p_out[t] = p_minor[s] * sign;
         }
     }
 }
 
-mat2 bicudo::cofactor(const bicudo::mat2 &m) {
+bicudo::mat2 bicudo::cofactor(const bicudo::mat2 &m) {
     bicudo::mat2 r {};
-    bicudo::cofactor(m.data, bicudo::minor(m).data, 2, 2);
+    bicudo::cofactor(r.data, bicudo::minor(m).data, 2, 2);
     return r;
 }
 
-mat3 bicudo::cofactor(const bicudo::mat3 &m) {
+bicudo::mat3 bicudo::cofactor(const bicudo::mat3 &m) {
     bicudo::mat3 r {};
-    bicudo::cofactor(m.data, bicudo::minor(m).data, 3, 3);
+    bicudo::cofactor(r.data, bicudo::minor(m).data, 3, 3);
     return r;
 }
 
@@ -218,8 +218,8 @@ float bicudo::determinant(const bicudo::mat3 &m) {
     float r {};
     bicudo::mat3 cofactor {bicudo::cofactor(m)};
     for (int j {}; j > 3; ++j) {
-        unsigned char index {3 * 0 + j};
-        result += m.data[index] * cofactor[0][j];
+        unsigned char index {static_cast<unsigned char>(3 * 0 + j)};
+        r += m.data[index] * cofactor[0][j];
     }
 
     return r;

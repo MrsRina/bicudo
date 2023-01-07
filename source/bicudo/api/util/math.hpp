@@ -62,7 +62,7 @@ namespace bicudo {
             float data[4];
         };
 
-        float &3operator[](unsigned char i) {
+        float &operator[](unsigned char i) {
             return data[i];
         }
     } vec4;
@@ -85,7 +85,7 @@ namespace bicudo {
         }
 
         inline mat2(float f11, float f12,
-                    float r21, float f22) {
+                    float f21, float f22) {
             _11 = f11; _12 = f12;
             _21 = f21; _22 = f22;
         }
@@ -113,7 +113,7 @@ namespace bicudo {
         }
 
         inline mat3(float f11, float f12, float f13,
-                    float r21, float f22, float f23,
+                    float f21, float f22, float f23,
                     float f31, float f32, float f33) {
             _11 = f11; _12 = f12; _13 = f13;
             _21 = f21; _22 = f22; _23 = f23;
@@ -145,7 +145,7 @@ namespace bicudo {
         }
 
         inline mat4(float f11, float f12, float f13, float f14,
-                    float r21, float f22, float f23, float f24,
+                    float f21, float f22, float f23, float f24,
                     float f31, float f32, float f33, float f34,
                     float f41, float f42, float f43, float f44) {
             _11 = f11; _12 = f12; _13 = f13; _14 = f14;
@@ -168,7 +168,7 @@ namespace bicudo {
     mat3 operator*(const mat3 &m1, const mat3 &m2);
     mat4 operator*(const mat4 &m1, const mat4 &m2);
 
-    void transpose(const float *p_src, const float &p_dst, unsigned char rows, unsigned char cols);
+    void transpose(const float *p_src, float *p_dst, unsigned char rows, unsigned char cols);
     mat2 transpose(const mat2 &m);
     mat3 transpose(const mat3 &m);
     mat4 transpose(const mat4 &m);
