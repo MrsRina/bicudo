@@ -1,1 +1,0 @@
-#include "bicudo/api/geometry/rect.hpp"

@@ -1,1 +1,0 @@
-#include "bicudo/api/component/component.hpp"
