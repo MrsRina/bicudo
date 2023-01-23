@@ -9,7 +9,7 @@ Renderer engine of Bicudo is made in API OpenGL 4.
 There is bicudo-1 version, but that version is deprecated, but I recommend you take a look in that branch.  
 Bicudo-3 physics engine is in progress.
 
-This is the first rewrite of Bicudo.
+Third rewrite of Bicudo.
 
 ---
 
