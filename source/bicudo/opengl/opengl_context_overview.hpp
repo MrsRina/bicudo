@@ -9,6 +9,9 @@ namespace bicudo {
     extern unsigned char gl_major_version;
     extern unsigned char gl_minor_version;
     extern SDL_GLContext sdl_gl_context;
+
+    void initglcontext();
+    void createglcontext(SDL_Window *p_root);
 }
 
 #endif
