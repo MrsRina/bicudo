@@ -1,6 +1,6 @@
 # Bicudo
 
-Bicudo is one framework to create 2D games, the first version has no GPU accelerated physics system.    
+Bicudo is one framework to createcore 2D games, the first version has no GPU accelerated physics system.    
 The purpose of creating this framework is not only to make games but learn physics, multi-threading & parallel tasks.
 
 Physics use the concept of SAT (separation axis theorem) to compute displacement of collisions.
@@ -58,15 +58,15 @@ public:
 int main(int, char**) {
     bicudo::init();
     
-    /* first you need to create one surface */
+    /* first you need to createcore one surface */
     bicudo::surface window {};
-    bicudo::create(&window);
+    bicudo::createcore(&window);
     
     /* second you need to configure the surface dimensions */
     window.rect = {bicudo::centered, bicudo::centered, 1280, 800};
     window.tag = "Bird Game";
     
-    /* create the first scene, in this case is game_scene */
+    /* createcore the first scene, in this case is game_scene */
     /* you do not need to worry about the ptr, bicudo is memory safe */
     game_scene *defaut_scene {new game_scene {}};
     bicudo::makecurrent(default_scene);
