@@ -1,6 +1,6 @@
 # Bicudo
 
-Bicudo is one framework to createcore 2D games, the first version has no GPU accelerated physics system.    
+Bicudo is one framework to create 2D games, the first version has no GPU accelerated physics system.    
 The purpose of creating this framework is not only to make games but learn physics, multi-threading & parallel tasks.
 
 Physics use the concept of SAT (separation axis theorem) to compute displacement of collisions.
