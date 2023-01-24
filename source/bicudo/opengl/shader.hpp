@@ -3,19 +3,30 @@
 
 #include <map>
 #include <iostream>
+#include <vector>
 
 namespace bicudo {
+    struct shading {
+        std::string path {};
+        uint32_t stage {};
+        bool path_is_resource {};
+    };
+
     class shader {
     protected:
-        uint32_t buffer_shader_program {};
         std::map<std::string, uint32_t> shader_location_map {};
     public:
         explicit shader();
         ~shader();
 
+        std::string name {};
+        uint32_t buffer_shader_program {};
+
         void invoke() const;
         void revoke() const;
     };
+
+    bool createshader(bicudo::shader *&p_shader, const std::vector<bicudo::shading> &shading_list);
 }
 
 #endif
