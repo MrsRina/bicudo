@@ -3,6 +3,38 @@
 #include "starter.hpp"
 #include "bicudo/opengl/opengl_context_overview.hpp"
 
+void scene_starter::on_create() {
+    scene::on_create();
+
+    bicudo::texturing t {};
+    t.invoke(0, {GL_TEXTURE_2D, GL_FLOAT});
+    t.send<float>({100, 100, 0}, nullptr, {GL_RGB32F, GL_RGB});
+    t.revoke();
+
+    t.invoke(1, {GL_TEXTURE_2D, GL_UNSIGNED_BYTE});
+    t.send<uint8_t>({60, 60, 0}, nullptr, {GL_R8UI, GL_RED_INTEGER});
+    t.revoke();
+
+    t.invoke(2, {GL_TEXTURE_2D, GL_FLOAT});
+    t.send<float>({50, 50, 0}, nullptr, {GL_RGBA32F, GL_RGBA});
+    t.revoke();
+
+    glBindTexture(GL_TEXTURE_2D, t[2].buffer);
+    bicudo::log("hi");
+}
+
+void scene_starter::on_destroy() {
+    scene::on_destroy();
+}
+
+void scene_starter::on_update() {
+    scene::on_update();
+}
+
+void scene_starter::on_render() {
+    scene::on_render();
+}
+
 int32_t main(int32_t, char**) {
     /* Specify vendor GL context. */
     bicudo::gl_minor_version = 4;

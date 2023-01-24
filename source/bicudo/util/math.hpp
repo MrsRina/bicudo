@@ -96,6 +96,48 @@ namespace bicudo {
             return &(this->data[index]);
         }
     } vec4;
+
+    typedef struct ivec2 {
+        union {
+            struct {
+                int32_t x, y;
+            };
+
+            int32_t data[2];
+        };
+
+        int32_t *operator[](uint8_t index) {
+            return &(this->data[index]);
+        }
+    } ivec2;
+
+    typedef struct ivec3 {
+        union {
+            struct {
+                int32_t x, y, z;
+            };
+
+            int32_t data[3];
+        };
+
+        int32_t *operator[](uint8_t index) {
+            return &(this->data[index]);
+        }
+    } ivec3;
+
+    typedef struct ivec4 {
+        union {
+            struct {
+                int32_t x, y, z, w;
+            };
+
+            int32_t data[4];
+        };
+
+        int32_t *operator[](uint8_t index) {
+            return &(this->data[index]);
+        }
+    } ivec4;
 }
 
 #endif

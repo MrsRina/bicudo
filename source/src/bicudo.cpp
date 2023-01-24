@@ -1,5 +1,4 @@
 #include "bicudo/bicudo.hpp"
-#include "bicudo/util/logger.hpp"
 
 bicudo::core *bicudo::kernel::p_core {};
 

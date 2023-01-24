@@ -5,6 +5,8 @@
 #include "bicudo/direct/display.hpp"
 #include "bicudo/direct/scene.hpp"
 #include "bicudo/core/core.hpp"
+#include "bicudo/opengl/opengl_tools.hpp"
+#include "bicudo/util/logger.hpp"
 
 namespace bicudo {
     class kernel {
