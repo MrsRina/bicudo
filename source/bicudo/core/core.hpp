@@ -5,12 +5,14 @@
 #include "../direct/display.hpp"
 #include "../service/service_display.hpp"
 #include "bicudo/service/service_scene.hpp"
+#include "bicudo/service/service_physic_engine.hpp"
 
 namespace bicudo {
     class core {
     public:
         bicudo::service_display service_display {};
         bicudo::service_scene service_scene {};
+        bicudo::service_physic_engine service_physic_engine {};
 
         bool window_show {};
         bool running_mainloop {};

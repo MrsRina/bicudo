@@ -19,6 +19,11 @@ bicudo::shader::~shader() {
     glDeleteProgram(this->buffer_shader_program);
 }
 
+bicudo::shader::shader(std::string_view shading_name) {
+    this->name = shading_name;
+    this->buffer_shader_program = glCreateProgram();
+}
+
 bool bicudo::createshader(bicudo::shader *&p_shader, const std::vector<bicudo::shading> &shading_list) {
     if (shading_list.empty()) {
         return bicudo::exception("Invalid shading list, empty.");
@@ -71,6 +76,8 @@ bool bicudo::createshader(bicudo::shader *&p_shader, const std::vector<bicudo::s
             glGetProgramInfoLog(p_shader->buffer_shader_program, request, nullptr, msg.data());
             error_going_on = bicudo::exception("Failed to link program '" + p_shader->name + "'. \n" + msg);
             delete p_shader;
+        } else {
+            error_going_on = bicudo::log("Successfully linked program '" + p_shader->name + "'.");
         }
     }
 

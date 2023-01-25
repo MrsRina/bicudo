@@ -5,13 +5,15 @@
 
 void bicudo::core::on_native_init() {
     this->running_mainloop = true;
-    bicudo::initglcontext();
+    this->service_physic_engine.on_native_init();
 }
 
 void bicudo::core::on_native_quit() {
+    this->service_physic_engine.on_native_quit();
 }
 
 int32_t bicudo::core::mainloop() {
+    this->on_native_init();
     SDL_Event sdl_event {};
 
     while (this->running_mainloop) {
@@ -35,5 +37,6 @@ int32_t bicudo::core::mainloop() {
         SDL_Delay(this->capped_fps / 1000);
     }
 
+    this->on_native_quit();
     return 0;
 }

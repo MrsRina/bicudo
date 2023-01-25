@@ -56,6 +56,7 @@ namespace bicudo {
             switch (buffer_info.x) {
                 case GL_ELEMENT_ARRAY_BUFFER: {
                     this->buffer_ebo = buffer;
+                    this->primitive[1] = buffer_info.y;
                     break;
                 }
 
@@ -70,7 +71,7 @@ namespace bicudo {
             glBufferData(this->bind_buffer_info[0], sizeof(T) * size, p_data, mode);
         }
 
-        void attach(uint32_t shader_slot, int32_t vec_size, const bicudo::ivec2 &bind_stride) const {
+        void attach(uint32_t shader_slot, int32_t vec_size, const bicudo::ivec2 &bind_stride = {0, 0}) const {
             const void *hack {(void*) (size_t) bind_stride.y};
             glEnableVertexAttribArray(shader_slot);
             glVertexAttribPointer(shader_slot, vec_size, this->bind_buffer_info[1], GL_FALSE, bind_stride.x, hack);

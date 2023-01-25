@@ -10,14 +10,6 @@ namespace bicudo {
     public:
         std::vector<bicudo::feature<T>*> features {};
 
-        virtual void on_init() {
-
-        }
-
-        virtual void on_quit() {
-
-        }
-
         virtual void add(bicudo::feature<T> *p_feature) {
             this->features.push_back(p_feature);
         }

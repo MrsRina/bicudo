@@ -1,11 +1,11 @@
 #include "bicudo/bicudo.hpp"
+#include "bicudo/opengl/opengl_context_overview.hpp"
 
 bicudo::core *bicudo::kernel::p_core {};
 
 void bicudo::createcore(bicudo::core *&p_core) {
     bicudo::kernel::p_core = p_core;
-    bicudo::kernel::p_core->on_native_init();
-
+    bicudo::initglcontext();
     bicudo::log("Kernel core created.");
 }
 

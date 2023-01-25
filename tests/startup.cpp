@@ -20,7 +20,6 @@ void scene_starter::on_create() {
     t.revoke();
 
     glBindTexture(GL_TEXTURE_2D, t[2].buffer);
-    bicudo::log("hi");
 }
 
 void scene_starter::on_destroy() {
@@ -49,7 +48,7 @@ int32_t main(int32_t, char**) {
     bicudo::feature<bicudo::display> *p_display {new bicudo::feature<bicudo::display>()};
     p_display->content.rect[2] = 1280;
     p_display->content.rect[3] = 800;
-    p_display->content.title = "Hello this is Bicudo3.";
+    p_display->content.title = "Hello this is Bicudo-3.";
     p_display->content.flags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
     p_display->content.opacity = 1.0f;
     bicudo::createdisplay(p_display);

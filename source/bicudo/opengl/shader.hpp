@@ -17,6 +17,7 @@ namespace bicudo {
         std::map<std::string, uint32_t> shader_location_map {};
     public:
         explicit shader();
+        explicit shader(std::string_view shading_name);
         ~shader();
 
         std::string name {};
