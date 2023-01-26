@@ -20,6 +20,9 @@ void bicudo::rigid::move(float x, float y) {
     this->normals[1] = bicudo::normalize(this->vertices[1] - this->vertices[2]);
     this->normals[2] = bicudo::normalize(this->vertices[2] - this->vertices[3]);
     this->normals[3] = bicudo::normalize(this->vertices[3] - this->vertices[0]);
+
+    this->position.x = x;
+    this->position.y = y;
 }
 
 void bicudo::rigid::rotate(float angle) {

@@ -21,7 +21,7 @@ namespace bicudo {
         };
 
         float *operator[](uint8_t index) {
-            return &(this->data[index + 2]);
+            return &(this->data[index * 2]);
         }
     } mat2;
 
@@ -38,7 +38,7 @@ namespace bicudo {
         };
 
         float *operator[](uint8_t index) {
-            return &(this->data[index + 3]);
+            return &(this->data[index * 3]);
         }
     } mat3;
 
@@ -88,7 +88,7 @@ namespace bicudo {
         }
 
         float *operator[](uint8_t index) {
-            return &(this->data[index + 4]);
+            return &(this->data[index * 4]);
         }
     } mat4;
 
@@ -381,7 +381,7 @@ namespace bicudo {
         return r;
     }
 
-    inline bicudo::mat4 rotate(const bicudo::mat4 &m, float angle, bicudo::vec3 &a) {
+    inline bicudo::mat4 rotate(const bicudo::mat4 &m, float angle, const bicudo::vec3 &a) {
         bicudo::mat4 r {bicudo::rotate(angle, a)};
         return m * r;
     }

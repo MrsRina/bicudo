@@ -25,6 +25,11 @@ void scene_starter::on_create() {
     p_rigid->content.size = {200, 200};
     p_rigid->content.move(200, 200);
     bicudo::kernel::p_core->service_physic_engine.add(p_rigid);
+
+    bicudo::feature<bicudo::rigid> *p_rigid_2 {new bicudo::feature<bicudo::rigid>()};
+    p_rigid_2->content.size = {200, 200};
+    p_rigid_2->content.move(401, 450);
+    bicudo::kernel::p_core->service_physic_engine.add(p_rigid_2);
 }
 
 void scene_starter::on_destroy() {

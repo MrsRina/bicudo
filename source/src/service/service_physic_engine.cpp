@@ -38,11 +38,12 @@ void bicudo::service_physic_engine::on_native_render() {
     bicudo::mat4 perspective {bicudo::orthographic(0.0f, display.rect[2], display.rect[3], 0.0f)};
     bicudo::mat4 model {};
 
-    this->buffer.invoke();
     this->p_shader_debug->invoke();
+    this->buffer.invoke();
 
     for (bicudo::feature<bicudo::rigid> *&p_feature : this->features) {
         model = bicudo::mat4(1.0f);
+        model = bicudo::rotate(model, p_feature->content.angular_angle, {0, 0, 1});
         model = perspective * model;
 
         rect.z = p_feature->content.size.x;
@@ -53,12 +54,12 @@ void bicudo::service_physic_engine::on_native_render() {
         this->p_shader_debug->set_uniform_vec4("Rectangle", &rect[0]);
         this->p_shader_debug->set_uniform_mat4("MVP", &model[0][0]);
 
-        rect.z = 1.0f * !p_feature->content.collided;
-        rect.w = 0.0f;
-        rect.x = 1.0f * p_feature->content.collided;
-        rect.y = 1.0f;
+        color.x = 1.0f * p_feature->content.collided;
+        color.y = 0.0f;
+        color.z = 1.0f * !p_feature->content.collided;
+        color.w = 1.0f;
 
-        this->p_shader_debug->set_uniform_vec4("Color", &rect[0]);
+        this->p_shader_debug->set_uniform_vec4("Color", &color[0]);
         this->buffer.draw();
     }
 
@@ -79,8 +80,8 @@ void bicudo::service_physic_engine::on_native_init() {
     };
 
     uint8_t index[6] {
-        1, 2, 4,
-        4, 3, 1
+        0, 1, 3,
+        3, 2, 0
     };
 
     std::string vsh {bicudo::gl_shading_version};
@@ -95,7 +96,7 @@ void bicudo::service_physic_engine::on_native_init() {
            "out vec2 TexCoords;\n"
            ""
            "void main() {\n"
-           "    gl_Position = MVP * vec4((VertexPos.xy * Rectangle.zw) + Rectangle.xy, 0.0f, 1.0f);\n"
+           "    gl_Position = MVP * vec4((VertexPos * Rectangle.zw) + Rectangle.xy, 0.0f, 1.0f);\n"
            "    Rect = Rectangle;\n"
            "    TexCoords = VertexTexCoords;\n"
            "}\n";
@@ -117,9 +118,9 @@ void bicudo::service_physic_engine::on_native_init() {
     this->p_shader_debug = new bicudo::shader("physic.debug");
     bicudo::createshader(this->p_shader_debug, {{vsh, GL_VERTEX_SHADER, true}, {fsh, GL_FRAGMENT_SHADER, true}});
 
-    this->buffer.invoke();
-
     /* Vertex pos layout binding. */
+    this->buffer.invoke();
+    this->buffer.primitive[0] = GL_TRIANGLES;
     this->buffer.bind(0, {GL_ARRAY_BUFFER, GL_FLOAT});
     this->buffer.send<float>(sizeof(mesh) / sizeof(float), mesh, GL_STATIC_DRAW);
     this->buffer.attach(0, 2);

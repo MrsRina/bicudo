@@ -20,6 +20,8 @@ int32_t bicudo::core::mainloop() {
     uint64_t old_ticks {};
     uint64_t current_ticks {};
 
+    glDisable(GL_DEPTH_TEST);
+
     while (this->running_mainloop) {
         old_ticks = current_ticks;
         current_ticks = SDL_GetPerformanceCounter();

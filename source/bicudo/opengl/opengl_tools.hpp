@@ -37,14 +37,14 @@ namespace bicudo {
         std::map<uint32_t, uint32_t> buffer_map {};
     public:
         uint32_t primitive[2] {GL_TRIANGLES, GL_UNSIGNED_BYTE};
-        int32_t stride[3] {};
+        int32_t stride[3] {0, 0, 0};
 
         uint32_t &operator[](uint32_t key) {
             return this->buffer_map[key];
         }
 
         void bind(uint32_t key, const bicudo::ivec2 &buffer_info) {
-            uint32_t &buffer {this->buffer_map[0]};
+            uint32_t &buffer {this->buffer_map[key]};
             if (buffer == 0) {
                 glGenBuffers(1, &buffer);
             }
@@ -83,10 +83,6 @@ namespace bicudo {
             }
 
             glBindVertexArray(this->buffer_vao);
-
-            if (this->buffer_ebo != 0) {
-                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->buffer_ebo);
-            }
         }
 
         void revoke() const {
