@@ -20,6 +20,11 @@ void scene_starter::on_create() {
     t.revoke();
 
     glBindTexture(GL_TEXTURE_2D, t[2].buffer);
+
+    bicudo::feature<bicudo::rigid> *p_rigid {new bicudo::feature<bicudo::rigid>()};
+    p_rigid->content.size = {200, 200};
+    p_rigid->content.move(200, 200);
+    bicudo::kernel::p_core->service_physic_engine.add(p_rigid);
 }
 
 void scene_starter::on_destroy() {

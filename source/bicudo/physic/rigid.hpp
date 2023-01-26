@@ -6,6 +6,8 @@
 namespace bicudo {
     class rigid {
     public:
+        bool collided {};
+
         bicudo::vec2 position {};
         bicudo::vec2 velocity {};
         bicudo::vec2 acceleration {};

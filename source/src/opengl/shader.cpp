@@ -24,6 +24,16 @@ bicudo::shader::shader(std::string_view shading_name) {
     this->buffer_shader_program = glCreateProgram();
 }
 
+void bicudo::shader::set_uniform_mat4(const std::string &uniform_name, const float *p_data) {
+    int32_t &location {this->shader_location_map[uniform_name] == 0 ? (this->shader_location_map[uniform_name] = glGetUniformLocation(this->buffer_shader_program, uniform_name.c_str())) : this->shader_location_map[uniform_name]};
+    glUniformMatrix4fv(location, 1, GL_FALSE, p_data);
+}
+
+void bicudo::shader::set_uniform_vec4(const std::string &uniform_name, const float *p_data) {
+    int32_t &location {this->shader_location_map[uniform_name] == 0 ? (this->shader_location_map[uniform_name] = glGetUniformLocation(this->buffer_shader_program, uniform_name.c_str())) : this->shader_location_map[uniform_name]};
+    glUniform4fv(location, 1, p_data);
+}
+
 bool bicudo::createshader(bicudo::shader *&p_shader, const std::vector<bicudo::shading> &shading_list) {
     if (shading_list.empty()) {
         return bicudo::exception("Invalid shading list, empty.");

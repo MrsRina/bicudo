@@ -14,7 +14,7 @@ namespace bicudo {
 
     class shader {
     protected:
-        std::map<std::string, uint32_t> shader_location_map {};
+        std::map<std::string, int32_t> shader_location_map {};
     public:
         explicit shader();
         explicit shader(std::string_view shading_name);
@@ -25,6 +25,9 @@ namespace bicudo {
 
         void invoke() const;
         void revoke() const;
+
+        void set_uniform_mat4(const std::string &name, const float *p_data);
+        void set_uniform_vec4(const std::string &name, const float *p_data);
     };
 
     bool createshader(bicudo::shader *&p_shader, const std::vector<bicudo::shading> &shading_list);

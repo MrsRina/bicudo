@@ -107,8 +107,8 @@ namespace bicudo {
             this->y = _y;
         }
 
-        inline float *operator[](uint8_t index) {
-            return &(this->data[index]);
+        inline float &operator[](uint8_t index) {
+            return this->data[index];
         }
     } vec2;
 
@@ -121,8 +121,8 @@ namespace bicudo {
             float data[3] {};
         };
 
-        float *operator[](uint8_t index) {
-            return &(this->data[index]);
+        inline float &operator[](uint8_t index) {
+            return this->data[index];
         }
     } vec3;
 
@@ -135,8 +135,8 @@ namespace bicudo {
             float data[4] {};
         };
 
-        float *operator[](uint8_t index) {
-            return &(this->data[index]);
+        inline float &operator[](uint8_t index) {
+            return this->data[index];
         }
     } vec4;
 
@@ -149,8 +149,8 @@ namespace bicudo {
             int32_t data[2] {};
         };
 
-        int32_t *operator[](uint8_t index) {
-            return &(this->data[index]);
+        inline int32_t &operator[](uint8_t index) {
+            return this->data[index];
         }
     } ivec2;
 
@@ -163,8 +163,8 @@ namespace bicudo {
             int32_t data[3] {};
         };
 
-        int32_t *operator[](uint8_t index) {
-            return &(this->data[index]);
+        inline int32_t &operator[](uint8_t index) {
+            return this->data[index];
         }
     } ivec3;
 
@@ -177,8 +177,8 @@ namespace bicudo {
             int32_t data[4] {};
         };
 
-        int32_t *operator[](uint8_t index) {
-            return &(this->data[index]);
+        inline int32_t &operator[](uint8_t index) {
+            return this->data[index];
         }
     } ivec4;
 
@@ -322,9 +322,19 @@ namespace bicudo {
         return r;
     }
 
-    inline bicudo::mat4 perspective(const bicudo::mat4 &m, float left, float right, float bottom, float top) {
-        bicudo::mat4 r {1.0f};
-        return r;
+    inline bicudo::mat4 orthographic(float left, float right, float bottom, float top) {
+        const float near {-1.0f};
+        const float far {1.0f};
+        const float inv_z {1.0f / (far - near)};
+        const float inv_y {1.0f / (top - bottom)};
+        const float inv_x {1.0f / (right - left)};
+
+        return {
+            2.0f * inv_x, 0.0f, 0.0f, 0.0f,
+            0.0f, 2.0f * inv_y, 0.0f, 0.0f,
+            0.0f, 0.0f, -2.0f * inv_z, 0.0f,
+            -(right + left) * inv_x, -(top + bottom) * inv_y, -(far + near) * inv_z, 1.0f
+        };
     }
 
     inline bicudo::mat4 translate(bicudo::mat4 &m, bicudo::vec3 &p) {

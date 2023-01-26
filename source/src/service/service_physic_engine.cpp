@@ -1,6 +1,8 @@
 #include "bicudo/service/service_physic_engine.hpp"
 #include "bicudo/physic/physic_sat.hpp"
 #include "bicudo/opengl/opengl_context_overview.hpp"
+#include "bicudo/bicudo.hpp"
+#include "bicudo/util/priority.hpp"
 
 void bicudo::service_physic_engine::on_native_update() {
     /**
@@ -19,6 +21,7 @@ void bicudo::service_physic_engine::on_native_update() {
 
     for (int32_t accurate_iterations {}; accurate_iterations < 3; accurate_iterations++) {
         for (bicudo::feature<bicudo::rigid> *&p_feature_rigid_l : this->features) {
+            p_feature_rigid_l->content.collided = false;
             for (bicudo::feature<bicudo::rigid> *&p_feature_rigid_r : this->features) {
                 if (p_feature_rigid_l != p_feature_rigid_r && bicudo::checkcollision(p_feature_rigid_r->content, p_feature_rigid_l->content, this->collide_info)) {
                     this->process_displacement_resolution(p_feature_rigid_l->content, p_feature_rigid_r->content);
@@ -29,11 +32,42 @@ void bicudo::service_physic_engine::on_native_update() {
 }
 
 void bicudo::service_physic_engine::on_native_render() {
+    auto &display {bicudo::kernel::p_core->service_display.get_display(bicudo::stack::toplevel)};
+    bicudo::vec4 rect {};
+    bicudo::vec4 color {};
+    bicudo::mat4 perspective {bicudo::orthographic(0.0f, display.rect[2], display.rect[3], 0.0f)};
+    bicudo::mat4 model {};
 
+    this->buffer.invoke();
+    this->p_shader_debug->invoke();
+
+    for (bicudo::feature<bicudo::rigid> *&p_feature : this->features) {
+        model = bicudo::mat4(1.0f);
+        model = perspective * model;
+
+        rect.z = p_feature->content.size.x;
+        rect.w = p_feature->content.size.y;
+        rect.x = p_feature->content.position.x - (rect.z / 2);
+        rect.y = p_feature->content.position.y - (rect.w / 2);
+
+        this->p_shader_debug->set_uniform_vec4("Rectangle", &rect[0]);
+        this->p_shader_debug->set_uniform_mat4("MVP", &model[0][0]);
+
+        rect.z = 1.0f * !p_feature->content.collided;
+        rect.w = 0.0f;
+        rect.x = 1.0f * p_feature->content.collided;
+        rect.y = 1.0f;
+
+        this->p_shader_debug->set_uniform_vec4("Color", &rect[0]);
+        this->buffer.draw();
+    }
+
+    this->p_shader_debug->revoke();
+    this->buffer.revoke();
 }
 
 void bicudo::service_physic_engine::process_displacement_resolution(bicudo::rigid &r, bicudo::rigid &l) {
-
+    r.collided = true;
 }
 
 void bicudo::service_physic_engine::on_native_init() {
@@ -98,6 +132,7 @@ void bicudo::service_physic_engine::on_native_init() {
     /* Indexing rendering index mesh. */
     this->buffer.bind(2, {GL_ELEMENT_ARRAY_BUFFER, GL_UNSIGNED_BYTE});
     this->buffer.send<uint8_t>(sizeof(index) / sizeof(uint8_t), index, GL_STATIC_DRAW);
+    this->buffer.stride[0] = 6;
     this->buffer.revoke();
 }
 
