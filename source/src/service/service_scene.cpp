@@ -18,6 +18,12 @@ void bicudo::service_scene::add(bicudo::feature<bicudo::scene *> *p_feature) {
     bicudo::log("Just created 1 scene.");
 }
 
+void bicudo::service_scene::on_native_event(SDL_Event &sdl_event) {
+    if (this->p_current_scene != nullptr && this->p_current_scene->content != nullptr) {
+        this->p_current_scene->content->on_event(sdl_event);
+    }
+}
+
 void bicudo::service_scene::on_native_update() {
     if (this->p_current_scene != nullptr && this->p_current_scene->content != nullptr) {
         this->p_current_scene->content->on_update();

@@ -7,29 +7,15 @@
 void scene_starter::on_create() {
     scene::on_create();
 
-    bicudo::texturing t {};
-    t.invoke(0, {GL_TEXTURE_2D, GL_FLOAT});
-    t.send<float>({100, 100, 0}, nullptr, {GL_RGB32F, GL_RGB});
-    t.revoke();
-
-    t.invoke(1, {GL_TEXTURE_2D, GL_UNSIGNED_BYTE});
-    t.send<uint8_t>({60, 60, 0}, nullptr, {GL_R8UI, GL_RED_INTEGER});
-    t.revoke();
-
-    t.invoke(2, {GL_TEXTURE_2D, GL_FLOAT});
-    t.send<float>({50, 50, 0}, nullptr, {GL_RGBA32F, GL_RGBA});
-    t.revoke();
-
-    glBindTexture(GL_TEXTURE_2D, t[2].buffer);
-
     bicudo::feature<bicudo::rigid> *p_solid_rigid {new bicudo::feature<bicudo::rigid>()};
-    bicudo::kernel::p_core->service_physic_engine.add(p_solid_rigid);
+    bicudo::createrigid(p_solid_rigid);
 
     /* The ground rigid. */
     p_solid_rigid->content.resize(600, 100);
     p_solid_rigid->content.move(400, 700);
     p_solid_rigid->content.acceleration.y = 0.0f; // Remove gravity from rigid.
     p_solid_rigid->content.mass = 0.0f;
+    bicudo::kernel::p_core->service_physic_engine.update_mass(&p_solid_rigid->content, 0.0f);
 
     /* Use current time as seed for random generator. */
     std::srand(std::time(nullptr));
@@ -51,6 +37,10 @@ void scene_starter::on_create() {
 
 void scene_starter::on_destroy() {
     scene::on_destroy();
+}
+
+void scene_starter::on_event(SDL_Event &sdl_event) {
+    scene::on_event(sdl_event);
 }
 
 void scene_starter::on_update() {

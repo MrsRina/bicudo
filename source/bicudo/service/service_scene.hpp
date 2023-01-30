@@ -11,6 +11,7 @@ namespace bicudo {
     public:
         void add(bicudo::feature<bicudo::scene*> *p_feature) override;
 
+        void on_native_event(SDL_Event &sdl_event);
         void on_native_update();
         void on_native_render();
     };

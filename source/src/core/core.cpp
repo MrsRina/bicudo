@@ -39,11 +39,13 @@ int32_t bicudo::core::mainloop() {
                     this->running_mainloop = false;
                     break;
                 }
-                default: {
+                default: {                    
                     if (sdl_event.type == SDL_WINDOWEVENT && sdl_event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
                         display.rect[2] = sdl_event.window.data1;
                         display.rect[3] = sdl_event.window.data2;
                     }
+
+                    this->service_scene.on_native_event(sdl_event);
                     break;
                 }
             }

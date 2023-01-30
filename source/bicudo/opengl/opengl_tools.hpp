@@ -235,7 +235,8 @@ namespace bicudo {
 
             /* Get array data from texture. */
             data.resize(gpudata_texture.w * gpudata_texture.h * channel_size);
-            glGetTexImage(gpudata_texture.type, 0, gpudata_texture.channel, data.data());
+            glGetTexImage(gpudata_texture.type, 0, gpudata_texture.channel, gpudata_texture.primitive, data.data());
+            return data;
         }
     };
 
