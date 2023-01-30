@@ -106,12 +106,12 @@ Bicudo contains tools to work with OpenGL easy, the tools replace good part of a
 bicudo::texturing t {};
 /* First arg is the key name. */
 t.invoke(666, {GL_TEXTURE_2D, GL_FLOAT});
-t.send<float>({100, 100, 0}, nullptr, {GL_RGB32F, GL_RGB});
+t.send<float>({100, 100, 0}, nullptr, {GL_RGBA16F, GL_RGBA});
 t.revoke(); /* Remember to revoke (unbind texture etc). */
 
 bicudo::paralleling p {};
 p.memory_barrier = GL_ALL_BARRIER_BITS;
-p.dimension[0] = p.dimension[1] = 32;
+p.dimension[0] = p.dimension[1] = 100;
 p.work_groups[0] = p.work_groups[1] = p.work_groups[2] = 1;
     
 /* Remember to invoke and attach textures. */
@@ -119,7 +119,7 @@ p.invoke();
 p.attach(0, t[666], GL_READ_ONLY); // the shader from t!
 p.dispatch(); // run paralleling code.
 
-t.invoke(0, {GL_TEXTURE_2D, GL_FLOAT});
+t.invoke(666, {GL_TEXTURE_2D, GL_FLOAT});
 std::vector<float> raw_tex_data {};
 t.get<float>(raw_tex_data); // read the texture, remember to invoke the texture.
 t.revoke();
