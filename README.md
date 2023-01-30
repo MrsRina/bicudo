@@ -196,10 +196,14 @@ bicudo::normalize(a);
 bicudo::rotate(a, RAD2DEG(90.0f));
 bicudo::rotate(a, 0.0920399f, b); // center
 
-/* There is only multiplication and rotation. */
+/* There is only multiplication. */
 bicudo::mat4 c = bicudo::mat4(1.0f); // identity
 bicudo::mat4 d {1.0f};
 bicudo::mat4 e = c * d;
+
+bicudo::scale(e, {23.0f, 23.0f, 232.0f});
+bicudo::rotate(e, {0, 1, 0});
+bicudo::translate(e, {1.0, 4000.0f, 9999.0f});
 ```
 
 # Credits & License
