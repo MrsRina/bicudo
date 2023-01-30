@@ -159,6 +159,7 @@ p.revoke();
 bicudo::buffering b {};
 b.primitive[0] = GL_TRIANGLES;
 b.primitive[1] = GL_UNSIGNED_BYTE; // used to indexing rendering technique.
+/* Tiny note: set indices to stride[0] when rendering using index, the stride[1] is not necessary required so it can be zero. */
 b.stride[0] = 0; b.stride[1] = 3;
 
 b.invoke();
@@ -173,6 +174,32 @@ b.revoke();
 b.invoke();
 b.draw(); // uwu
 b.revoke();
+```
+
+The mathematical part is very fun!
+```c++
+bicudo::vec2 a = bicudo::vec2(00.0f, 0.03940492304f);
+bicudo::vec2 b {2.0f, 2.0f};
+
+/* basic arithmethic vectorial operations. */
+a = a * b + a - b * a;
+a += b;
+a -= b;
+a *= b;
+b /= 2.0f;
+a /= b; // yes it exists.
+a *= 2.0f; // scalar.
+
+bicudo::dot(a, b);
+bicudo::cross(a, b);
+bicudo::normalize(a);
+bicudo::rotate(a, RAD2DEG(90.0f));
+bicudo::rotate(a, 0.0920399f, b); // center
+
+/* There is only multiplication and rotation. */
+bicudo::mat4 c = bicudo::mat4(1.0f); // identity
+bicudo::mat4 d {1.0f};
+bicudo::mat4 e = c * d;
 ```
 
 # Credits & License
