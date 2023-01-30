@@ -120,15 +120,15 @@ bb += "\n"
 ""
 "void main() {\n"
 "   ivec2 pix = ivec2(gl_GlobalInvocationID.xy);\n"
-"   vec2 size = imageSize(uTexture)\n;"
+"   vec2 size = imageSize(uTexture);\n;"
 ""
 "   imageStore(uTexture, pix, vec4(size / gl_GlobalInvocation.x));\n"
 "}\n";
 
 bicudo::shader *p_shader {new bicudo::shader("hello word shader")};
 bicudo::createshader(p_shader, {
-    {bb, GL_COMPUTE_SHADER, true}
-    /*{"./data/effects/oioi.glsl.vert", GL_COMPUTE_SHADER}, # the last arg is to make path as shader resource. */
+    {bb, GL_COMPUTE_SHADER, true} // last arg to specify use path as shader source.
+    /*{"./data/effects/oioi.glsl.vert", GL_COMPUTE_SHADER}, */
 });
 
 bicudo::texturing t {};
