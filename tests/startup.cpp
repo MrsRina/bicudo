@@ -1,5 +1,6 @@
 #include <iostream>
 #include <bicudo/bicudo.hpp>
+#include <ctime>
 #include "starter.hpp"
 #include "bicudo/opengl/opengl_context_overview.hpp"
 
@@ -21,15 +22,31 @@ void scene_starter::on_create() {
 
     glBindTexture(GL_TEXTURE_2D, t[2].buffer);
 
-    bicudo::feature<bicudo::rigid> *p_rigid {new bicudo::feature<bicudo::rigid>()};
-    p_rigid->content.size = {200, 200};
-    p_rigid->content.move(200, 200);
-    bicudo::kernel::p_core->service_physic_engine.add(p_rigid);
+    bicudo::feature<bicudo::rigid> *p_solid_rigid {new bicudo::feature<bicudo::rigid>()};
+    bicudo::kernel::p_core->service_physic_engine.add(p_solid_rigid);
 
-    bicudo::feature<bicudo::rigid> *p_rigid_2 {new bicudo::feature<bicudo::rigid>()};
-    p_rigid_2->content.size = {200, 200};
-    p_rigid_2->content.move(401, 450);
-    bicudo::kernel::p_core->service_physic_engine.add(p_rigid_2);
+    /* The ground rigid. */
+    p_solid_rigid->content.resize(600, 100);
+    p_solid_rigid->content.move(400, 700);
+    p_solid_rigid->content.acceleration.y = 0.0f; // Remove gravity from rigid.
+    p_solid_rigid->content.mass = 0.0f;
+
+    /* Use current time as seed for random generator. */
+    std::srand(std::time(nullptr));
+    float randomic_number {};
+
+    /* generate some rigids to do physics testing. */
+    for (int32_t it {}; it < 500; it++) {
+        auto *p_feature_rigid {new bicudo::feature<bicudo::rigid>()};
+        auto &rigid {p_feature_rigid->content};
+        bicudo::createrigid(p_feature_rigid);
+
+        randomic_number = std::rand() % 100;
+        rigid.resize(randomic_number, randomic_number);
+
+        randomic_number = std::rand() % 600;
+        rigid.move(randomic_number, randomic_number);
+    }
 }
 
 void scene_starter::on_destroy() {

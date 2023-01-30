@@ -1,19 +1,35 @@
 #include "bicudo/physic/rigid.hpp"
 #include "bicudo/bicudo.hpp"
 
-void bicudo::rigid::move(float x, float y) {
-    float w {this->size.x / 2};
-    float h {this->size.y / 2};
+void bicudo::rigid::resize(float w, float h) {
+    this->size.x = w;
+    this->size.y = h;
 
-    /* Align the center position with size dimension of rigid rectangle. */
-    this->vertices[0].x = x - w;
-    this->vertices[0].y = y - h;
-    this->vertices[1].x = x + w;
-    this->vertices[1].y = y - h;
-    this->vertices[2].x = x + w;
-    this->vertices[2].y = y + h;
-    this->vertices[3].x = x - w;
-    this->vertices[3].y = y + h;
+    bicudo::vec2 const div = this->size / 2;
+    this->vertices[0].x = this->position.x - div.x;
+    this->vertices[0].y = this->position.y - div.y;
+    this->vertices[1].x = this->position.x + div.x;
+    this->vertices[1].y = this->position.y - div.y;
+    this->vertices[2].x = this->position.x + div.x;
+    this->vertices[2].y = this->position.y + div.y;
+    this->vertices[3].x = this->position.x - div.x;
+    this->vertices[3].y = this->position.y + div.y;
+
+    float const previous_angle {this->angular_angle};
+    this->angular_angle = 0.0f;
+    this->rotate(previous_angle);
+    this->update_inertia();
+}
+
+void bicudo::rigid::move(float x, float y) {
+    this->vertices[0].x += x ;
+    this->vertices[0].y += y ;
+    this->vertices[1].x += x ;
+    this->vertices[1].y += y ;
+    this->vertices[2].x += x ;
+    this->vertices[2].y += y ;
+    this->vertices[3].x += x ;
+    this->vertices[3].y += y ;
 
     /* Calculate the normals direction of all faces. */
     this->normals[0] = bicudo::normalize(this->vertices[0] - this->vertices[1]);
@@ -21,8 +37,8 @@ void bicudo::rigid::move(float x, float y) {
     this->normals[2] = bicudo::normalize(this->vertices[2] - this->vertices[3]);
     this->normals[3] = bicudo::normalize(this->vertices[3] - this->vertices[0]);
 
-    this->position.x = x;
-    this->position.y = y;
+    this->position.x += x;
+    this->position.y += y;
 }
 
 void bicudo::rigid::rotate(float angle) {
@@ -39,14 +55,23 @@ void bicudo::rigid::rotate(float angle) {
     this->normals[3] = bicudo::normalize(this->vertices[3] - this->vertices[0]);
 }
 
+void bicudo::rigid::update_inertia() {
+    if (this->mass == 0.0f) {
+        this->inertia = 0.0f;
+    } else {
+        this->inertia = (1.0f / this->mass) * (bicudo::magnitude(this->size)) / 12;
+        this->inertia = 1.0f / this->inertia;
+    }
+}
+
 void bicudo::rigid::on_update() {
-    float dt {bicudo::kernel::p_core->delta};
+    float  const  dt {bicudo::kernel::p_core->delta};
 
     this->velocity += this->acceleration * dt;
-    bicudo::vec2 motion {this->position + this->velocity * dt};
+    const bicudo::vec2 motion {this->velocity * dt};
     this->move(motion.x, motion.y);
 
     this->angular_velocity += this->angular_acceleration * dt;
-    float angular_motion {this->angular_angle + this->angular_velocity * dt};
+    const float angular_motion {this->angular_angle + this->angular_velocity * dt};
     this->rotate(angular_motion);
 }

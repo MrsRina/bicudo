@@ -4,7 +4,42 @@
 #include "bicudo/bicudo.hpp"
 #include "bicudo/util/priority.hpp"
 
+void bicudo::service_physic_engine::update_mass(bicudo::rigid *p_rigid, float delta) {
+    float mm {};
+    if (p_rigid->mass != 0) {
+        mm = 1.0f / p_rigid->mass;
+    }
+
+    mm += delta;
+    if (mm <= 0.0f) {
+        p_rigid->mass = 0.0f;
+        p_rigid->velocity = bicudo::vec2zero;
+        p_rigid->acceleration = bicudo::vec2zero;
+        p_rigid->angular_acceleration = bicudo::zero;
+    } else {
+        p_rigid->mass = 1.0f / mm;
+        p_rigid->acceleration = this->gravity;
+    }
+
+    p_rigid->update_inertia();
+}
+
+void bicudo::service_physic_engine::set_gravity(float x, float y) {
+    this->gravity.x = 0;
+    this->gravity.y = 0;
+}
+
+bicudo::vec2 bicudo::service_physic_engine::get_current_gravity() {
+    return this->gravity;
+}
+
 void bicudo::service_physic_engine::on_native_update() {
+    for (bicudo::feature<rigid> *&p_feature_rigid : this->features) {
+        if (p_feature_rigid != nullptr) {
+            p_feature_rigid->content.on_update();
+        }
+    }
+
     /**
      * IMPORTANT NOTES!!
      *
@@ -23,7 +58,7 @@ void bicudo::service_physic_engine::on_native_update() {
         for (bicudo::feature<bicudo::rigid> *&p_feature_rigid_l : this->features) {
             p_feature_rigid_l->content.collided = false;
             for (bicudo::feature<bicudo::rigid> *&p_feature_rigid_r : this->features) {
-                if (p_feature_rigid_l != p_feature_rigid_r && bicudo::checkcollision(p_feature_rigid_r->content, p_feature_rigid_l->content, this->collide_info)) {
+                if (p_feature_rigid_l != p_feature_rigid_r && bicudo::checkcollision(p_feature_rigid_l->content, p_feature_rigid_r->content, this->collide_info)) {
                     this->process_displacement_resolution(p_feature_rigid_l->content, p_feature_rigid_r->content);
                 }
             }
@@ -67,8 +102,119 @@ void bicudo::service_physic_engine::on_native_render() {
     this->buffer.revoke();
 }
 
-void bicudo::service_physic_engine::process_displacement_resolution(bicudo::rigid &r, bicudo::rigid &l) {
-    r.collided = true;
+void bicudo::service_physic_engine::add(bicudo::feature<bicudo::rigid> *p_feature) {
+    service::add(p_feature);
+
+    p_feature->content.acceleration = this->gravity;
+    this->update_mass(&p_feature->content, p_feature->content.mass);
+}
+
+void bicudo::service_physic_engine::process_displacement_resolution(bicudo::rigid &l, bicudo::rigid &r) {
+    l.collided = true;
+    if (ASSERT_FLOAT(l.mass, 0.0f)  && ASSERT_FLOAT(r.mass, 0.0f)) {
+        return;
+    }
+
+    /* The distance is divided by the sum of mass.*/
+    float accuracy = this->collide_info.distance / (l.mass + r.mass);
+    bicudo::vec2 force {this->collide_info.normal * accuracy};
+
+    l.move(force.x * -l.mass, force.y * -l.mass);
+    r.move(force.x * r.mass, force.y * r.mass);
+
+    switch (l.rotatable) {
+        case true: {
+            bicudo::vec2 n {this->collide_info.normal};
+            bicudo::vec2 start {this->collide_info.start * (r.mass / (l.mass + r.mass))};
+            bicudo::vec2 end {this->collide_info.end * (l.mass / (l.mass + r.mass))};
+            bicudo::vec2 p {start + end};
+
+            /* Direction from contact point between position center. */
+            bicudo::vec2 ld {p - l.position};
+            bicudo::vec2 rd {p - r.position};
+
+            bicudo::vec2 lv {l.velocity + bicudo::vec2 {-1.0f * l.angular_velocity * ld.y, l.angular_velocity * ld.x}};
+            bicudo::vec2 rv {r.velocity + bicudo::vec2 {-1.0f * r.angular_velocity * rd.y, r.angular_velocity * rd.x}};
+
+            /* V as known relative velocity between the two rigids. */
+            bicudo::vec2 v {rv - lv};
+            float v_dot {bicudo::dot(v, n)};
+            if (v_dot > 0.0f) break;
+
+            float restitiution {std::min(l.restitution, r.restitution)};
+            float friction {std::min(l.friction, r.friction)};
+
+            float ld_cross {bicudo::cross(ld, n)};
+            float rd_cross {bicudo::cross(rd, n)};
+
+            float jn {
+                (-(1.0f + restitiution) * v_dot) / (l.mass + r.mass + ld_cross * ld_cross * l.inertia + rd_cross * rd_cross * r.inertia)
+            };
+            
+            force = n * jn;
+            l.velocity -= force * l.mass;
+            r.velocity += force * r.mass;
+
+            l.angular_velocity -= ld_cross * jn * l.inertia;
+            r.angular_velocity += rd_cross * jn * r.inertia;
+
+            bicudo::vec2 tangent {v - n * bicudo::dot(v, n)};
+            tangent = bicudo::normalize(tangent) * -1.0f;
+
+            float ld_cross_t {bicudo::cross(ld, tangent)};
+            float rd_cross_t {bicudo::cross(rd, tangent)};
+
+            float jt {
+                (-(1.0f + restitiution) * bicudo::dot(v, tangent) * friction) / (l.mass + r.mass + ld_cross_t * ld_cross_t + l.mass + rd_cross_t * rd_cross_t * r.inertia)
+            };
+
+            jt = jt > jn ? jn : jt;
+            tangent *= jt;
+
+            l.velocity -= force * l.mass;
+            r.velocity += force * r.mass;
+
+            l.angular_velocity -= ld_cross_t * jt * l.inertia;
+            r.angular_velocity += rd_cross_t * jt * r.inertia;
+            break;
+        }
+
+        default: {
+            bicudo::vec2 n {this->collide_info.normal};
+            bicudo::vec2 vl {l.velocity};
+            bicudo::vec2 vr {r.velocity};
+
+            /* V as known relative velocity between the two rigids. */
+            bicudo::vec2 v {vr - vl};
+
+            float v_dot {bicudo::dot(v, n)};
+            if (v_dot > 0.0f) break;
+
+            float restitution {std::min(l.restitution, r.restitution)};
+            float friction {std::min(l.friction, r.friction)};
+            float jn {
+                (-(1.0f + restitution) * v_dot) / (l.mass, r.mass)
+            };
+
+            force = n * jn;
+            l.velocity -= force * l.mass;
+            r.velocity += force * r.mass;
+
+            bicudo::vec2 tangent {v - n * v_dot};
+            tangent = bicudo::normalize(tangent) * -1.0f;
+            
+            float jt {
+                (-(1.0f + restitution) * bicudo::dot(v, tangent) * friction) / (l.mass + r.mass)
+            };
+            
+            jt = jt > jn ? jn : jt;
+            force = tangent * jt;
+
+            l.velocity -= force * l.mass;
+            r.velocity += force * r.mass;
+            break;
+        }
+    }
 }
 
 void bicudo::service_physic_engine::on_native_init() {

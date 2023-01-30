@@ -16,3 +16,7 @@ void bicudo::createdisplay(bicudo::feature<bicudo::display> *&p_feature) {
 void bicudo::createscene(bicudo::feature<bicudo::scene *> *&p_feature) {
     bicudo::kernel::p_core->service_scene.add(p_feature);
 }
+
+void bicudo::createrigid(bicudo::feature<bicudo::rigid> *&p_feature) {
+    bicudo::kernel::p_core->service_physic_engine.add(p_feature);
+}

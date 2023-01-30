@@ -18,16 +18,20 @@ int32_t bicudo::core::mainloop() {
     SDL_Event sdl_event {};
 
     uint64_t old_ticks {};
-    uint64_t current_ticks {};
+    uint64_t current_ticks {SDL_GetPerformanceCounter()};
+    uint64_t performance_frequency {1};
 
     glDisable(GL_DEPTH_TEST);
 
     while (this->running_mainloop) {
+        /* Delta time can not be a irrational number, or be, div by 0. */
         old_ticks = current_ticks;
         current_ticks = SDL_GetPerformanceCounter();
+        performance_frequency += SDL_GetPerformanceFrequency();
 
-        this->delta = static_cast<float>(current_ticks - old_ticks) / static_cast<float>(SDL_GetPerformanceFrequency());
+        this->delta = static_cast<float>(current_ticks - old_ticks) / static_cast<float>(performance_frequency);
         auto &display {this->service_display.get_display(bicudo::stack::toplevel)};
+        performance_frequency = 0;
 
         while (SDL_PollEvent(&sdl_event)) {
             switch (sdl_event.type) {

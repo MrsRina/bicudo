@@ -12,13 +12,19 @@ namespace bicudo {
         buffering buffer {};
         shader *p_shader_debug {};
         bicudo::collideinfo collide_info {};
+        bicudo::vec2 gravity {0, 90.0f};
     public:
+        void update_mass(bicudo::rigid *p_rigid, float delta);
+        void set_gravity(float x, float y);
+        bicudo::vec2 get_current_gravity();
+
         void on_native_init();
         void on_native_quit();
         void on_native_update();
         void on_native_render();
 
-        void process_displacement_resolution(bicudo::rigid &r, bicudo::rigid &l);
+        void add(bicudo::feature<bicudo::rigid> *p_feature) override;
+        void process_displacement_resolution(bicudo::rigid &l, bicudo::rigid &r);
     };
 }
 

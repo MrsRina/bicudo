@@ -115,7 +115,7 @@ namespace bicudo {
     typedef struct vec3 {
         union {
             struct {
-                float x, y, z;
+                float x,  y, z;
             };
 
             float data[3] {};
@@ -212,7 +212,15 @@ namespace bicudo {
     }
 
     inline bicudo::vec2 operator/(const bicudo::vec2 &l, float div) {
-        return {l.x / div, l.y / div};
+        float x = l.x;
+        float y = l.y;
+
+        if (div != 0.0f) {
+            x /= div;
+            y /= div;
+        }
+
+        return {x, y};
     }
 
     inline bool operator==(const bicudo::vec2 &l, const bicudo::vec2 &r) {
@@ -229,12 +237,12 @@ namespace bicudo {
     }
 
     inline bicudo::vec2 normalize(const bicudo::vec2 &l) {
-        float len {sqrtf(l.x * l.x + l.y * l.y)};
-        if (len != 0) {
-            len = 1.0f / len;
+        float mag {sqrtf(l.x * l.x + l.y * l.y)};
+        if (mag > 0) {
+            mag = 1.0f / mag;
         }
 
-        return {l.x * len, l.y * len};
+        return {l.x * mag, l.y * mag};
     }
 
     inline float magnitude(const bicudo::vec2 &l) {
@@ -242,7 +250,11 @@ namespace bicudo {
     }
 
     inline float dot(const bicudo::vec2 &l, const bicudo::vec2 &r) {
-        return l.x * r.x + l.x * r.x;
+        return l.x * r.x + l.y * r.y;
+    }
+
+    inline float cross(const bicudo::vec2 &l, const bicudo::vec2 &r) {
+        return l.x * r.y - l.y * r.x;
     }
 
     inline bicudo::vec2 rotate(const bicudo::vec2 &l, float angle) {
@@ -251,9 +263,9 @@ namespace bicudo {
     }
 
     inline bicudo::vec2 rotate(const bicudo::vec2 &vec, float angle, const bicudo::vec2 &center) {
-        bicudo::vec2 displacement {vec + center};
+        bicudo::vec2 displacement {vec - center};
         displacement = bicudo::rotate(displacement, angle);
-        return displacement - center;
+        return displacement + center;
     }
 
     inline bicudo::vec2 &operator/=(bicudo::vec2 &l, float div) {
@@ -273,7 +285,7 @@ namespace bicudo {
     }
 
     inline bicudo::vec2 &operator-=(bicudo::vec2 &l, const bicudo::vec2 &r) {
-        return (l = l + r);
+        return (l = l - r);
     }
 
     inline bicudo::vec2 &operator+=(bicudo::vec2 &l, const bicudo::vec2 &r) {
@@ -393,6 +405,17 @@ namespace bicudo {
     inline bicudo::mat4 &operator*=(bicudo::mat4 &m, const bicudo::mat4 &r) {
         return (m = m * r);
     }
+
+    /* Empty mathematical primitives. */
+    const static bicudo::vec2 vec2zero {0.0f, 0.0f};
+    const static bicudo::vec3 vec3zero {0.0f, 0.0f, 0.0f};
+    const static bicudo::vec4 vec4zero {0.0f, 0.0f, 0.0f, 0.0f};
+    
+    const static bicudo::mat2 mat2zero {0.0f, 0.0f, 0.0f, 0.0f};
+    const static bicudo::mat3 mat3zero {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
+    const static bicudo::mat4 mat4zero {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
+    
+    const float zero {0.0f};
 }
 
 #endif

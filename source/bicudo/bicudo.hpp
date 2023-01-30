@@ -17,6 +17,7 @@ namespace bicudo {
     void createcore(bicudo::core *&p_core);
     void createdisplay(bicudo::feature<bicudo::display> *&p_feature);
     void createscene(bicudo::feature<bicudo::scene*> *&p_feature);
+    void createrigid(bicudo::feature<bicudo::rigid> *&p_feautere);
 }
 
 #endif

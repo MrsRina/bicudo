@@ -7,51 +7,50 @@ void bicudo::changedir(bicudo::collideinfo &r) {
     r.end = l;
 }
 
-bool bicudo::findcollideinfo(bicudo::rigid &r, bicudo::rigid &l, bicudo::collideinfo &collide_info) {
-    bicudo::vec2 n {};
+bool bicudo::findcollideinfo(bicudo::rigid &l, bicudo::rigid &r, bicudo::collideinfo &collide_info) {
+    bicudo::vec2 normal {};
     bicudo::vec2 support_point {};
-    bicudo::vec2 dir {};
-    bicudo::vec2 vert {};
+    bicudo::vec2 direction {};
+    bicudo::vec2 point_edge {};
 
     float best_dist {99999};
     bool has_support {true};
-    bool had_support {};
 
     uint8_t i {};
     uint8_t best_index {};
     bicudo::supportinfo support_info {};
 
     while (has_support && i < 4) {
-        n = r.normals[i];
-        dir = n * -1.0f;
-        vert = r.vertices[i];
+        normal = l.normals[i];
+        direction = normal * -1.0f;
+        point_edge = l.vertices[i];
 
-        has_support = bicudo::checksupportpoint(l, dir, vert, support_info);
+        has_support = bicudo::checksupportpoint(r, direction, point_edge, support_info);
         if (has_support && support_info.distance < best_dist) {
             best_dist = support_info.distance;
             best_index = i;
-            had_support = has_support;
+            support_point = support_info.point;
         }
 
         i++;
     }
 
-    if (had_support) {
-        bicudo::vec2 best_normal {r.normals[best_index] * best_dist};
-        bicudo::setcollideinfo(collide_info, best_dist, r.normals[best_index], support_point + best_normal);
+    if (has_support) {
+        normal = l.normals[best_index] * best_dist;
+        bicudo::setcollideinfo(collide_info, best_dist, l.normals[best_index], support_point + normal);
     }
 
-    return had_support;
+    return has_support;
 }
 
-bool bicudo::checksupportpoint(bicudo::rigid &r, bicudo::vec2 &direction_projection, bicudo::vec2 &vertex_projected, bicudo::supportinfo &support_info) {
+bool bicudo::checksupportpoint(bicudo::rigid &l, bicudo::vec2 &direction_projection, bicudo::vec2 &vertex_projected, bicudo::supportinfo &support_info) {
     bicudo::vec2 edge {};
     float proj {};
 
     support_info.distance = -99999.0f;
     bool flag {};
 
-    for (bicudo::vec2 &vertex : r.vertices) {
+    for (bicudo::vec2 &vertex : l.vertices) {
         edge = vertex - vertex_projected;
         proj = bicudo::dot(edge, direction_projection);
 
@@ -72,9 +71,9 @@ void bicudo::setcollideinfo(bicudo::collideinfo &collide_info, float distance, c
     collide_info.end = s + n * distance;
 }
 
-bool bicudo::checkcollision(bicudo::rigid &r, bicudo::rigid &l, bicudo::collideinfo &collide_info) {
+bool bicudo::checkcollision(bicudo::rigid &l, bicudo::rigid &r, bicudo::collideinfo &collide_info) {
     bicudo::collideinfo collides_info[2] {};
-    if (!bicudo::findcollideinfo(r, l, collides_info[0]) || !bicudo::findcollideinfo(r, l, collides_info[1])) {
+    if (!bicudo::findcollideinfo(l, r, collides_info[0]) || !bicudo::findcollideinfo(r, l, collides_info[1])) {
         return false;
     }
 
