@@ -113,6 +113,25 @@ int32_t main(int32_t, char**) {
 GPU and OpenGL are pretty cool, but require some time to understand how do high-parallel-performance softwares.  
 Bicudo contains tools to work with OpenGL easy, the tools replace good part of amount GL calls to compile buffers into GPU.
 ```c++
+std::string bb {bicudo::gl_shading_version};
+bb += "\n"
+"layout (local_size_x = 1, local_size_y = 1) in;\n"
+"layout (location = 0, rgba16f) in image2D uTexture;\n"
+""
+""
+"void main() {\n"
+"   ivec2 pix = ivec2(gl_GlobalInvocationID.xy);\n"
+"   vec2 size = imageSize(uTexture)\n;"
+""
+"   imageStore(uTexture, pix, vec4(size / gl_GlobalInvocation.x));\n"
+"}\n";
+
+bicudo::shader *p_shader {new bicudo::shader("hello word shader")};
+bicudo::createshader(p_shader, {
+    {bb, GL_COMPUTE_SHADER, true}
+    /*{"./data/effects/oioi.glsl.vert", GL_COMPUTE_SHADER}, # the last arg is to make path as shader resource. */
+});
+
 bicudo::texturing t {};
 /* First arg is the key name. */
 t.invoke(666, {GL_TEXTURE_2D, GL_FLOAT});
@@ -122,6 +141,7 @@ t.revoke(); /* Remember to revoke (unbind texture etc). */
 bicudo::paralleling p {};
 p.memory_barrier = GL_ALL_BARRIER_BITS;
 p.dimension[0] = p.dimension[1] = 100;
+p.p_shader = p_shader; /* Link the shader before call invoke. */
 p.work_groups[0] = p.work_groups[1] = p.work_groups[2] = 1;
     
 /* Remember to invoke and attach textures. */
