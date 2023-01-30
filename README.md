@@ -9,7 +9,8 @@ Renderer engine of Bicudo is made in API OpenGL 4.
 There is bicudo-1 version, but that version is deprecated, but I recommend you take a look in that branch.  
 Bicudo-3 physics engine is in progress.
 
-Third rewrite of Bicudo.
+There is many Bicudo's rewrite, this third version is better and use OFP (oriented feature programming).  
+Do not know what is OFP? Me no too, I created this coding style as you can see, I hope you like it. ;)
 
 ---
 
@@ -145,8 +146,6 @@ b.invoke();
 b.draw(); // uwu
 b.revoke();
 ```
-
-And is it!, I rewrited many times sorry. Bye!
 
 # Credits & License
 
