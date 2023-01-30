@@ -4,13 +4,18 @@ Bicudo is one framework to create 2D games, the first version has no GPU acceler
 The purpose of creating this framework is not only to make games but learn physics, multi-threading & parallel tasks.
 
 Physics use the concept of SAT (separation axis theorem) to compute displacement of collisions.
-Renderer engine of Bicudo is made in API OpenGL 4.
+Renderer engine of Bicudo is made in API OpenGL 4 and use SDL to handle native window & physcal devices input.
 
 There is bicudo-1 version, but that version is deprecated, but I recommend you take a look in that branch.  
-Bicudo-3 physics engine is in progress.
-
 There is many Bicudo's rewrite, this third version is better and use OFP (oriented feature programming).  
 Do not know what is OFP? Me no too, I created this coding style as you can see, I hope you like it. ;)
+
+Mainly features:
+* Multi-threading. (?).
+* GPU accelerated (rendering).
+* GPU tools to work easy with OpenGL.
+* Mathematical API library.
+* Built on SDL.
 
 ---
 
@@ -63,6 +68,10 @@ void scene_starter::on_create() {
 
 void scene_starter::on_destroy() {
     scene::on_destroy();
+}
+
+void scene_starter::on_event(SDL_Event &sdl_event) {
+    scene::on_event(sdl_event);
 }
 
 void scene_starter::on_update() {
