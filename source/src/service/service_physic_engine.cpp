@@ -76,9 +76,16 @@ void bicudo::service_physic_engine::on_native_render() {
     this->p_shader_debug->invoke();
     this->buffer.invoke();
 
+    bicudo::vec3 center {};
+
     for (bicudo::feature<bicudo::rigid> *&p_feature : this->features) {
+        center.x = p_feature->content.position.x + p_feature->content.size.x / 2;
+        center.y = p_feature->content.position.y + p_feature->content.size.y / 2;
+
         model = bicudo::mat4(1.0f);
-        model = bicudo::rotate(model, p_feature->content.angular_angle, {0, 0, 1});
+        model = bicudo::translate(model, {0, -1.0f, 0});
+        //model = bicudo::rotate(model, p_feature->content.angular_angle, {0, 0, 1});
+        //model = bicudo::translate(model, -center);
         model = perspective * model;
 
         rect.z = p_feature->content.size.x;
@@ -86,15 +93,15 @@ void bicudo::service_physic_engine::on_native_render() {
         rect.x = p_feature->content.position.x - (rect.z / 2);
         rect.y = p_feature->content.position.y - (rect.w / 2);
 
-        this->p_shader_debug->set_uniform_vec4("Rectangle", &rect[0]);
-        this->p_shader_debug->set_uniform_mat4("MVP", &model[0][0]);
+        this->p_shader_debug->set_uniform_vec4("u_Rectangle", &rect[0]);
+        this->p_shader_debug->set_uniform_mat4("u_PerspectiveModel", &model[0][0]);
 
         color.x = 1.0f * p_feature->content.collided;
         color.y = 0.0f;
         color.z = 1.0f * !p_feature->content.collided;
         color.w = 1.0f;
 
-        this->p_shader_debug->set_uniform_vec4("Color", &color[0]);
+        this->p_shader_debug->set_uniform_vec4("u_Color", &color[0]);
         this->buffer.draw();
     }
 
@@ -232,33 +239,33 @@ void bicudo::service_physic_engine::on_native_init() {
 
     std::string vsh {bicudo::gl_shading_version};
     vsh += "\n"
-           "layout (location = 0) in vec2 VertexPos;\n"
-           "layout (location = 1) in vec2 VertexTexCoords;\n"
+           "layout (location = 0) in vec2 a_Pos;\n"
+           "layout (location = 1) in vec2 a_TexCoord;\n"
            ""
-           "uniform mat4 MVP;\n"
-           "uniform vec4 Rectangle;\n"
+           "uniform mat4 u_PerspectiveModel;\n"
+           "uniform vec4 u_Rectangle;\n"
            ""
-           "out vec4 Rect;\n"
-           "out vec2 TexCoords;\n"
+           "out vec4 v_Rect;\n"
+           "out vec2 v_TexCoord;\n"
            ""
            "void main() {\n"
-           "    gl_Position = MVP * vec4((VertexPos * Rectangle.zw) + Rectangle.xy, 0.0f, 1.0f);\n"
-           "    Rect = Rectangle;\n"
-           "    TexCoords = VertexTexCoords;\n"
+           "    gl_Position = (u_PerspectiveModel * vec4(a_Pos * u_Rectangle.zw + u_Rectangle.xy, 0.0f, 1.0f));\n"
+           "    v_Rect = u_Rectangle;\n"
+           "    v_TexCoord = a_TexCoord;\n"
            "}\n";
 
     std::string fsh {bicudo::gl_shading_version};
     fsh += "\n"
-           "layout (location = 0) out vec4 FragColor;\n"
+           "layout (location = 0) out vec4 a_FragColor;\n"
            ""
-           "in vec2 Rect;\n"
-           "in vec2 TexCoords;\n"
+           "in vec2 v_Rect;\n"
+           "in vec2 v_TexCoords;\n"
            ""
-           "uniform vec4 Color;\n"
+           "uniform vec4 u_Color;\n"
            ""
            "void main() {\n"
-           "    vec4 sum = Color;\n"
-           "    FragColor = sum;\n"
+           "    vec4 sum = u_Color;\n"
+           "    a_FragColor = sum;\n"
            "}\n";
 
     this->p_shader_debug = new bicudo::shader("physic.debug");

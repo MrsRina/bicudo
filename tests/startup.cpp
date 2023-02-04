@@ -22,7 +22,7 @@ void scene_starter::on_create() {
     float randomic_number {};
 
     /* generate some rigids to do physics testing. */
-    for (int32_t it {}; it < 500; it++) {
+    for (int32_t it {}; it < 2; it++) {
         auto *p_feature_rigid {new bicudo::feature<bicudo::rigid>()};
         auto &rigid {p_feature_rigid->content};
         bicudo::createrigid(p_feature_rigid);
