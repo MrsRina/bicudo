@@ -22,7 +22,7 @@ void scene_starter::on_create() {
     float randomic_number {};
 
     /* generate some rigids to do physics testing. */
-    for (int32_t it {}; it < 2; it++) {
+    for (int32_t it {}; it < 0; it++) {
         auto *p_feature_rigid {new bicudo::feature<bicudo::rigid>()};
         auto &rigid {p_feature_rigid->content};
         bicudo::createrigid(p_feature_rigid);
@@ -34,14 +34,16 @@ void scene_starter::on_create() {
         rigid.move(randomic_number, randomic_number);
     }
 
-    bicudo::gpufeature *p_gpu_feature = new bicudo::gpubuffer();
+    bicudo::gpufeature *p_gpu_feature = this->gpu_feature_vector.emplace_back(new bicudo::gpudynamicbatch());
     bicudo::mesh mesh {};
 
-    mesh.append_float(bicudo::layout::position, {2.0f, 2.0f});
-    mesh.append_float(bicudo::layout::position, {2.0f, 20.0f});
+    mesh.begin(0);
+    mesh.append_float(bicudo::layout::position, {0.1f, 0.0f});
+    mesh.append_float(bicudo::layout::position, {1.0f, -1.0f});
 
     p_gpu_feature->set_mesh(mesh);
     p_gpu_feature->set_primitive(bicudo::primitive::lines);
+    p_gpu_feature->set_draw_stride(2, 0);
 }
 
 void scene_starter::on_destroy() {
@@ -58,6 +60,12 @@ void scene_starter::on_update() {
 
 void scene_starter::on_render() {
     scene::on_render();
+
+    for (bicudo::gpufeature *&p_gpu_feature : this->gpu_feature_vector) {
+        p_gpu_feature->invoke();
+        p_gpu_feature->draw();
+        p_gpu_feature->revoke();
+    }
 }
 
 int32_t main(int32_t, char**) {
