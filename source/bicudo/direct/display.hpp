@@ -13,7 +13,7 @@ namespace bicudo {
         float opacity {1.0f};
         int32_t rect[4] {SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 0, 0};
         uint32_t flags {};
-
+    public:
         SDL_Window *&root();
         void on_update();
     };

@@ -1,5 +1,5 @@
 #include "bicudo/bicudo.hpp"
-#include "bicudo/opengl/opengl_context_overview.hpp"
+#include "bicudo/opengl/openglcontextoverview.hpp"
 
 bicudo::core *bicudo::kernel::p_core {};
 

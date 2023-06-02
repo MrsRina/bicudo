@@ -1,7 +1,7 @@
-#include "bicudo/service/service_scene.hpp"
+#include "bicudo/service/servicescene.hpp"
 #include "bicudo/util/logger.hpp"
 
-void bicudo::service_scene::add(bicudo::feature<bicudo::scene *> *p_feature) {
+void bicudo::servicescene::add(bicudo::feature<bicudo::scene *> *p_feature) {
     if (p_feature == nullptr) {
         return;
     }
@@ -18,19 +18,19 @@ void bicudo::service_scene::add(bicudo::feature<bicudo::scene *> *p_feature) {
     bicudo::log("Just created 1 scene.");
 }
 
-void bicudo::service_scene::on_native_event(SDL_Event &sdl_event) {
+void bicudo::servicescene::on_native_event(SDL_Event &sdl_event) {
     if (this->p_current_scene != nullptr && this->p_current_scene->content != nullptr) {
         this->p_current_scene->content->on_event(sdl_event);
     }
 }
 
-void bicudo::service_scene::on_native_update() {
+void bicudo::servicescene::on_native_update() {
     if (this->p_current_scene != nullptr && this->p_current_scene->content != nullptr) {
         this->p_current_scene->content->on_update();
     }
 }
 
-void bicudo::service_scene::on_native_render() {
+void bicudo::servicescene::on_native_render() {
     if (this->p_current_scene != nullptr && this->p_current_scene->content != nullptr) {
         this->p_current_scene->content->on_render();
     }

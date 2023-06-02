@@ -1,4 +1,4 @@
-#include "bicudo/physic/physic_sat.hpp"
+#include "bicudo/physic/physicsat.hpp"
 
 void bicudo::changedir(bicudo::collideinfo &r) {
     r.normal *= -1.0f;

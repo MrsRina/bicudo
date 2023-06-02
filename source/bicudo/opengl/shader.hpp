@@ -21,10 +21,11 @@ namespace bicudo {
         ~shader();
 
         std::string name {};
-        uint32_t buffer_shader_program {};
+        uint32_t program_buffer_name_object {};
 
         void invoke() const;
         void revoke() const;
+        void fill_uniforms();
 
         void set_uniform_mat4(const std::string &name, const float *p_data);
         void set_uniform_vec4(const std::string &name, const float *p_data);

@@ -1,10 +1,10 @@
-#include "bicudo/service/service_physic_engine.hpp"
-#include "bicudo/physic/physic_sat.hpp"
-#include "bicudo/opengl/opengl_context_overview.hpp"
+#include "bicudo/service/servicephysicengine.hpp"
+#include "bicudo/physic/physicsat.hpp"
+#include "bicudo/opengl/openglcontextoverview.hpp"
 #include "bicudo/bicudo.hpp"
 #include "bicudo/util/priority.hpp"
 
-void bicudo::service_physic_engine::update_mass(bicudo::rigid *p_rigid, float delta) {
+void bicudo::servicephysicengine::update_mass(bicudo::rigid *p_rigid, float delta) {
     float mm {};
     if (p_rigid->mass != 0) {
         mm = 1.0f / p_rigid->mass;
@@ -24,16 +24,16 @@ void bicudo::service_physic_engine::update_mass(bicudo::rigid *p_rigid, float de
     p_rigid->update_inertia();
 }
 
-void bicudo::service_physic_engine::set_gravity(float x, float y) {
+void bicudo::servicephysicengine::set_gravity(float x, float y) {
     this->gravity.x = 0;
     this->gravity.y = 0;
 }
 
-bicudo::vec2 bicudo::service_physic_engine::get_current_gravity() {
+bicudo::vec2 bicudo::servicephysicengine::get_current_gravity() {
     return this->gravity;
 }
 
-void bicudo::service_physic_engine::on_native_update() {
+void bicudo::servicephysicengine::on_native_update() {
     for (bicudo::feature<rigid> *&p_feature_rigid : this->features) {
         if (p_feature_rigid != nullptr) {
             p_feature_rigid->content.on_update();
@@ -66,26 +66,27 @@ void bicudo::service_physic_engine::on_native_update() {
     }
 }
 
-void bicudo::service_physic_engine::on_native_render() {
+void bicudo::servicephysicengine::on_native_render() {
     auto &display {bicudo::kernel::p_core->service_display.get_display(bicudo::stack::toplevel)};
     bicudo::vec4 rect {};
     bicudo::vec4 color {};
-    bicudo::mat4 perspective {bicudo::orthographic(0.0f, display.rect[2], display.rect[3], 0.0f)};
+    bicudo::mat4 perspective {bicudo::orthographic(0.0f, static_cast<float>(display.rect[2]), static_cast<float>(display.rect[3]), 0.0f)};
     bicudo::mat4 model {};
 
     this->p_shader_debug->invoke();
     this->buffer.invoke();
 
     bicudo::vec3 center {};
+    angle += 0.1f;
 
     for (bicudo::feature<bicudo::rigid> *&p_feature : this->features) {
-        center.x = p_feature->content.position.x + p_feature->content.size.x / 2;
-        center.y = p_feature->content.position.y + p_feature->content.size.y / 2;
+        center.x = p_feature->content.position.x + (p_feature->content.size.x / 2);
+        center.y = p_feature->content.position.y + (p_feature->content.size.y / 2);
 
         model = bicudo::mat4(1.0f);
-        model = bicudo::translate(model, {0, -1.0f, 0});
-        //model = bicudo::rotate(model, p_feature->content.angular_angle, {0, 0, 1});
-        //model = bicudo::translate(model, -center);
+        model = bicudo::translate(model, center);
+        model = bicudo::rotate(model, p_feature->content.angular_angle, {0, 0, 1});
+        model = bicudo::translate(model, -center);
         model = perspective * model;
 
         rect.z = p_feature->content.size.x;
@@ -93,15 +94,15 @@ void bicudo::service_physic_engine::on_native_render() {
         rect.x = p_feature->content.position.x - (rect.z / 2);
         rect.y = p_feature->content.position.y - (rect.w / 2);
 
-        this->p_shader_debug->set_uniform_vec4("u_Rectangle", &rect[0]);
-        this->p_shader_debug->set_uniform_mat4("u_PerspectiveModel", &model[0][0]);
+        this->p_shader_debug->set_uniform_vec4("uRect", &rect[0]);
+        this->p_shader_debug->set_uniform_mat4("uProjectionModel", &model[0][0]);
 
         color.x = 1.0f * p_feature->content.collided;
         color.y = 0.0f;
         color.z = 1.0f * !p_feature->content.collided;
         color.w = 1.0f;
 
-        this->p_shader_debug->set_uniform_vec4("u_Color", &color[0]);
+        this->p_shader_debug->set_uniform_vec4("uColor", &color[0]);
         this->buffer.draw();
     }
 
@@ -109,14 +110,14 @@ void bicudo::service_physic_engine::on_native_render() {
     this->buffer.revoke();
 }
 
-void bicudo::service_physic_engine::add(bicudo::feature<bicudo::rigid> *p_feature) {
+void bicudo::servicephysicengine::add(bicudo::feature<bicudo::rigid> *p_feature) {
     service::add(p_feature);
 
     p_feature->content.acceleration = this->gravity;
     this->update_mass(&p_feature->content, p_feature->content.mass);
 }
 
-void bicudo::service_physic_engine::process_displacement_resolution(bicudo::rigid &l, bicudo::rigid &r) {
+void bicudo::servicephysicengine::process_displacement_resolution(bicudo::rigid &l, bicudo::rigid &r) {
     l.collided = true;
     if (ASSERT_FLOAT(l.mass, 0.0f)  && ASSERT_FLOAT(r.mass, 0.0f)) {
         return;
@@ -224,7 +225,7 @@ void bicudo::service_physic_engine::process_displacement_resolution(bicudo::rigi
     }
 }
 
-void bicudo::service_physic_engine::on_native_init() {
+void bicudo::servicephysicengine::on_native_init() {
     float mesh[8] {
         0.0f, 0.0f,
         1.0f, 0.0f,
@@ -239,33 +240,33 @@ void bicudo::service_physic_engine::on_native_init() {
 
     std::string vsh {bicudo::gl_shading_version};
     vsh += "\n"
-           "layout (location = 0) in vec2 a_Pos;\n"
-           "layout (location = 1) in vec2 a_TexCoord;\n"
+           "layout (location = 0) in vec2 aPos;\n"
+           "layout (location = 1) in vec2 aTexCoord;\n"
            ""
-           "uniform mat4 u_PerspectiveModel;\n"
-           "uniform vec4 u_Rectangle;\n"
+           "uniform mat4 uProjectionModel;\n"
+           "uniform vec4 uRect;\n"
            ""
-           "out vec4 v_Rect;\n"
-           "out vec2 v_TexCoord;\n"
+           "out vec4 vRect;\n"
+           "out vec2 vTexCoord;\n"
            ""
            "void main() {\n"
-           "    gl_Position = (u_PerspectiveModel * vec4(a_Pos * u_Rectangle.zw + u_Rectangle.xy, 0.0f, 1.0f));\n"
-           "    v_Rect = u_Rectangle;\n"
-           "    v_TexCoord = a_TexCoord;\n"
+           "    gl_Position = (uProjectionModel * vec4(aPos * uRect.zw + uRect.xy, 0.0f, 1.0f));\n"
+           "    vRect = uRect;\n"
+           "    vTexCoord = aTexCoord;\n"
            "}\n";
 
     std::string fsh {bicudo::gl_shading_version};
     fsh += "\n"
-           "layout (location = 0) out vec4 a_FragColor;\n"
+           "layout (location = 0) out vec4 vFragColor;\n"
            ""
-           "in vec2 v_Rect;\n"
-           "in vec2 v_TexCoords;\n"
+           "in vec2 vRect;\n"
+           "in vec2 vTexCoord;\n"
            ""
-           "uniform vec4 u_Color;\n"
+           "uniform vec4 uColor;\n"
            ""
            "void main() {\n"
-           "    vec4 sum = u_Color;\n"
-           "    a_FragColor = sum;\n"
+           "    vec4 sum = uColor;\n"
+           "    vFragColor = sum;\n"
            "}\n";
 
     this->p_shader_debug = new bicudo::shader("physic.debug");
@@ -275,21 +276,19 @@ void bicudo::service_physic_engine::on_native_init() {
     this->buffer.invoke();
     this->buffer.primitive[0] = GL_TRIANGLES;
     this->buffer.bind(0, {GL_ARRAY_BUFFER, GL_FLOAT});
-    this->buffer.send<float>(sizeof(mesh) / sizeof(float), mesh, GL_STATIC_DRAW);
+    this->buffer.send<float>(sizeof(mesh), mesh, GL_STATIC_DRAW);
     this->buffer.attach(0, 2);
 
     /* Vertex texture coordinates layout binding. */
-    this->buffer.bind(1, {GL_ARRAY_BUFFER, GL_FLOAT});
-    this->buffer.send<float>(sizeof(mesh) / sizeof(float), mesh, GL_STATIC_DRAW);
     this->buffer.attach(1, 2);
 
     /* Indexing rendering index mesh. */
     this->buffer.bind(2, {GL_ELEMENT_ARRAY_BUFFER, GL_UNSIGNED_BYTE});
-    this->buffer.send<uint8_t>(sizeof(index) / sizeof(uint8_t), index, GL_STATIC_DRAW);
+    this->buffer.send<uint8_t>(sizeof(index), index, GL_STATIC_DRAW);
     this->buffer.stride[0] = 6;
     this->buffer.revoke();
 }
 
-void bicudo::service_physic_engine::on_native_quit() {
+void bicudo::servicephysicengine::on_native_quit() {
     this->buffer.delete_buffers();
 }

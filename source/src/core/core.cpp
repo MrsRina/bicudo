@@ -1,7 +1,7 @@
 #include "GL/glew.h"
 #include "bicudo/core/core.hpp"
 #include "bicudo/util/priority.hpp"
-#include "bicudo/opengl/opengl_context_overview.hpp"
+#include "bicudo/opengl/openglcontextoverview.hpp"
 
 void bicudo::core::on_native_init() {
     this->running_mainloop = true;

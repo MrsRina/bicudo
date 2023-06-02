@@ -3,16 +3,16 @@
 
 #include "../feature/feature.hpp"
 #include "../direct/display.hpp"
-#include "../service/service_display.hpp"
-#include "bicudo/service/service_scene.hpp"
-#include "bicudo/service/service_physic_engine.hpp"
+#include "../service/servicedisplay.hpp"
+#include "bicudo/service/servicescene.hpp"
+#include "bicudo/service/servicephysicengine.hpp"
 
 namespace bicudo {
     class core {
     public:
-        bicudo::service_display service_display {};
-        bicudo::service_scene service_scene {};
-        bicudo::service_physic_engine service_physic_engine {};
+        bicudo::servicedisplay service_display {};
+        bicudo::servicescene service_scene {};
+        bicudo::servicephysicengine service_physic_engine {};
 
         bool window_show {};
         bool running_mainloop {};
@@ -20,7 +20,7 @@ namespace bicudo {
 
         uint64_t capped_fps {};
         float delta {};
-
+    public:
         void on_native_init();
         void on_native_quit();
 

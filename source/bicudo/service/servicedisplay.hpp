@@ -5,7 +5,7 @@
 #include "../direct/display.hpp"
 
 namespace bicudo {
-    class service_display : public service<bicudo::display> {
+    class servicedisplay : public service<bicudo::display> {
     public:
         void add(bicudo::feature<bicudo::display> *p_feature) override;
         bicudo::display &get_display(uint32_t priority);

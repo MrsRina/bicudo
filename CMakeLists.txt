@@ -24,7 +24,7 @@ if (${ENABLE_TESTS})
     file(GLOB_RECURSE SOURCE_FILES "tests/*.cpp")
 
     project(bicudo_tests)
-    add_compile_options(-O3)
+    # add_compile_options(-O3)
 
     set(CMAKE_CXX_STANDARD 17)
     set(EXECUTABLE_OUTPUT_PATH ../build/tests)

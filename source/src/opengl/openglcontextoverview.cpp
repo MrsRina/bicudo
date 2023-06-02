@@ -1,4 +1,4 @@
-#include "bicudo/opengl/opengl_context_overview.hpp"
+#include "bicudo/opengl/openglcontextoverview.hpp"
 #include "GL/glew.h"
 #include "bicudo/util/logger.hpp"
 

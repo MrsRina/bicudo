@@ -5,7 +5,7 @@
 #include "../direct/scene.hpp"
 
 namespace bicudo {
-    class service_scene : public service<bicudo::scene*> {
+    class servicescene : public service<bicudo::scene*> {
     protected:
         bicudo::feature<bicudo::scene*> *p_current_scene {};
     public:

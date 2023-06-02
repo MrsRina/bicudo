@@ -1,5 +1,5 @@
 #include "bicudo/direct/display.hpp"
-#include "bicudo/opengl/opengl_context_overview.hpp"
+#include "bicudo/opengl/openglcontextoverview.hpp"
 #include "bicudo/util/logger.hpp"
 
 SDL_Window *&bicudo::display::root() {

@@ -40,7 +40,7 @@ void scene_starter::on_create() {
     scene::on_create();
 
     bicudo::feature<bicudo::rigid> *p_solid_rigid {new bicudo::feature<bicudo::rigid>()};
-    bicudo::kernel::p_core->service_physic_engine.add(p_solid_rigid);
+    bicudo::kernel::p_core->servicephysicengine.add(p_solid_rigid);
 
     /* The ground rigid. */
     p_solid_rigid->content.resize(600, 100);

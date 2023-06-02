@@ -3,16 +3,17 @@
 
 #include "../feature/service.hpp"
 #include "../physic/rigid.hpp"
-#include "../opengl/opengl_tools.hpp"
-#include "../physic/physic_sat.hpp"
+#include "../opengl/opengltools.hpp"
+#include "../physic/physicsat.hpp"
 
 namespace bicudo {
-    class service_physic_engine : public service<bicudo::rigid> {
+    class servicephysicengine : public service<bicudo::rigid> {
     protected:
         buffering buffer {};
         shader *p_shader_debug {};
         bicudo::collideinfo collide_info {};
         bicudo::vec2 gravity {0, 90.0f};
+        float angle {};
     public:
         void update_mass(bicudo::rigid *p_rigid, float delta);
         void set_gravity(float x, float y);

@@ -7,39 +7,59 @@
 
 #define ASSERT_FLOAT(x, y) (fabsf((x) - (y)) <= FLT_EPSILON * fmaxf(1.0f, fmaxf(fabsf(x), fabsf(y))))
 #define DEG2RAD(x) ((x) * 0.0174533f)
+#define PI 3.14159265358979323846
 
 namespace bicudo {
     typedef struct mat2 {
         union {
             struct {
-                float
-                i11, i12, i13,
-                i21, i22, i23;
+                float i11, i12,
+                      i21, i22;
             };
 
-            float data[4];
+            float data[4] {};
         };
 
-        inline float *operator[](int index) {
+        inline float *operator[](int32_t index) {
             return &(this->data[index * 2]);
         }
+
+        inline explicit mat2(float scale = 0.0f) :
+                i11(scale), i12(0.0f),
+                i21(0.0f), i22(scale) {};
+
+        inline mat2(float _11, float _12,
+                    float _21, float _22) :
+                i11(_11), i12(_12),
+                i21(_21), i22(_22) {};
     } mat2;
 
     typedef struct mat3 {
         union {
             struct {
-                float
-                i11, i12, i13,
-                i21, i22, i23,
-                i31, i32, i33;
+                float i11, i12, i13,
+                      i21, i22, i23,
+                      i31, i32, i33;
             };
 
-            float data[9];
+            float data[9] {};
         };
 
-        inline float *operator[](int index) {
+        inline float *operator[](int32_t index) {
             return &(this->data[index * 3]);
         }
+
+        inline explicit mat3(float scale = 0.0f) :
+                i11(scale), i12(0.0f), i13(0.0f),
+                i21(0.0f), i22(scale), i23(0.0f),
+                i31(0.0f), i32(0.0f), i33(scale) {};
+
+        inline mat3(float _11, float _12, float _13,
+                    float _21, float _22, float _23,
+                    float _31, float _32, float _33) :
+                i11(_11), i12(_12), i13(_13),
+                i21(_21), i22(_22), i23(_23),
+                i31(_31), i32(_32), i33(_33) {}
     } mat3;
 
     typedef struct mat4 {
@@ -55,41 +75,25 @@ namespace bicudo {
             float data[16] {};
         };
 
-        inline explicit mat4(float identity_value = 1.0f) {
-            this->i11 = identity_value;
-            this->i12 = 0;
-            this->i13 = 0;
-            this->i14 = 0;
-
-            this->i21 = 0;
-            this->i22 = identity_value;
-            this->i23 = 0;
-            this->i24 = 0;
-
-            this->i31 = 0;
-            this->i32 = 0;
-            this->i33 = identity_value;
-            this->i34 = 0;
-
-            this->i41 = 0;
-            this->i42 = 0;
-            this->i43 = 0;
-            this->i44 = identity_value;
+        inline float *operator[](int32_t index) {
+            return &(this->data[index * 4]);
         }
+
+        inline explicit mat4(float scale = 0.0f) :
+                    i11(scale), i12(0.0f), i13(0.0f), i14(0.0f),
+                    i21(0.0f), i22(scale), i23(0.0f), i24(0.0f),
+                    i31(0.0f), i32(0.0f), i33(scale), i34(0.0f),
+                    i41(0.0f), i42(0.0f), i43(0.0f), i44(scale) {};
 
         inline mat4(float _11, float _12, float _13, float _14,
                     float _21, float _22, float _23, float _24,
                     float _31, float _32, float _33, float _34,
-                    float _41, float _42, float _43, float _44) {
-            this->i11 = _11; this->i12 = _12; this->i13 = _13; this->i14 = _14;
-            this->i21 = _21; this->i22 = _22; this->i23 = _23; this->i24 = _24;
-            this->i31 = _31; this->i32 = _32; this->i33 = _33; this->i34 = _34;
-            this->i41 = _41; this->i42 = _42; this->i43 = _43; this->i44 = _44;
-        }
+                    float _41, float _42, float _43, float _44) :
 
-        inline float *operator[](int index) {
-            return &(this->data[index * 4]);
-        }
+                    i11(_11), i12(_12), i13(_13), i14(_14),
+                    i21(_21), i22(_22), i23(_23), i24(_24),
+                    i31(_31), i32(_32), i33(_33), i34(_34),
+                    i41(_41), i42(_42), i43(_43), i44(_44) {}
     } mat4;
 
     typedef struct vec2 {
@@ -101,15 +105,12 @@ namespace bicudo {
             float data[2] {};
         };
 
-        explicit inline vec2() = default;
-        inline vec2(float _x, float _y) {
-            this->x = _x;
-            this->y = _y;
-        }
-
-        inline float &operator[](int index) {
+        float &operator[](int32_t index) {
             return this->data[index];
         }
+
+        inline vec2() : x(0.0f), y(0.0f) {}
+        inline vec2(float _x, float _y) : x(_x), y(_y) {}
     } vec2;
 
     typedef struct vec3 {
@@ -121,30 +122,32 @@ namespace bicudo {
             float data[3] {};
         };
 
-        explicit inline vec3() = default;
-        inline vec3(float _x, float _y, float _z) {
-            this->x = _x;
-            this->y = _y;
-            this->z = _z;
-        }
-
-        inline float &operator[](int index) {
+        float &operator[](int32_t index) {
             return this->data[index];
         }
+
+        inline vec3() : x(0.0f), y(0.0f), z(0.0f) {}
+        inline vec3(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {}
     } vec3;
 
     typedef struct vec4 {
         union {
             struct {
-                float x, y, z, w;
+                float x;
+                float y;
+                float z;
+                float w;
             };
 
             float data[4] {};
         };
 
-        inline float &operator[](int index) {
+        float &operator[](int32_t index) {
             return this->data[index];
         }
+
+        inline vec4() : x(0.0f), y(0.0f), z(0.0f), w(0.0f) {}
+        inline vec4(float _x, float _y, float _z, float _w) : x(_x), y(_y), z(_z), w(_w) {}
     } vec4;
 
     typedef struct ivec2 {
@@ -156,9 +159,12 @@ namespace bicudo {
             int32_t data[2] {};
         };
 
-        inline int32_t &operator[](int index) {
+        int32_t &operator[](int32_t index) {
             return this->data[index];
         }
+
+        inline ivec2() : x(0), y(0) {}
+        inline ivec2(int32_t _x, int32_t _y) : x(_x), y(_y) {}
     } ivec2;
 
     typedef struct ivec3 {
@@ -170,9 +176,12 @@ namespace bicudo {
             int32_t data[3] {};
         };
 
-        inline int32_t &operator[](int index) {
+        int32_t &operator[](int32_t index) {
             return this->data[index];
         }
+
+        inline ivec3() : x(0), y(0), z(0) {}
+        inline ivec3(int32_t _x, int32_t _y, int32_t _z) : x(_x), y(_y), z(_z) {}
     } ivec3;
 
     typedef struct ivec4 {
@@ -184,9 +193,12 @@ namespace bicudo {
             int32_t data[4] {};
         };
 
-        inline int32_t &operator[](int index) {
+        int32_t &operator[](int32_t index) {
             return this->data[index];
         }
+
+        inline ivec4() : x(0), y(0), z(0), w(0) {}
+        inline ivec4(int32_t _x, int32_t _y, int32_t _z) : x(_x), y(_y), z(_z), w(_z) {}
     } ivec4;
 
     /* Start of vec2 mathematical operators. */
@@ -245,11 +257,24 @@ namespace bicudo {
 
     inline bicudo::vec2 normalize(const bicudo::vec2 &l) {
         float mag {sqrtf(l.x * l.x + l.y * l.y)};
-        if (mag > 0) {
+        if (mag > 0.0f) {
             mag = 1.0f / mag;
         }
 
         return {l.x * mag, l.y * mag};
+    }
+
+    inline bicudo::vec3 normalize(const bicudo::vec3 &l) {
+        float mag {sqrtf(l.x * l.x + l.y * l.y + l.z * l.z)};
+        if (mag > 0.0f) {
+            mag = 1.0f / mag;
+        }
+
+        return {l.x * mag, l.y * mag, l.z * mag};
+    }
+
+    inline float magnitude(const bicudo::vec3 &l) {
+        return sqrtf(l.x * l.x + l.y * l.y + l.z * l.z);
     }
 
     inline float magnitude(const bicudo::vec2 &l) {
@@ -322,9 +347,9 @@ namespace bicudo {
             for (int32_t j {}; j < b_cols; ++j) {
                 p_out[b_cols * i + j] = 0.0f;
 
-                for (int32_t it {}; it < b_rows; ++it) {
-                    rr_a = a_cols * i + it;
-                    rr_b = b_cols * it + j;
+                for (int32_t k {}; k < b_rows; ++k) {
+                    rr_a = a_cols * i + k;
+                    rr_b = b_cols * k + j;
                     p_out[b_cols * i + j] += p_m_a[rr_a] * p_m_b[rr_b];
                 }
             }
@@ -340,7 +365,7 @@ namespace bicudo {
     }
 
     inline bicudo::mat4 operator*(const bicudo::mat4 &m_l, const bicudo::mat4 &m_r) {
-        bicudo::mat4 r {};
+        bicudo::mat4 r {1.0f};
         bicudo::multiply(r.data, m_l.data, 4, 4, m_r.data, 4, 4);
         return r;
     }
@@ -368,33 +393,26 @@ namespace bicudo {
         };
     }
 
-    inline bicudo::mat4 translate(const bicudo::mat4 &m, const bicudo::vec3 &p) {
-        bicudo::mat4 t {1.0f};
+    inline bicudo::mat4 translate(bicudo::mat4 &m, const bicudo::vec3 &p) {
+        m[3][0] += p.x;
+        m[3][1] += p.y;
+        m[3][2] += p.z;
 
-        // t[3][0] = t[0][0] * p.x + t[1][0] * p.y + t[2][0] * p.z + t[3][0];
-        // t[3][1] = t[0][1] * p.x + t[1][1] * p.y + t[2][1] * p.z + t[3][1];
-        // t[3][2] = t[0][2] * p.x + t[1][2] * p.y + t[2][2] * p.z + t[3][2];
-
-        t[3][0] = p.x;
-        t[3][1] = p.y;
-        t[3][2] = p.z;
-
-        return t * m;
+        return m;
     }
 
-    inline bicudo::mat4 scale(const bicudo::mat4 &m, const bicudo::vec3 &s) {
+    inline bicudo::mat4 scale(bicudo::mat4 &m, const bicudo::vec3 &s) {
         bicudo::mat4 t {1.0f};
 
-        t[0][0] = s.x;
-        t[1][1] = s.y;
-        t[2][2] = s.z;
+        t[0][3] *= s.x;
+        t[1][3] *= s.y;
+        t[2][3] *= s.z;
 
-        return t * m;
+        return m;
     }
 
     inline bicudo::mat4 rotate(float angle, const bicudo::vec3 &a) {
         bicudo::mat4 r {1.0f};
-        angle = DEG2RAD(angle);
 
         if (a.x != 0) {
             r[1][1] = cosf(angle);
@@ -416,9 +434,42 @@ namespace bicudo {
         return r;
     }
 
-    inline bicudo::mat4 rotate(const bicudo::mat4 &m, float angle, const bicudo::vec3 &a) {
-        bicudo::mat4 r {bicudo::rotate(angle, a)};
-        return r * m;
+    inline bicudo::mat4 rotate(bicudo::mat4 &m, float a, const bicudo::vec3 &axis) {
+//        float c {cosf(a)};
+//        float s {sinf(a)};
+//        float t {1.0f - c};
+
+//        bicudo::vec3 v {bicudo::normalize(axis)};
+
+//        float x {v.x};
+//        float y {v.y};
+//        float z {v.z};
+
+//        bicudo::mat4 r {
+//            t*(x*x) + c, t*x*y + s*z, t*x*z - s*y, 0.0f,
+//            t*x*y - s*z, t*(y*y) + c, t*y*z + s*x, 0.0f,
+//            t*x*z + s*y, t*y*z - s*x, t*(z*z) + c, 0.0f,
+//            0.0f, 0.0f, 0.0f, 1.0f
+//        };
+
+        if (axis.x != 0) {
+            m[1][1] *= cosf(a);
+            m[1][2] *= sinf(a);
+            m[2][1] *= -sinf(a);
+            m[2][2] *= cosf(a);
+        } else if (axis.y != 0) {
+            m[0][0] *= cosf(a);
+            m[0][2] *= -sinf(a);
+            m[2][0] *= sinf(a);
+            m[2][2] *= cosf(a);
+        } else if (axis.z != 0) {
+            m[0][0] *= cosf(a);
+            m[0][1] *= sinf(a);
+            m[1][0] *= -sinf(a);
+            m[1][1] *= cosf(a);
+        }
+
+        return m;
     }
 
     inline bicudo::mat4 &operator*=(bicudo::mat4 &m, float scalar) {

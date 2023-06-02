@@ -67,8 +67,13 @@ namespace bicudo {
         }
 
         template<typename T>
-        void send(uint32_t size, const T *p_data, uint32_t mode) const {
-            glBufferData(this->bind_buffer_info[0], sizeof(T) * size, p_data, mode);
+        void send(int32_t size, const T *p_data, uint32_t mode) const {
+            glBufferData(this->bind_buffer_info[0], size, p_data, mode);
+        }
+
+        template<typename t>
+        void edit(const bicudo::ivec2 &buffer_stride, const t *p_data) {
+            glBufferSubData(this->bind_buffer_info[0], buffer_stride.x, buffer_stride.y, p_data);
         }
 
         void attach(uint32_t shader_slot, int32_t vec_size, const bicudo::ivec2 &bind_stride = {0, 0}) const {

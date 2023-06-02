@@ -2,7 +2,7 @@
 #include <bicudo/bicudo.hpp>
 #include <ctime>
 #include "starter.hpp"
-#include "bicudo/opengl/opengl_context_overview.hpp"
+#include "bicudo/opengl/openglcontextoverview.hpp"
 
 void scene_starter::on_create() {
     scene::on_create();
@@ -27,12 +27,21 @@ void scene_starter::on_create() {
         auto &rigid {p_feature_rigid->content};
         bicudo::createrigid(p_feature_rigid);
 
-        randomic_number = std::rand() % 100;
+        randomic_number = std::rand() % 600;
         rigid.resize(randomic_number, randomic_number);
 
         randomic_number = std::rand() % 600;
         rigid.move(randomic_number, randomic_number);
     }
+
+    bicudo::gpufeature *p_gpu_feature = new bicudo::gpubuffer();
+    bicudo::mesh mesh {};
+
+    mesh.append_float(bicudo::layout::position, {2.0f, 2.0f});
+    mesh.append_float(bicudo::layout::position, {2.0f, 20.0f});
+
+    p_gpu_feature->set_mesh(mesh);
+    p_gpu_feature->set_primitive(bicudo::primitive::lines);
 }
 
 void scene_starter::on_destroy() {
