@@ -22,6 +22,7 @@ namespace bicudo {
 
         std::string name {};
         uint32_t program_buffer_name_object {};
+    public:
 
         void invoke() const;
         void revoke() const;

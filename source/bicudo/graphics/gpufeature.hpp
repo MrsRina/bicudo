@@ -30,6 +30,9 @@ namespace bicudo {
         explicit gpufeature() = default;
         ~gpufeature() { this->free_all_memory(); };
     public:
+        bicudo::mat4 trs {};
+        uint32_t pipeline_program {};
+    public:
         virtual void set_mesh(bicudo::mesh&) {};
         virtual void set_primitive(bicudo::primitive) {};
         virtual void set_index_primitive(bicudo::primitive) {};
@@ -44,6 +47,9 @@ namespace bicudo {
         virtual void draw() {};
         virtual void invoke() {};
         virtual void revoke() {};
+
+        bicudo::mat4 &get_matrix_trs() { return this->trs };
+        uint32_t &get_pipeline() { return this->pipeline_program; };
     };
 }
 
