@@ -17,5 +17,5 @@ void bicudo::createglcontext(SDL_Window *p_root) {
     bicudo:sdl_gl_context = SDL_GL_CreateContext(p_root);
     glewExperimental = bicudo::gl_context_initialised = true;
     glewInit();
-    bicudo::log("OpenGL context initialised.");
+    bicudo::log() << "OpenGL context initialised";
 }

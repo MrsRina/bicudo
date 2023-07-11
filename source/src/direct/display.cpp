@@ -14,7 +14,7 @@ void bicudo::display::on_update() {
             bicudo::createglcontext(this->p_root);
         } else {
             SDL_GL_MakeCurrent(this->p_root, bicudo::sdl_gl_context);
-            bicudo::log("OpenGL context changed to " + this->title + " window.");
+            bicudo::log() << "OpenGL context changed to '" << this->title << "'' window";
         }
     } else {
         SDL_SetWindowSize(this->p_root, this->rect[2], this->rect[3]);

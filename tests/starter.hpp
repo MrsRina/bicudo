@@ -5,7 +5,8 @@
 
 class scene_starter : public bicudo::scene {
 public:
-    std::vector<bicudo::gpufeature*> gpu_feature_vector {};
+    std::vector<bicudo::gpufeature*> loaded_gpu_pipeline_list {};
+    std::vector<bicudo::gpufeature*> loaded_gpu_renderable_list {};
 public:
     void on_create() override;
     void on_destroy() override;

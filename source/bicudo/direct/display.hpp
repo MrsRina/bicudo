@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <SDL2/SDL_video.h>
+#include "bicudo/util/math.hpp"
 
 namespace bicudo {
     class display {
@@ -11,7 +12,7 @@ namespace bicudo {
     public:
         std::string title {};
         float opacity {1.0f};
-        int32_t rect[4] {SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 0, 0};
+        bicudo::vec4 rect {static_cast<float>(SDL_WINDOWPOS_CENTERED), static_cast<float>(SDL_WINDOWPOS_CENTERED), 0.0f, 0.0f};
         uint32_t flags {};
     public:
         SDL_Window *&root();

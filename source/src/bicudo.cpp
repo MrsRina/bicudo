@@ -6,7 +6,7 @@ bicudo::core *bicudo::kernel::p_core {};
 void bicudo::createcore(bicudo::core *&p_core) {
     bicudo::kernel::p_core = p_core;
     bicudo::initglcontext();
-    bicudo::log("Kernel core created.");
+    bicudo::log() << "Kernel core created";
 }
 
 void bicudo::createdisplay(bicudo::feature<bicudo::display> *&p_feature) {

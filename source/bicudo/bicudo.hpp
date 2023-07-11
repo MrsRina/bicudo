@@ -7,7 +7,8 @@
 #include "bicudo/core/core.hpp"
 #include "bicudo/opengl/opengltools.hpp"
 #include "bicudo/util/logger.hpp"
-#include "bicudo/graphics/gpudynamicbatch.hpp"
+#include "bicudo/graphics/gpurenderable.hpp"
+#include "bicudo/graphics/gpupipeline.hpp"
 
 namespace bicudo {
     class kernel {

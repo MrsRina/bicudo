@@ -54,8 +54,10 @@ int32_t bicudo::core::mainloop() {
         this->service_physic_engine.on_native_update();
         this->service_scene.on_native_update();
 
+        // @TODO set viewport at other place
         glViewport(0, 0, display.rect[2], display.rect[3]);
-        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         this->service_physic_engine.on_native_render();

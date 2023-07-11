@@ -7,17 +7,17 @@
 
 namespace bicudo {
     enum class primitive {
-        lines   = GL_LINES,
-        quads   = GL_TRIANGLES,
-        points  = GL_POINTS,
-        uint32  = GL_UNSIGNED_INT,
-        int32   = GL_INT,
-        uint16  = GL_UNSIGNED_SHORT,
-        int16   = GL_SHORT,
-        int8    = GL_BYTE,
-        uint8   = GL_UNSIGNED_BYTE,
-        float32 = GL_FLOAT,
-        float16 = GL_HALF_FLOAT
+        lines     = GL_LINES,
+        triangles = GL_TRIANGLES,
+        points    = GL_POINTS,
+        uint32    = GL_UNSIGNED_INT,
+        int32     = GL_INT,
+        uint16    = GL_UNSIGNED_SHORT,
+        int16     = GL_SHORT,
+        int8      = GL_BYTE,
+        uint8     = GL_UNSIGNED_BYTE,
+        float32   = GL_FLOAT,
+        float16   = GL_HALF_FLOAT
     };
 
     enum class buffer {
@@ -25,13 +25,18 @@ namespace bicudo {
         index = GL_ELEMENT_ARRAY_BUFFER
     };
 
+    struct pipelineproperty {
+    public:
+        uint64_t viewport_count {};
+        bicudo::vec4 *p_viewports {};
+        uint64_t render_layer_count {};
+        uint32_t *p_render_layers {};
+    };
+
     class gpufeature {
     public:
         explicit gpufeature() = default;
         ~gpufeature() { this->free_all_memory(); };
-    public:
-        bicudo::mat4 trs {};
-        uint32_t pipeline_program {};
     public:
         virtual void set_mesh(bicudo::mesh&) {};
         virtual void set_primitive(bicudo::primitive) {};
@@ -47,9 +52,10 @@ namespace bicudo {
         virtual void draw() {};
         virtual void invoke() {};
         virtual void revoke() {};
-
-        bicudo::mat4 &get_matrix_trs() { return this->trs };
-        uint32_t &get_pipeline() { return this->pipeline_program; };
+        virtual uint32_t get_gpu_reference(uint32_t) { return 0; };
+        virtual uint32_t get_main_gpu_reference() { return 0; };
+        virtual void set_pipeline_property(bicudo::pipelineproperty&) {};
+        virtual bicudo::pipelineproperty *edit_pipeline_property() { return nullptr; };
     };
 }
 

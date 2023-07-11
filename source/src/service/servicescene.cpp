@@ -15,7 +15,8 @@ void bicudo::servicescene::add(bicudo::feature<bicudo::scene *> *p_feature) {
     this->p_current_scene = p_feature;
     this->p_current_scene->content->on_create();
     service::add(p_feature);
-    bicudo::log("Just created 1 scene.");
+
+    bicudo::log() << "A scene was created";
 }
 
 void bicudo::servicescene::on_native_event(SDL_Event &sdl_event) {

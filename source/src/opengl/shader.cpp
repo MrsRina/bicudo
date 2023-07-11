@@ -53,7 +53,8 @@ void bicudo::shader::fill_uniforms() {
 
 bool bicudo::createshader(bicudo::shader *&p_shader, const std::vector<bicudo::shading> &shading_list) {
     if (shading_list.empty()) {
-        return bicudo::exception("Invalid shading list, empty.");
+        bicudo::log() << "Invalid shading list, empty";
+        return true;
     }
 
     std::vector<uint32_t> compiled_shader_list {};
@@ -80,7 +81,7 @@ bool bicudo::createshader(bicudo::shader *&p_shader, const std::vector<bicudo::s
             std::string msg {}; msg.resize(request);
 
             glGetShaderInfoLog(shader, request, nullptr, msg.data());
-            bicudo::exception("Failed to compile shader '" + p_shader->name + "'. \n" + msg);
+            bicudo::log() << "Failed to compile shader '" << p_shader->name << "' \n" << msg;
             glDeleteShader(shader);
             break;
         }
@@ -101,10 +102,11 @@ bool bicudo::createshader(bicudo::shader *&p_shader, const std::vector<bicudo::s
             std::string msg {}; msg.resize(request);
 
             glGetProgramInfoLog(p_shader->program_buffer_name_object, request, nullptr, msg.data());
-            error_going_on = bicudo::exception("Failed to link program '" + p_shader->name + "'. \n" + msg);
+            bicudo::log() << "Failed to link program '" << p_shader->name << "' \n" << msg;
             delete p_shader;
         } else {
-            error_going_on = bicudo::log("Successfully linked program '" + p_shader->name + "'.");
+            error_going_on = false;
+            bicudo::log() << "Successfully linked program '" << p_shader->name << '\'';
             p_shader->fill_uniforms();
         }
     }

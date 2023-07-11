@@ -87,3 +87,7 @@ void bicudo::gpubuffer::invoke() {
 void bicudo::gpubuffer::revoke() {
     glBindVertexArray(0);
 }
+
+uint32_t bicudo::gpubuffer::get_gpu_reference(uint32_t key) {
+    return this->buffer_map[key];
+}

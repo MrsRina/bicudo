@@ -34,16 +34,24 @@ void scene_starter::on_create() {
         rigid.move(randomic_number, randomic_number);
     }
 
-    bicudo::gpufeature *p_gpu_feature = this->gpu_feature_vector.emplace_back(new bicudo::gpudynamicbatch());
+    bicudo::gpufeature *p_triangle = this->loaded_gpu_renderable_list.emplace_back(new bicudo::gpurenderable());
     bicudo::mesh mesh {};
 
     mesh.begin(0);
-    mesh.append_float(bicudo::layout::position, {0.1f, 0.0f});
-    mesh.append_float(bicudo::layout::position, {1.0f, -1.0f});
+    mesh.append_float(bicudo::layout::position, {0.0f, 0.0f});
+    mesh.append_float(bicudo::layout::position, {0.0f, 1.0f});
+    mesh.append_float(bicudo::layout::position, {1.0f, 1.0f});
 
-    p_gpu_feature->set_mesh(mesh);
-    p_gpu_feature->set_primitive(bicudo::primitive::lines);
-    p_gpu_feature->set_draw_stride(2, 0);
+    p_triangle->set_mesh(mesh);
+    p_triangle->set_primitive(bicudo::primitive::triangles);
+    p_triangle->set_draw_stride(6, 0);
+
+    bicudo::gpufeature *p_overlay = this->loaded_gpu_pipeline_list.emplace_back(new bicudo::gpupipeline());
+    bicudo::pipelineproperty gpu_pipepiline_property {};
+
+    gpu_pipepiline_property.viewport_count = 1;
+    gpu_pipepiline_property.p_viewports = &bicudo::kernel::p_core->service_display.get_display(0).rect;
+    p_overlay->set_pipeline_property(gpu_pipepiline_property);
 }
 
 void scene_starter::on_destroy() {
@@ -60,12 +68,15 @@ void scene_starter::on_update() {
 
 void scene_starter::on_render() {
     scene::on_render();
+    this->loaded_gpu_pipeline_list.at(0)->invoke();
 
-    for (bicudo::gpufeature *&p_gpu_feature : this->gpu_feature_vector) {
+    for (bicudo::gpufeature *&p_gpu_feature : this->loaded_gpu_renderable_list) {
         p_gpu_feature->invoke();
         p_gpu_feature->draw();
         p_gpu_feature->revoke();
     }
+
+    this->loaded_gpu_pipeline_list.at(0)->revoke();
 }
 
 int32_t main(int32_t, char**) {
@@ -82,7 +93,7 @@ int32_t main(int32_t, char**) {
     bicudo::feature<bicudo::display> *p_display {new bicudo::feature<bicudo::display>()};
     p_display->content.rect[2] = 1280;
     p_display->content.rect[3] = 800;
-    p_display->content.title = "Hello this is Bicudo-3.";
+    p_display->content.title = "Hello this is Bicudo 3";
     p_display->content.flags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
     p_display->content.opacity = 1.0f;
     bicudo::createdisplay(p_display);

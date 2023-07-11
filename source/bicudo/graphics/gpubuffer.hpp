@@ -31,6 +31,7 @@ namespace bicudo {
         void free_all_memory() override;
         void invoke() override;
         void revoke() override;
+        uint32_t get_gpu_reference(uint32_t key) override;
     };
 }
 
