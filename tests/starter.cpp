@@ -42,16 +42,36 @@ void scene_starter::on_create() {
     mesh.append_float(bicudo::layout::position, {0.0f, 1.0f});
     mesh.append_float(bicudo::layout::position, {1.0f, 1.0f});
 
+    float resources[8] {
+        0.0f, 0.0f,
+        1.0f, 0.0f,
+        0.0f, 1.0f,
+        1.0f, 1.0f
+    };
+
+    uint8_t indices[6] {
+        0, 1, 3,
+        3, 2, 0
+    };
+
+    bicudo::mesh mesh {};
+
+    mesh.resource_size = sizeof(resources);
+    mesh.indice_size = sizeof(indices);
+
+    mesh.p_resources = resources;
+    mesh.p_indices = resources;
+
     p_triangle->set_mesh(mesh);
-    p_triangle->set_primitive(bicudo::primitive::triangles);
+    p_triangle->set_primitive(GL_TRIANGLES);
     p_triangle->set_draw_stride(6, 0);
 
     bicudo::gpufeature *p_overlay = this->loaded_gpu_pipeline_list.emplace_back(new bicudo::gpupipeline());
-    bicudo::pipelineproperty gpu_pipepiline_property {};
+    bicudo::pipelineproperty gpu_pipeline_property {};
 
-    gpu_pipepiline_property.viewport_count = 1;
-    gpu_pipepiline_property.p_viewports = &bicudo::kernel::p_core->service_display.get_display(0).rect;
-    p_overlay->set_pipeline_property(gpu_pipepiline_property);
+    gpu_pipeline_property.viewport_count = 1;
+    gpu_pipeline_property.p_viewports = &bicudo::kernel::p_core->service_display.get_display(0).rect;
+    p_overlay->set_pipeline_property(gpu_pipeline_property);
 }
 
 void scene_starter::on_destroy() {
