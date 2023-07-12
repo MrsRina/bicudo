@@ -34,19 +34,11 @@ void scene_starter::on_create() {
         rigid.move(randomic_number, randomic_number);
     }
 
-    bicudo::gpufeature *p_triangle = this->loaded_gpu_renderable_list.emplace_back(new bicudo::gpurenderable());
-    bicudo::mesh mesh {};
-
-    mesh.begin(0);
-    mesh.append_float(bicudo::layout::position, {0.0f, 0.0f});
-    mesh.append_float(bicudo::layout::position, {0.0f, 1.0f});
-    mesh.append_float(bicudo::layout::position, {1.0f, 1.0f});
-
-    float resources[8] {
-        0.0f, 0.0f,
-        1.0f, 0.0f,
-        0.0f, 1.0f,
-        1.0f, 1.0f
+    float resources[16] {
+        0.0f, 0.0f, 0.0f, 0.0f
+        1.0f, 0.0f, 1.0f, 0.0f
+        0.0f, 1.0f, 0.0f, 1.0f
+        1.0f, 1.0f, 1.0f, 1.0f
     };
 
     uint8_t indices[6] {
@@ -54,23 +46,27 @@ void scene_starter::on_create() {
         3, 2, 0
     };
 
-    bicudo::mesh mesh {};
+    bicudo::meshdescriptor mesh_descriptor {};
+    mesh_descriptor.resource_size = sizeof(resources);
+    mesh_descriptor.p_resources = resources;
 
-    mesh.resource_size = sizeof(resources);
-    mesh.indice_size = sizeof(indices);
+    mesh_descriptor.indice_size = sizeof(indices);
+    mesh_descriptor.indice_type = GL_UNSIGNED_BYTE;
+    mesh_descriptor.p_indices = indices;
 
-    mesh.p_resources = resources;
-    mesh.p_indices = resources;
+    mesh_descriptor.attrib_pos.layout = {2, GL_FLOAT, sizeof(float)*4, 0};
+    mesh_descriptor.attrib_texcoord.layout = {2, GL_FLOAT, sizeof(float)*4, sizeof(float)*2};
 
-    p_triangle->set_mesh(mesh);
+    bicudo::gpufeature *p_triangle = this->loaded_gpu_renderable_list.emplace_back(new bicudo::gpurenderable());
+    p_triangle->set_mesh_descriptor(mesh_descriptor);
     p_triangle->set_primitive(GL_TRIANGLES);
     p_triangle->set_draw_stride(6, 0);
 
-    bicudo::gpufeature *p_overlay = this->loaded_gpu_pipeline_list.emplace_back(new bicudo::gpupipeline());
     bicudo::pipelineproperty gpu_pipeline_property {};
-
     gpu_pipeline_property.viewport_count = 1;
     gpu_pipeline_property.p_viewports = &bicudo::kernel::p_core->service_display.get_display(0).rect;
+    
+    bicudo::gpufeature *p_overlay = this->loaded_gpu_pipeline_list.emplace_back(new bicudo::gpupipeline());
     p_overlay->set_pipeline_property(gpu_pipeline_property);
 }
 

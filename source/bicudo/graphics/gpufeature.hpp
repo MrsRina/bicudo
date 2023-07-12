@@ -1,25 +1,17 @@
 #ifndef BICUDO_GRAPHICS_GPU_FEATURE_H
 #define BICUDO_GRAPHICS_GPU_FEATURE_H
 
-#include "stream/mesh.hpp"
 #include "GL/glew.h"
 #include "gpudirecttask.hpp"
+#include "gpustructures.hpp"
 
 namespace bicudo {
-    struct pipelineproperty {
-    public:
-        uint64_t viewport_count {};
-        bicudo::vec4 *p_viewports {};
-        uint64_t render_layer_count {};
-        uint32_t *p_render_layers {};
-    };
-
     class gpufeature {
     public:
         explicit gpufeature() = default;
         ~gpufeature() { this->free_all_memory(); };
     public:
-        virtual void set_mesh(bicudo::mesh&) {};
+        virtual void set_mesh_descriptor(bicudo::meshdescriptor&) {};
         virtual void set_primitive(uint32_t) {};
         virtual void set_index_primitive(uint32_t) {};
         virtual void set_draw_stride(int64_t, int64_t, int64_t = -1) {};
