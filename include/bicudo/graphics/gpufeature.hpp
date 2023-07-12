@@ -1,7 +1,7 @@
 #ifndef BICUDO_GRAPHICS_GPU_FEATURE_H
 #define BICUDO_GRAPHICS_GPU_FEATURE_H
 
-#include "GL/glew.h"
+#include "platform/platform.hpp"
 #include "gpudirecttask.hpp"
 #include "gpustructures.hpp"
 

@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.13)
 project(bicudo)
 
 add_compile_options(-O3)
-include_directories(source)
+include_directories(include)
 
 set(CMAKE_CXX_STANDARD 17)
 set(BICUDO_ENABLE_TESTS true)
@@ -18,7 +18,7 @@ endif()
 
 message("-- Bicudo configuring done")
 
-file(GLOB_RECURSE SOURCE_FILES "source/src/*.cpp")
+file(GLOB_RECURSE SOURCE_FILES "src/*.cpp")
 add_library(bicudo ${SOURCE_FILES})
 
 message("-- Bicudo building done")

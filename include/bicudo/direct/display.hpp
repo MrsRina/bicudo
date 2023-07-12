@@ -8,13 +8,13 @@
 namespace bicudo {
     class display {
     protected:
+        const char *p_initial_title {};
         SDL_Window *p_root {};
+        uint16_t context_api {}
     public:
-        std::string title {};
-        float opacity {1.0f};
         bicudo::vec4 rect {static_cast<float>(SDL_WINDOWPOS_CENTERED), static_cast<float>(SDL_WINDOWPOS_CENTERED), 0.0f, 0.0f};
-        uint32_t flags {};
     public:
+        explicit display(const char *p_title) : p_initial_title(p_title) {};        
         SDL_Window *&root();
         void on_update();
     };

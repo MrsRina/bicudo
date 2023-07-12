@@ -41,7 +41,7 @@ void bicudo::gpubuffer::set_mesh_descriptor(bicudo::meshdescriptor &mesh_descrip
     if (mesh_descriptor.indice_size > 0 && mesh_descriptor.p_indices != nullptr) {
         this->bind(1, GL_ELEMENT_ARRAY_BUFFER);
         this->send(mesh_descriptor.indice_size, mesh_descriptor.p_indices, true);
-        this->index_primitive = mesh_descriptor.indice_type;
+        this->set_index_primitive(mesh_descriptor.indice_type);
     }
 
     this->revoke();

@@ -13,7 +13,9 @@ void bicudo::core::on_native_quit() {
     this->service_physic_engine.on_native_quit();
 }
 
-int32_t bicudo::core::mainloop() {
+int32_t bicudo::core::mainloop(bicudo::contextoverview *p_context_overview) {
+    this->service_display.set_context_overview(p_context_overview);
+
     this->on_native_init();
     SDL_Event sdl_event {};
 

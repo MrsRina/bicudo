@@ -23,8 +23,7 @@ namespace bicudo {
     public:
         void on_native_init();
         void on_native_quit();
-
-        int32_t mainloop();
+        int32_t mainloop(bicudo::contextoverview *p_context_overview);
     };
 }
 

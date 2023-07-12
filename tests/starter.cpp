@@ -47,7 +47,7 @@ void scene_starter::on_create() {
     };
 
     bicudo::meshdescriptor mesh_descriptor {};
-    mesh_descriptor.resource_size = sizeof(resources);
+    mesh_descriptor.resource_size = sizeof(resources);.
     mesh_descriptor.p_resources = static_cast<void*>(resources);
 
     mesh_descriptor.indice_size = sizeof(indices);
@@ -110,8 +110,6 @@ int32_t main(int32_t, char**) {
     p_display->content.rect[2] = 1280;
     p_display->content.rect[3] = 800;
     p_display->content.title = "Hello this is Bicudo 3";
-    p_display->content.flags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
-    p_display->content.opacity = 1.0f;
     bicudo::createdisplay(p_display);
 
     /* Insert a scene. */
