@@ -1,17 +1,47 @@
 #include "bicudo/graphics/gpubuffer.hpp"
+#include "bicudo/util/logger.hpp"
 
-void bicudo::gpubuffer::set_mesh(bicudo::mesh &mesh) {
-    std::vector<float> &v {mesh.get_float_vector(bicudo::layout::position)};
-    std::vector<float> &t {mesh.get_float_vector(bicudo::layout::texcoord)};
-    std::vector<float> &n {mesh.get_float_vector(bicudo::layout::position)};
-    std::vector<uint32_t> &i {mesh.get_uint_vector()};
+void bicudo::gpubuffer::set_mesh_descriptor(bicudo::meshdescriptor &mesh_descriptor) {
+    if (mesh_descriptor.p_resources == nullptr) {
+        bicudo::log() << "[bicudo::gpubuffer::set_mesh_descriptor] Invalid resources (p_resources is nullptr)";
+        return;
+    }
 
     this->invoke();
 
-    if (!v.empty()) {
+    if (mesh_descriptor.resource_size > 0) {
         this->bind(0, GL_ARRAY_BUFFER);
-        this->send(sizeof(float) * v.size(), v.data(), true);
-        this->attach(mesh.get_float_key(bicudo::layout::position), 2, GL_FLOAT, {0, 0});
+        this->send(mesh_descriptor.resource_size, mesh_descriptor.p_resources, true);
+    }
+
+    if (mesh_descriptor.attrib_pos.type != -1) {
+        this->attach(mesh_descriptor.attrib_pos.location,
+                     mesh_descriptor.attrib_pos.size,
+                     mesh_descriptor.attrib_pos.type,
+                    {static_cast<float>(mesh_descriptor.attrib_pos.stride),
+                     static_cast<float>(mesh_descriptor.attrib_pos.offset)});
+    }
+
+    if (mesh_descriptor.attrib_normal.type != -1) {
+        this->attach(mesh_descriptor.attrib_normal.location,
+                     mesh_descriptor.attrib_normal.size,
+                     mesh_descriptor.attrib_normal.type,
+                    {static_cast<float>(mesh_descriptor.attrib_normal.stride),
+                     static_cast<float>(mesh_descriptor.attrib_normal.offset)});
+    }
+
+    if (mesh_descriptor.attrib_texcoord.type != -1) {
+        this->attach(mesh_descriptor.attrib_texcoord.location,
+                     mesh_descriptor.attrib_texcoord.size,
+                     mesh_descriptor.attrib_texcoord.type,
+                    {static_cast<float>(mesh_descriptor.attrib_texcoord.stride),
+                     static_cast<float>(mesh_descriptor.attrib_texcoord.offset)});
+    }
+
+    if (mesh_descriptor.indice_size > 0 && mesh_descriptor.p_indices != nullptr) {
+        this->bind(1, GL_ELEMENT_ARRAY_BUFFER);
+        this->send(mesh_descriptor.indice_size, mesh_descriptor.p_indices, true);
+        this->index_primitive = mesh_descriptor.indice_type;
     }
 
     this->revoke();
@@ -53,9 +83,9 @@ void bicudo::gpubuffer::edit(void *p_data, const bicudo::vec2 &stride) {
     glBufferSubData(static_cast<uint32_t>(this->buffer_bind), static_cast<int64_t>(stride.x), static_cast<int64_t>(stride.y), p_data);
 }
 
-void bicudo::gpubuffer::attach(uint32_t layout_binding_slot, uint32_t vec_size, uint32_t _primitive, const bicudo::vec2 &stride) {
-    glEnableVertexAttribArray(layout_binding_slot);
-    glVertexAttribPointer(layout_binding_slot, (uint32_t) _primitive, vec_size, false, static_cast<int64_t>(stride.x), (void*) (static_cast<int64_t>(stride.y)));
+void bicudo::gpubuffer::attach(uint32_t layout_location_slot, int32_t size, uint32_t type, const bicudo::vec2 &stride) {
+    glEnableVertexAttribArray(layout_location_slot);
+    glVertexAttribPointer(layout_location_slot, type, size, false, static_cast<int64_t>(stride.x), (void*) (static_cast<int64_t>(stride.y)));
 }
 
 void bicudo::gpubuffer::unbind() {

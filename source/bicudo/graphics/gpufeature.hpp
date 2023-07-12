@@ -18,7 +18,7 @@ namespace bicudo {
         virtual void bind(uint32_t, uint32_t) {};
         virtual void edit(void*, const bicudo::vec2&) {};
         virtual void send(int64_t, void*, bool = false) {};
-        virtual void attach(uint32_t, uint32_t, uint32_t, const bicudo::vec2&) {};
+        virtual void attach(uint32_t, int32_t, uint32_t, const bicudo::vec2&) {};
         virtual void unbind() {};
         virtual void free_memory(uint32_t) {};
         virtual void free_all_memory() {};
