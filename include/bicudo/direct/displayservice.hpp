@@ -1,5 +1,5 @@
-#ifndef BICUDO_DISPLAY_SERVICE_H
-#define BICUDO_DISPLAY_SERVICE_H
+#ifndef BICUDO_DIRECT_DISPLAY_SERVICE_H
+#define BICUDO_DIRECT_DISPLAY_SERVICE_H
 
 #include "bicudo/service/service.hpp"
 #include "display.hpp"

@@ -11,3 +11,7 @@ void bicudo::createcore(bicudo::core *p_core) {
 void bicudo::createdisplay(bicudo::display *p_display) {
     bicudo::kernel::p_core->p_display_service->add(p_display);
 }
+
+void bicudo::createscene(bicudo::scene *p_scene) {
+    bicudo::kernel::p_core->p_scene_service->add(p_scene);
+}

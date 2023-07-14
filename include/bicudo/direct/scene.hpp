@@ -5,6 +5,10 @@
 
 namespace bicudo {
     class scene {
+    protected:
+        int32_t scene_id {};
+    public:
+        int32_t &id();
     public:
         virtual void on_create();
         virtual void on_destroy();

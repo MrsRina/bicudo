@@ -1,5 +1,9 @@
 #include "bicudo/direct/scene.hpp"
 
+int32_t &bicudo::scene::id() {
+    return this->scene_id;
+}
+
 void bicudo::scene::on_create() {
 
 }

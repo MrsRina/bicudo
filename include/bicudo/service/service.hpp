@@ -9,6 +9,7 @@ namespace bicudo {
     class service {
     protected:
         std::vector<t> features {};
+        s highest_token {};
     public:
         std::vector<t> &get_features() { return this->features; }
         virtual void add(t feature) { this->features.push_back(feature); }
