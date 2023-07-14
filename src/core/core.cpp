@@ -16,8 +16,6 @@ void bicudo::core::on_quit_all() {
 }
 
 int32_t bicudo::core::mainloop() {
-    this->on_init_all();
-
     uint64_t old_ticks {};
     uint64_t current_ticks {SDL_GetPerformanceCounter()};
     uint64_t performance_frequency {1};

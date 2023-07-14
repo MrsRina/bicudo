@@ -1,4 +1,5 @@
 #include "starter.hpp"
+#include <bicudo/platform/openglcontextoverview.hpp>
 
 void scenestarter::on_create() {
     scene::on_create();
@@ -75,13 +76,15 @@ int32_t main(int32_t, char**) {
     bicudo::display display {};
     bicudo::createdisplay(&display);
 
+    bicudo::contextoverview *p_context_overview {new bicudo::openglcontextoverview()};
+    p_context_overview->set_opengl_property(3, 4, "#version 450");
+
     bicudo::displayproperty display_property {};
     display_property.p_title = "hello-bucyd";
     display_property.size = {1280, 800};
     display_property.position = {SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED};
     display_property.fullscreen = false;
-    display_property.p_api_context_overview = new bicudo::openglcontextoverview(3, 4, "#version 450");
-
+    display_property.p_api_context_overview = p_context_overview;
     bicudo::setdisplayproperty(display_property, &display);
 
     /* Run bicudo core. */

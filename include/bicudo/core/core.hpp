@@ -19,6 +19,10 @@ namespace bicudo {
         void on_init_all();
         void on_quit_all();
     public:
+        explicit core() {
+            this->on_init_all();
+        }
+
         int32_t mainloop();
     };
 }

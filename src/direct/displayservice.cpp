@@ -39,6 +39,14 @@ void bicudo::displayservice::update(bicudo::displayproperty &display_property,
     }
 
     if (display_property.size.x != -1 && display_property.size.y != -1) {
-    
+        SDL_SetWindowSize(display_root, display_property.size.x, display_property.size.y);
+    }
+
+    if (display_property.fullscreen != -1) {
+        SDL_SetWindowFullscreen(display_root, display_property.fullscreen);
+    }
+
+    if (display_property.resizable != -1) {
+        SDL_SetWindowResizable(display_root, static_cast<bool>(display_property.resizable));   
     }
 }
