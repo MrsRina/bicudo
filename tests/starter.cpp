@@ -73,9 +73,6 @@ int32_t main(int32_t, char**) {
     bicudo::core core {};
     bicudo::createcore(&core);
 
-    bicudo::display display {};
-    bicudo::createdisplay(&display);
-
     bicudo::contextoverview *p_context_overview {new bicudo::openglcontextoverview()};
     p_context_overview->set_opengl_property(3, 4, "#version 450");
 
@@ -83,9 +80,11 @@ int32_t main(int32_t, char**) {
     display_property.p_title = "hello-bucyd";
     display_property.size = {1280, 800};
     display_property.position = {SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED};
-    display_property.fullscreen = false;
     display_property.p_api_context_overview = p_context_overview;
-    bicudo::setdisplayproperty(display_property, &display);
+
+    bicudo::display display {};
+    bicudo::createdisplay(&display);
+    display.set_display_property(display_property);
 
     /* Run bicudo core. */
     return core.mainloop();

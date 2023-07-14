@@ -17,7 +17,6 @@ namespace bicudo {
 
     void createcore(bicudo::core *p_core);
     void createdisplay(bicudo::display *p_display);
-    void setdisplayproperty(bicudo::displayproperty &display_property, bicudo::display *p_display);
 }
 
 #endif

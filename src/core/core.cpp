@@ -3,6 +3,8 @@
 #include "bicudo/util/priority.hpp"
 
 void bicudo::core::on_init_all() {
+    SDL_Init(SDL_INIT_VIDEO);
+
     this->running_mainloop = true;
     this->capped_fps = 60;
 

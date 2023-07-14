@@ -11,7 +11,3 @@ void bicudo::createcore(bicudo::core *p_core) {
 void bicudo::createdisplay(bicudo::display *p_display) {
     bicudo::kernel::p_core->p_display_service->add(p_display);
 }
-
-void bicudo::setdisplayproperty(bicudo::displayproperty &display_property, bicudo::display *p_display) {
-    bicudo::kernel::p_core->p_display_service->update(display_property, p_display);
-}
