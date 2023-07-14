@@ -6,9 +6,11 @@
 namespace bicudo {
     class contextoverview {
     protected:
-        SDL_GLcontext sdl_opengl_context {};
+        SDL_GLContext sdl_opengl_context {};
+
         bool library_was_initialized {};
         const char *p_glsl_version {};
+
         uint32_t major_opengl_version {};
         uint32_t minor_opengl_version {};
     public:

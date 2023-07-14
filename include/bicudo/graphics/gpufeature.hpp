@@ -1,7 +1,7 @@
 #ifndef BICUDO_GRAPHICS_GPU_FEATURE_H
 #define BICUDO_GRAPHICS_GPU_FEATURE_H
 
-#include "platform/platform.hpp"
+#include "bicudo/platform/platform.hpp"
 #include "gpudirecttask.hpp"
 #include "gpustructures.hpp"
 

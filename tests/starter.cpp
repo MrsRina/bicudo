@@ -1,38 +1,7 @@
-#include <iostream>
-#include <bicudo/bicudo.hpp>
-#include <ctime>
 #include "starter.hpp"
-#include "bicudo/opengl/openglcontextoverview.hpp"
 
-void scene_starter::on_create() {
+void scenestarter::on_create() {
     scene::on_create();
-
-    bicudo::feature<bicudo::rigid> *p_solid_rigid {new bicudo::feature<bicudo::rigid>()};
-    bicudo::createrigid(p_solid_rigid);
-
-    /* The ground rigid. */
-    p_solid_rigid->content.resize(600, 100);
-    p_solid_rigid->content.move(400, 700);
-    p_solid_rigid->content.acceleration.y = 0.0f; // Remove gravity from rigid.
-    p_solid_rigid->content.mass = 0.0f;
-    bicudo::kernel::p_core->service_physic_engine.update_mass(&p_solid_rigid->content, 0.0f);
-
-    /* Use current time as seed for random generator. */
-    std::srand(std::time(nullptr));
-    float randomic_number {};
-
-    /* generate some rigids to do physics testing. */
-    for (int32_t it {}; it < 0; it++) {
-        auto *p_feature_rigid {new bicudo::feature<bicudo::rigid>()};
-        auto &rigid {p_feature_rigid->content};
-        bicudo::createrigid(p_feature_rigid);
-
-        randomic_number = std::rand() % 600;
-        rigid.resize(randomic_number, randomic_number);
-
-        randomic_number = std::rand() % 600;
-        rigid.move(randomic_number, randomic_number);
-    }
 
     float resources[16] {
         0.0f, 0.0f, 0.0f, 0.0f,
@@ -47,7 +16,7 @@ void scene_starter::on_create() {
     };
 
     bicudo::meshdescriptor mesh_descriptor {};
-    mesh_descriptor.resource_size = sizeof(resources);.
+    mesh_descriptor.resource_size = sizeof(resources);
     mesh_descriptor.p_resources = static_cast<void*>(resources);
 
     mesh_descriptor.indice_size = sizeof(indices);
@@ -64,25 +33,28 @@ void scene_starter::on_create() {
 
     bicudo::pipelineproperty gpu_pipeline_property {};
     gpu_pipeline_property.viewport_count = 1;
-    gpu_pipeline_property.p_viewports = &bicudo::kernel::p_core->service_display.get_display(0).rect;
+
+    auto &display_size {bicudo::kernel::p_core->p_display_service->get(bicudo::toplevel)->size};
+    this->viewport = {0.0f, 0.0f, static_cast<float>(display_size.x), static_cast<float>(display_size.y)};
+    gpu_pipeline_property.p_viewports = &this->viewport;
     
     bicudo::gpufeature *p_overlay = this->loaded_gpu_pipeline_list.emplace_back(new bicudo::gpupipeline());
     p_overlay->set_pipeline_property(gpu_pipeline_property);
 }
 
-void scene_starter::on_destroy() {
+void scenestarter::on_destroy() {
     scene::on_destroy();
 }
 
-void scene_starter::on_event(SDL_Event &sdl_event) {
+void scenestarter::on_event(SDL_Event &sdl_event) {
     scene::on_event(sdl_event);
 }
 
-void scene_starter::on_update() {
+void scenestarter::on_update() {
     scene::on_update();
 }
 
-void scene_starter::on_render() {
+void scenestarter::on_render() {
     scene::on_render();
     this->loaded_gpu_pipeline_list.at(0)->invoke();
 
@@ -96,26 +68,22 @@ void scene_starter::on_render() {
 }
 
 int32_t main(int32_t, char**) {
-    /* Specify vendor GL context. */
-    bicudo::gl_minor_version = 4;
-    bicudo::gl_major_version = 4;
-    bicudo::gl_shading_version = "#version 450";
-
     /* Init the bicudo core. */
-    bicudo::core *p_core {new bicudo::core()};
-    bicudo::createcore(p_core);
+    bicudo::core core {};
+    bicudo::createcore(&core);
 
-    /* Create a display. */
-    bicudo::feature<bicudo::display> *p_display {new bicudo::feature<bicudo::display>()};
-    p_display->content.rect[2] = 1280;
-    p_display->content.rect[3] = 800;
-    p_display->content.title = "Hello this is Bicudo 3";
-    bicudo::createdisplay(p_display);
+    bicudo::display display {};
+    bicudo::createdisplay(&display);
 
-    /* Insert a scene. */
-    bicudo::feature<bicudo::scene*> *p_scene {new bicudo::feature<bicudo::scene*>(new scene_starter())};
-    bicudo::createscene(p_scene);
+    bicudo::displayproperty display_property {};
+    display_property.p_title = "hello-bucyd";
+    display_property.size = {1280, 800};
+    display_property.position = {SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED};
+    display_property.fullscreen = false;
+    display_property.p_api_context_overview = new bicudo::openglcontextoverview(3, 4, "#version 450");
+
+    bicudo::setdisplayproperty(display_property, &display);
 
     /* Run bicudo core. */
-    return p_core->mainloop();
+    return core.mainloop();
 }

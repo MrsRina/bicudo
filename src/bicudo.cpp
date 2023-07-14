@@ -1,22 +1,17 @@
 #include "bicudo/bicudo.hpp"
-#include "bicudo/opengl/openglcontextoverview.hpp"
 
 bicudo::core *bicudo::kernel::p_core {};
+int32_t bicudo::toplevel {};
 
-void bicudo::createcore(bicudo::core *&p_core) {
+void bicudo::createcore(bicudo::core *p_core) {
     bicudo::kernel::p_core = p_core;
-    bicudo::initglcontext();
     bicudo::log() << "Kernel core created";
 }
 
-void bicudo::createdisplay(bicudo::feature<bicudo::display> *&p_feature) {
-    bicudo::kernel::p_core->service_display.add(p_feature);
+void bicudo::createdisplay(bicudo::display *p_display) {
+    bicudo::kernel::p_core->p_display_service->add(p_display);
 }
 
-void bicudo::createscene(bicudo::feature<bicudo::scene *> *&p_feature) {
-    bicudo::kernel::p_core->service_scene.add(p_feature);
-}
-
-void bicudo::createrigid(bicudo::feature<bicudo::rigid> *&p_feature) {
-    bicudo::kernel::p_core->service_physic_engine.add(p_feature);
+void bicudo::setdisplayproperty(bicudo::displayproperty &display_property, bicudo::display *p_display) {
+    bicudo::kernel::p_core->p_display_service->update(display_property, p_display);
 }

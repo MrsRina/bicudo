@@ -14,7 +14,7 @@ namespace bicudo {
 
         uint16_t get_api_window_context_flag() override;
         void create(SDL_Window *p_sdl_window) override;
-        void desotry(SDL_Window *p_sdl_window) override;
+        void destroy(SDL_Window *p_sdl_window) override;
     }; 
 }
 

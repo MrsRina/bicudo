@@ -1,7 +1,7 @@
 #include "bicudo/platform/openglcontextoverview.hpp"
 
 uint16_t bicudo::openglcontextoverview::get_api_window_context_flag() {
-    return SDL_OPENGL_WINDOW;
+    return SDL_WINDOW_OPENGL;
 }
 
 void bicudo::openglcontextoverview::create(SDL_Window *p_sdl_window) {

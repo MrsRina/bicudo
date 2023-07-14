@@ -116,7 +116,7 @@ namespace bicudo {
     typedef struct vec3 {
         union {
             struct {
-                float x,  y, z;
+                float x, y, z;
             };
 
             float data[3] {};

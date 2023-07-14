@@ -3,10 +3,11 @@
 
 #include <bicudo/bicudo.hpp>
 
-class scene_starter : public bicudo::scene {
+class scenestarter : public bicudo::scene {
 public:
     std::vector<bicudo::gpufeature*> loaded_gpu_pipeline_list {};
     std::vector<bicudo::gpufeature*> loaded_gpu_renderable_list {};
+    bicudo::vec4 viewport {};
 public:
     void on_create() override;
     void on_destroy() override;

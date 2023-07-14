@@ -1,7 +1,7 @@
 #ifndef BICUDO_DIRECT_SCENE_H
 #define BICUDO_DIRECT_SCENE_H
 
-#include <SDL2/SDL.h>
+#include "bicudo/platform/platform.hpp"
 
 namespace bicudo {
     class scene {
