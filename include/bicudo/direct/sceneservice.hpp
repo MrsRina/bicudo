@@ -7,6 +7,10 @@
 namespace bicudo {
     class sceneservice : public service<bicudo::scene*, int32_t> {
     public:
+        bicudo::scene *p_current_scene {};
+    public:
+        void start(bicudo::scene *p_scene, bool reload);
+    public:
         int64_t find(int32_t id) override;
         bicudo::scene *get(int32_t index) override;
         void add(bicudo::scene *p_scene) override;

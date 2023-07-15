@@ -2,6 +2,10 @@
 #include "bicudo/core/core.hpp"
 #include "bicudo/util/priority.hpp"
 
+bicudo::task &bicudo::core::generate_task() {
+    return this->task_queue.emplace();
+}
+
 void bicudo::core::on_init_all() {
     SDL_Init(SDL_INIT_VIDEO);
 
@@ -10,9 +14,15 @@ void bicudo::core::on_init_all() {
 
     this->p_display_service = new bicudo::displayservice();
     this->p_display_service->on_init();
+
+    this->p_scene_service = new bicudo::sceneservice();
+    this->p_display_service->on_init();
 }
 
 void bicudo::core::on_quit_all() {
+    this->p_display_service->on_quit();
+    delete this->p_display_service;
+
     this->p_display_service->on_quit();
     delete this->p_display_service;
 }
@@ -22,7 +32,7 @@ int32_t bicudo::core::mainloop() {
     uint64_t current_ticks {SDL_GetPerformanceCounter()};
     uint64_t performance_frequency {1};
 
-    auto p_display {this->p_display_service->get(bicudo::toplevel)};
+    auto p_display {this->p_display_service->get(bicudo::stack::toplevel)};
     SDL_Event sdl_event {};
     glDisable(GL_DEPTH_TEST);
 
@@ -41,10 +51,15 @@ int32_t bicudo::core::mainloop() {
                     this->running_mainloop = false;
                     break;
                 }
+
                 default: {
                     if (sdl_event.type == SDL_WINDOWEVENT && sdl_event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
                         p_display->size.x = static_cast<int32_t>(sdl_event.window.data1);
                         p_display->size.y = static_cast<int32_t>(sdl_event.window.data2);
+                    }
+
+                    if (this->p_scene_service->p_current_scene != nullptr) {
+                        this->p_scene_service->p_current_scene->on_event(sdl_event);
                     }
 
                     break;
@@ -52,13 +67,27 @@ int32_t bicudo::core::mainloop() {
             }
         }
         
+        while (!this->task_queue.empty()) {
+            auto &task {this->task_queue.front()};
+            task.function(task.p_data);
+            this->task_queue.pop();
+        }
+
+        if (this->p_scene_service->p_current_scene != nullptr) {
+            this->p_scene_service->p_current_scene->on_update();
+        }
+
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        if (this->p_scene_service->p_current_scene != nullptr) {
+        //    this->p_scene_service->p_current_scene->on_render();
+        }
 
         SDL_GL_SwapWindow(p_display->root());
         SDL_Delay(1000 / this->capped_fps);
     }
 
-    this->on_quit_all();
+    //this->on_quit_all();
     return 0;
 }

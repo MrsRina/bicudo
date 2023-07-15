@@ -4,6 +4,10 @@ int32_t &bicudo::scene::id() {
     return this->scene_id;
 }
 
+void bicudo::scene::on_reload() {
+
+}
+
 void bicudo::scene::on_create() {
 
 }

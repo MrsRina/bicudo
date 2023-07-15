@@ -1,4 +1,23 @@
 #include "bicudo/direct/sceneservice.hpp"
+#include "bicudo/util/logger.hpp"
+#include "bicudo/bicudo.hpp"
+
+void bicudo::sceneservice::start(bicudo::scene *p_scene, bool reload) {
+    if (p_scene == nullptr) {
+        bicudo::log() << "Failed to start scene (nullptr)";
+    }
+
+    this->p_current_scene = p_scene;
+    if (!reload) {
+        return;
+    }
+
+    bicudo::kernel::p_core->generate_task() = {
+        .p_data = nullptr,
+        .function = [p_scene](void *p_data) {
+            p_scene->on_reload();
+    }};
+}
 
 int64_t bicudo::sceneservice::find(int32_t id) {
     for (uint64_t it {}; it < this->features.size(); it++) {
@@ -19,5 +38,11 @@ void bicudo::sceneservice::add(bicudo::scene *p_scene) {
     if (this->find(scene_id) == -1) {
         scene_id = ++this->highest_token;
         this->features.emplace_back(p_scene);
+
+        bicudo::kernel::p_core->generate_task() = {
+            .p_data = nullptr,
+            .function = [p_scene](void *p_data) {
+                p_scene->on_create();
+        }};
     }
 }

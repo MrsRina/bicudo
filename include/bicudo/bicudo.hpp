@@ -13,10 +13,10 @@ namespace bicudo {
         extern bicudo::core *p_core;
     }
 
-    extern int32_t toplevel;
-
     void createcore(bicudo::core *p_core);
     void createdisplay(bicudo::display *p_display);
+    void createscene(bicudo::scene *p_scene);
+    void startscene(bicudo::scene *p_scene, bool reload = false);
 }
 
 #endif

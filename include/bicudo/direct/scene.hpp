@@ -9,7 +9,9 @@ namespace bicudo {
         int32_t scene_id {};
     public:
         int32_t &id();
+        bool is_loaded();
     public:
+        virtual void on_reload();
         virtual void on_create();
         virtual void on_destroy();
         virtual void on_update();

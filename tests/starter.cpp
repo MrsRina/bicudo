@@ -18,14 +18,27 @@ void scenestarter::on_create() {
 
     bicudo::meshdescriptor mesh_descriptor {};
     mesh_descriptor.resource_size = sizeof(resources);
-    mesh_descriptor.p_resources = static_cast<void*>(resources);
+    mesh_descriptor.p_resources = resources;
 
     mesh_descriptor.indice_size = sizeof(indices);
     mesh_descriptor.indice_type = GL_UNSIGNED_BYTE;
-    mesh_descriptor.p_indices = static_cast<void*>(indices);
+    mesh_descriptor.p_indices = indices;
 
-    mesh_descriptor.attrib_pos = {2, GL_FLOAT, sizeof(float)*4, 0};
-    mesh_descriptor.attrib_texcoord = {2, GL_FLOAT, sizeof(float)*4, sizeof(float)*2};
+    mesh_descriptor.attrib_pos = {
+        .location = 0,
+        .size     = 2,
+        .type     = GL_FLOAT,
+        .stride   = sizeof(float)*4,
+        .offset   = 0
+    };
+
+    mesh_descriptor.attrib_texcoord = {
+        .location = 1,
+        .size     = 2,
+        .type     = GL_FLOAT, 
+        .stride   = sizeof(float)*4, 
+        .offset   = sizeof(float)*2
+    };
 
     bicudo::gpufeature *p_triangle = this->loaded_gpu_renderable_list.emplace_back(new bicudo::gpurenderable());
     p_triangle->set_mesh_descriptor(mesh_descriptor);
@@ -35,10 +48,10 @@ void scenestarter::on_create() {
     bicudo::pipelineproperty gpu_pipeline_property {};
     gpu_pipeline_property.viewport_count = 1;
 
-    auto &display_size {bicudo::kernel::p_core->p_display_service->get(bicudo::toplevel)->size};
+    auto &display_size {bicudo::kernel::p_core->p_display_service->get(bicudo::stack::toplevel)->size};
     this->viewport = {0.0f, 0.0f, static_cast<float>(display_size.x), static_cast<float>(display_size.y)};
     gpu_pipeline_property.p_viewports = &this->viewport;
-    
+
     bicudo::gpufeature *p_overlay = this->loaded_gpu_pipeline_list.emplace_back(new bicudo::gpupipeline());
     p_overlay->set_pipeline_property(gpu_pipeline_property);
 }
@@ -57,6 +70,8 @@ void scenestarter::on_update() {
 
 void scenestarter::on_render() {
     scene::on_render();
+
+    glViewport(this->viewport.x, this->viewport.y, this->viewport.z, this->viewport.w);
     this->loaded_gpu_pipeline_list.at(0)->invoke();
 
     for (bicudo::gpufeature *&p_gpu_feature : this->loaded_gpu_renderable_list) {
@@ -85,6 +100,15 @@ int32_t main(int32_t, char**) {
     bicudo::display display {};
     bicudo::createdisplay(&display);
     display.set_display_property(display_property);
+
+    bicudo::scene *p_scene_starter {new scenestarter()};
+    bicudo::createscene(p_scene_starter);
+    bicudo::startscene(p_scene_starter, true);
+
+    /*if (this->should_change_scenary && this->targeting_scenary != -1) {
+        bicudo::startscene(this->targeting_scenary); // invoke on reload? nah
+        bicudo::startscenereload(this->targeting_scenary); // invoke on reload yes
+    }*/
 
     /* Run bicudo core. */
     return core.mainloop();

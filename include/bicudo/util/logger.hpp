@@ -25,4 +25,9 @@ namespace bicudo {
     };
 }
 
+#define bassert(condition, message) \
+    if (!(condition)) { \
+        std::cerr << "--- [B]icudo.Log - Assert failed: " << #condition << ", " << message << std::endl; \
+    } \
+
 #endif

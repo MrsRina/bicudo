@@ -2,12 +2,17 @@
 #define BICUDO_CORE_H
 
 #include "bicudo/direct/displayservice.hpp"
+#include "bicudo/direct/sceneservice.hpp"
 #include "bicudo/util/logger.hpp"
+#include "bicudo/util/priority.hpp"
+
+#include <queue>
 
 namespace bicudo {
     struct core {
     public:
         bicudo::displayservice *p_display_service {};
+        bicudo::sceneservice *p_scene_service {};
     protected:
         bool window_show {};
         bool running_mainloop {};
@@ -15,6 +20,8 @@ namespace bicudo {
 
         uint64_t capped_fps {};
         float delta {};
+
+        std::queue<bicudo::task> task_queue {};
     protected:
         void on_init_all();
         void on_quit_all();
@@ -23,6 +30,7 @@ namespace bicudo {
             this->on_init_all();
         }
 
+        bicudo::task &generate_task();
         int32_t mainloop();
     };
 }
