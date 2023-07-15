@@ -2,8 +2,8 @@
 #define BICUDO_DIRECT_DISPLAY_SERVICE_H
 
 #include "bicudo/service/service.hpp"
-#include "display.hpp"
 #include "bicudo/platform/contextoverview.hpp"
+#include "display.hpp"
 
 namespace bicudo {
     class displayservice : public service<bicudo::display*, int32_t> {

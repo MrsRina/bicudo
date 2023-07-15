@@ -85,8 +85,17 @@ void scenestarter::on_render() {
 
 int32_t main(int32_t, char**) {
     /* Init the bicudo core. */
+    bicudo::displayservice display_service {};
+    bicudo::sceneservice scene_service {};
+
+    bicudo::coreproperty core_property {
+        .p_display_service = &display_service,
+        .p_scene_service = &scene_service
+    };
+
     bicudo::core core {};
     bicudo::createcore(&core);
+    core.set_core_property(core_property);
 
     bicudo::contextoverview *p_context_overview {new bicudo::openglcontextoverview()};
     p_context_overview->set_opengl_property(3, 4, "#version 450");
@@ -104,11 +113,6 @@ int32_t main(int32_t, char**) {
     bicudo::scene *p_scene_starter {new scenestarter()};
     bicudo::createscene(p_scene_starter);
     bicudo::startscene(p_scene_starter, true);
-
-    /*if (this->should_change_scenary && this->targeting_scenary != -1) {
-        bicudo::startscene(this->targeting_scenary); // invoke on reload? nah
-        bicudo::startscenereload(this->targeting_scenary); // invoke on reload yes
-    }*/
 
     /* Run bicudo core. */
     return core.mainloop();

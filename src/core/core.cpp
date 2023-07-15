@@ -1,6 +1,9 @@
-#include "GL/glew.h"
 #include "bicudo/core/core.hpp"
-#include "bicudo/util/priority.hpp"
+
+void bicudo::core::set_core_property(bicudo::coreproperty &core_property) {
+    this->p_display_service = core_property.p_display_service;
+    this->p_scene_service = core_property.p_scene_service;
+}
 
 bicudo::task &bicudo::core::generate_task() {
     return this->task_queue.emplace();
@@ -12,22 +15,18 @@ void bicudo::core::on_init_all() {
     this->running_mainloop = true;
     this->capped_fps = 60;
 
-    this->p_display_service = new bicudo::displayservice();
     this->p_display_service->on_init();
-
-    this->p_scene_service = new bicudo::sceneservice();
-    this->p_display_service->on_init();
+    this->p_scene_service->on_init();
 }
 
 void bicudo::core::on_quit_all() {
     this->p_display_service->on_quit();
-    delete this->p_display_service;
-
     this->p_display_service->on_quit();
-    delete this->p_display_service;
 }
 
 int32_t bicudo::core::mainloop() {
+    this->on_init_all();
+
     uint64_t old_ticks {};
     uint64_t current_ticks {SDL_GetPerformanceCounter()};
     uint64_t performance_frequency {1};
@@ -81,13 +80,13 @@ int32_t bicudo::core::mainloop() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         if (this->p_scene_service->p_current_scene != nullptr) {
-        //    this->p_scene_service->p_current_scene->on_render();
+            this->p_scene_service->p_current_scene->on_render();
         }
 
         SDL_GL_SwapWindow(p_display->root());
         SDL_Delay(1000 / this->capped_fps);
     }
 
-    //this->on_quit_all();
+    this->on_quit_all();
     return 0;
 }

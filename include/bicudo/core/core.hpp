@@ -9,6 +9,12 @@
 #include <queue>
 
 namespace bicudo {
+    struct coreproperty {
+    public:
+        bicudo::displayservice *p_display_service {};
+        bicudo::sceneservice *p_scene_service {};
+    };
+
     struct core {
     public:
         bicudo::displayservice *p_display_service {};
@@ -26,10 +32,7 @@ namespace bicudo {
         void on_init_all();
         void on_quit_all();
     public:
-        explicit core() {
-            this->on_init_all();
-        }
-
+        void set_core_property(bicudo::coreproperty &core_property);
         bicudo::task &generate_task();
         int32_t mainloop();
     };

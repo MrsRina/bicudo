@@ -30,7 +30,14 @@ void bicudo::displayservice::update(bicudo::displayproperty &display_property,
 
     auto &display_root {p_display->root()};
     if (display_root == nullptr) {
-        display_root = SDL_CreateWindow("Bicudo", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, display_property.p_api_context_overview->get_api_window_context_flag());
+        display_root = SDL_CreateWindow("Bicudo", 
+            SDL_WINDOWPOS_CENTERED, 
+            SDL_WINDOWPOS_CENTERED, 
+            800, 600, 
+            display_property.p_api_context_overview->get_api_window_context_flag()
+        );
+
+        display_property.p_api_context_overview->create(display_root);
         p_display->size = {800, 600};
     }
 

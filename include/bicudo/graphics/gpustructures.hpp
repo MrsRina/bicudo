@@ -13,6 +13,7 @@ namespace bicudo {
     };
 
     struct attriblayout {
+    public:
         uint32_t location {};
         int32_t size {};
         uint32_t type {};

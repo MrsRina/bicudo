@@ -1,6 +1,5 @@
-#include "bicudo/direct/sceneservice.hpp"
-#include "bicudo/util/logger.hpp"
 #include "bicudo/bicudo.hpp"
+#include "bicudo/util/logger.hpp"
 
 void bicudo::sceneservice::start(bicudo::scene *p_scene, bool reload) {
     if (p_scene == nullptr) {

@@ -17,7 +17,7 @@ namespace bicudo {
         virtual void set_draw_stride(int64_t, int64_t, int64_t = -1) {};
         virtual void bind(uint32_t, uint32_t) {};
         virtual void edit(void*, const bicudo::ivec2&) {};
-        virtual void send(int64_t, void*, bool = false) {};
+        virtual void send(int64_t, void*, int32_t) {};
         virtual void attach(uint32_t, int32_t, uint32_t, const bicudo::ivec2&) {};
         virtual void unbind() {};
         virtual void free_memory(uint32_t) {};

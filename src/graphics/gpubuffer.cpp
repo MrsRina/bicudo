@@ -66,8 +66,6 @@ void bicudo::gpubuffer::bind(uint32_t key, uint32_t _working_buffer) {
         this->element_buffer_key = key;
         this->indexing_rendering_enabled = true;
         break;
-    default:
-        break;
     }
 
     glBindBuffer(_working_buffer, buffer);
@@ -75,8 +73,8 @@ void bicudo::gpubuffer::bind(uint32_t key, uint32_t _working_buffer) {
     this->bind_on = true;
 }
 
-void bicudo::gpubuffer::send(int64_t data_size, void *p_data, bool immutable_draw) {
-    glBufferData(this->buffer_bind, data_size, p_data, immutable_draw ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
+void bicudo::gpubuffer::send(int64_t data_size, void *p_data, int32_t driver_read_mode) {
+    glBufferData(this->buffer_bind, data_size, p_data, driver_read_mode);
 }
 
 void bicudo::gpubuffer::edit(void *p_data, const bicudo::ivec2 &stride) {
