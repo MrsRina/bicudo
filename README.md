@@ -17,7 +17,7 @@ Mainly features:
 
 # Building
 
-If you are on Windows, please replace `"Unix Makefiles"` with `"Ninja"` or whatever toolchain makefile generator you want, run the command:  
+If you are on Windows, please replace `"Unix Makefiles"` with `"Ninja"` or whatever toolchain makefile generator you want, just run the command:  
 `cmake -S . -B ./cmake-build-debug/ -G "Unix Makefiles" && cmake --build ./cmake-build-debug/"`
 
 Native "library" location:  
