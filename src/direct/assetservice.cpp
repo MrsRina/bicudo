@@ -12,5 +12,5 @@ void bicudo::assetservice::registry(bicudo::assetdescriptor &asset_descriptor, b
         p_asset->resources.at(it) = asset_descriptor.pp_resources[it];
     }
 
-    this->loaded_asset_unordered_map[p_asset->tag] = p_asset;
+    this->loaded_asset_unordered_map.insert({p_asset->tag, p_asset});
 }

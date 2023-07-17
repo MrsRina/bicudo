@@ -18,7 +18,7 @@ void bicudo::core::on_init_all() {
 
 void bicudo::core::on_quit_all() {
     this->p_display_service->on_shutdown();
-    this->p_display_service->on_shutdown();
+    this->p_scene_service->on_shutdown();
 }
 
 int32_t bicudo::core::mainloop() {
