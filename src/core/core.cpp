@@ -14,14 +14,11 @@ void bicudo::core::on_init_all() {
 
     this->running_mainloop = true;
     this->capped_fps = 60;
-
-    this->p_display_service->on_init();
-    this->p_scene_service->on_init();
 }
 
 void bicudo::core::on_quit_all() {
-    this->p_display_service->on_quit();
-    this->p_display_service->on_quit();
+    this->p_display_service->on_shutdown();
+    this->p_display_service->on_shutdown();
 }
 
 int32_t bicudo::core::mainloop() {
@@ -65,7 +62,7 @@ int32_t bicudo::core::mainloop() {
                 }
             }
         }
-        
+
         while (!this->task_queue.empty()) {
             auto &task {this->task_queue.front()};
             task.function(task.p_data);

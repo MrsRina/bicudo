@@ -24,7 +24,6 @@ namespace bicudo {
     public:
         bicudo::ivec2 size {};
     public:
-        void set_display_property(bicudo::displayproperty &display_property);
         int32_t &id();
         SDL_Window *&root();
     };

@@ -8,6 +8,7 @@ public:
     std::vector<bicudo::gpufeature*> loaded_gpu_pipeline_list {};
     std::vector<bicudo::gpufeature*> loaded_gpu_renderable_list {};
     bicudo::vec4 viewport {};
+    bicudo::asset overlay_asset {};
 public:
     void on_create() override;
     void on_destroy() override;

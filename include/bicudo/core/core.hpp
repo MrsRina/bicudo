@@ -3,6 +3,7 @@
 
 #include "bicudo/direct/displayservice.hpp"
 #include "bicudo/direct/sceneservice.hpp"
+#include "bicudo/direct/assetservice.hpp"
 #include "bicudo/util/logger.hpp"
 #include "bicudo/util/priority.hpp"
 
@@ -13,12 +14,14 @@ namespace bicudo {
     public:
         bicudo::displayservice *p_display_service {};
         bicudo::sceneservice *p_scene_service {};
+        bicudo::assetservice *p_asset_service {};
     };
 
     struct core {
     public:
         bicudo::displayservice *p_display_service {};
         bicudo::sceneservice *p_scene_service {};
+        bicudo::assetservice *p_asset_service {};
     protected:
         bool window_show {};
         bool running_mainloop {};

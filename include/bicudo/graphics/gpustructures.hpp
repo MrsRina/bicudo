@@ -9,7 +9,7 @@ namespace bicudo {
         uint32_t viewport_count {};
         bicudo::vec4 *p_viewports {};
         uint32_t render_layer_count {};
-        uint32_t *p_render_layes {};
+        uint32_t *p_render_layers {};
     };
 
     struct attriblayout {

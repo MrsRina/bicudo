@@ -1,5 +1,6 @@
 #include "bicudo/bicudo.hpp"
 #include "bicudo/util/logger.hpp"
+#include "bicudo/util/logger.hpp"
 
 void bicudo::sceneservice::start(bicudo::scene *p_scene, bool reload) {
     if (p_scene == nullptr) {
@@ -19,8 +20,8 @@ void bicudo::sceneservice::start(bicudo::scene *p_scene, bool reload) {
 }
 
 int64_t bicudo::sceneservice::find(int32_t id) {
-    for (uint64_t it {}; it < this->features.size(); it++) {
-        if (this->features.at(it)->id() == id) {
+    for (uint64_t it {}; it < this->loaded_scene_list.size(); it++) {
+        if (this->loaded_scene_list.at(it)->id() == id) {
             return static_cast<int64_t>(it);
         }
     }
@@ -29,14 +30,14 @@ int64_t bicudo::sceneservice::find(int32_t id) {
 }
 
 bicudo::scene *bicudo::sceneservice::get(int32_t index) {
-    return this->features.at(index);
+    return this->loaded_scene_list.at(index);
 }
 
 void bicudo::sceneservice::add(bicudo::scene *p_scene) {
     auto &scene_id {p_scene->id()};
     if (this->find(scene_id) == -1) {
         scene_id = ++this->highest_token;
-        this->features.emplace_back(p_scene);
+        this->loaded_scene_list.emplace_back(p_scene);
 
         bicudo::kernel::p_core->generate_task() = {
             .p_data = nullptr,
@@ -44,4 +45,8 @@ void bicudo::sceneservice::add(bicudo::scene *p_scene) {
                 p_scene->on_create();
         }};
     }
+}
+
+void bicudo::sceneservice::on_shutdown() {
+    bicudo::log() << "Scene service shutdown called";
 }

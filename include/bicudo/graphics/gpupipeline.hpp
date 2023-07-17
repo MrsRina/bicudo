@@ -6,10 +6,11 @@
 namespace bicudo {
     class gpupipeline : public gpufeature {
     protected:
-        bicudo::pipelineproperty pipeline_property {};
+        std::vector<uint32_t> render_layer_list {};
     public:
-        void set_pipeline_property(bicudo::pipelineproperty &_pipeline_property) override;
-        bicudo::pipelineproperty *edit_pipeline_property() override;
+        void set_pipeline_property(bicudo::pipelineproperty &pipeline_property) override;
+        void invoke() override;
+        void revoke() override;
     };
 }
 

@@ -28,7 +28,6 @@ namespace bicudo {
         virtual uint32_t get_gpu_reference(uint32_t) { return 0; };
         virtual uint32_t get_main_gpu_reference() { return 0; };
         virtual void set_pipeline_property(bicudo::pipelineproperty&) {};
-        virtual bicudo::pipelineproperty *edit_pipeline_property() { return nullptr; };
     };
 }
 

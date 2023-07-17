@@ -1,8 +1,9 @@
 #include "bicudo/direct/displayservice.hpp"
+#include "bicudo/util/logger.hpp"
 
 int64_t bicudo::displayservice::find(int32_t id) {
-    for (uint64_t it {}; it < this->features.size(); it++) {
-        if (this->features.at(it)->id() == id) {
+    for (uint64_t it {}; it < this->loaded_display_list.size(); it++) {
+        if (this->loaded_display_list.at(it)->id() == id) {
             return static_cast<int64_t>(it);
         }
     }
@@ -11,14 +12,14 @@ int64_t bicudo::displayservice::find(int32_t id) {
 }
 
 bicudo::display *bicudo::displayservice::get(int32_t index) {
-    return this->features.at(index);
+    return this->loaded_display_list.at(index);
 }
 
 void bicudo::displayservice::add(bicudo::display *p_display) {
     auto &display_id {p_display->id()};
     if (this->find(display_id) == -1) {
         display_id = ++this->highest_token;
-        this->features.emplace_back(p_display);
+        this->loaded_display_list.emplace_back(p_display);
     }
 }
 
@@ -57,4 +58,8 @@ void bicudo::displayservice::update(bicudo::displayproperty &display_property,
     if (display_property.resizable != -1) {
         SDL_SetWindowResizable(display_root, static_cast<SDL_bool>(display_property.resizable));   
     }
+}
+
+void bicudo::displayservice::on_shutdown() {
+    bicudo::log() << "Display service shutdown called";
 }
