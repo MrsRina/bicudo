@@ -15,13 +15,12 @@ void scenestarter::on_create() {
     };
 
     bicudo::assetdescriptor overlay_descriptor {
-        .p_tag = "overlay",
+        .p_tag          = "overlay",
         .resource_count = 1,
-        .pp_resources = p_overlay_resources
+        .pp_resources   = p_overlay_resources
     };
 
     bicudo::createasset(overlay_descriptor, &this->overlay_asset);
-    return;
 
     float resources[16] {
         0.0f, 0.0f, 0.0f, 0.0f,

@@ -3,6 +3,7 @@
 void bicudo::core::set_core_property(bicudo::coreproperty &core_property) {
     this->p_display_service = core_property.p_display_service;
     this->p_scene_service = core_property.p_scene_service;
+    this->p_asset_service = core_property.p_asset_service;
 }
 
 bicudo::task &bicudo::core::generate_task() {

@@ -9,6 +9,7 @@
 namespace bicudo {
     class assetservice {
     protected:
+        int32_t gostosa = 3;
         std::unordered_map<std::string, bicudo::asset*> loaded_asset_unordered_map {};
     public:
         bicudo::asset *get(std::string_view tag);

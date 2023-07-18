@@ -1,5 +1,4 @@
 #include "bicudo/direct/assetservice.hpp"
-
 bicudo::asset *bicudo::assetservice::get(std::string_view tag) {
     return this->loaded_asset_unordered_map[tag.data()];
 }
