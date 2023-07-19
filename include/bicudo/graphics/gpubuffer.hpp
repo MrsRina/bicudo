@@ -7,7 +7,6 @@
 namespace bicudo {
     class gpubuffer : public bicudo::gpufeature {
     protected:
-        uint32_t primitive {};
         uint32_t buffer_bind {};
         uint32_t index_primitive {};
 
@@ -20,7 +19,6 @@ namespace bicudo {
         std::unordered_map<uint32_t, uint32_t> buffer_map {};
     public:
         void set_mesh_descriptor(bicudo::meshdescriptor &mesh_descriptor) override;
-        void set_primitive(uint32_t _primitive) override;
         void set_index_primitive(uint32_t _primitive) override;
         void bind(uint32_t key, uint32_t buffer) override;
         void send(int64_t data_size, void *p_data, int32_t driver_read_mode) override;

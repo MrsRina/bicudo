@@ -47,10 +47,6 @@ void bicudo::gpubuffer::set_mesh_descriptor(bicudo::meshdescriptor &mesh_descrip
     this->revoke();
 }
 
-void bicudo::gpubuffer::set_primitive(uint32_t _primitive) {
-    this->primitive = _primitive;
-}
-
 void bicudo::gpubuffer::set_index_primitive(uint32_t _primitive) {
     this->index_primitive = _primitive;
 }

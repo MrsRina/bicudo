@@ -5,11 +5,15 @@ void bicudo::gpurenderable::set_draw_stride(int64_t size, int64_t offset, int64_
     this->stride[1] = offset;
 }
 
+void bicudo::gpurenderable::set_primitive(uint32_t _primitive) {
+    this->primitive = _primitive;
+}
+
 void bicudo::gpurenderable::draw() {
     if (this->indexed_rendering) {
-        glDrawElements(static_cast<uint32_t>(this->primitive), this->stride[0], static_cast<uint32_t>(this->index_primitive), (void*) this->stride[1]);
+        glDrawElements(this->primitive, this->stride[0], this->index_primitive, (void*) this->stride[1]);
     } else {
-        glDrawArrays(static_cast<uint32_t>(this->primitive), this->stride[0], this->stride[1]);
+        glDrawArrays(this->primitive, this->stride[0], this->stride[1]);
     }
 }
 
