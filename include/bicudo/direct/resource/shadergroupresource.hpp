@@ -14,6 +14,7 @@ namespace bicudo {
 
     class shadergroupresource : public resource {
     protected:
+        std::vector<bicudo::shadermodule> loaded_shader_module_list {};
         uint32_t program {};
     public:
         explicit shadergroupresource(const std::vector<bicudo::shadermodule> &pipeline_shader_module_list);

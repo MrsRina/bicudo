@@ -13,7 +13,7 @@ bool bicudo::readfile(std::string_view path, std::string &string_builder) {
         
         ifs.close();
     } else {
-        std::string msg {"Failed to read file '"}; msg += path; msg += '\'';
+        bicudo::log() << "Failed to read file '" << path << '\'';
         return true;
     }
 

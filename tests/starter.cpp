@@ -64,7 +64,7 @@ void scenestarter::on_create() {
     p_triangle->set_draw_stride(6, 0);
 
     uint32_t overlay_programs[] {
-        bicudo::getasset("overlay")->resources.at(0)->get_program()
+        bicudo::getasset("overlay")->get(0)->get_program()
     };
 
     bicudo::pipelineproperty gpu_pipeline_property {};

@@ -17,10 +17,12 @@ namespace bicudo {
     protected:
         int32_t asset_id {};
     public:
-       std::vector<bicudo::resource*> resources {};
-       std::string tag {};
-   public:
-       int32_t &id();
+        std::vector<bicudo::resource*> loaded_resource_list {};
+        std::string tag {};
+    public:
+        void do_load_resources();
+        bicudo::resource *get(uint64_t index);
+        int32_t &id();
     };
 }
 

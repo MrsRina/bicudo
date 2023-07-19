@@ -13,10 +13,11 @@ void bicudo::sceneservice::start(bicudo::scene *p_scene, bool reload) {
     }
 
     bicudo::kernel::p_core->generate_task() = {
-        .p_data   = p_scene,
-        .function = [](void *p_data) {
-            (static_cast<bicudo::scene*>(p_data))->on_reload();
-    }};
+        .p_data   = nullptr,
+        .function = [p_scene](void*) {
+            p_scene->on_create();
+        }
+    };
 }
 
 int64_t bicudo::sceneservice::find(int32_t id) {
@@ -40,10 +41,11 @@ void bicudo::sceneservice::add(bicudo::scene *p_scene) {
         this->loaded_scene_list.emplace_back(p_scene);
 
         bicudo::kernel::p_core->generate_task() = {
-            .p_data   = p_scene,
-            .function = [](void *p_data) {
-                (static_cast<bicudo::scene*>(p_data))->on_create();
-        }};
+            .p_data   = nullptr,
+            .function = [p_scene](void*) {
+                p_scene->on_create();
+            }
+        };
     }
 }
 
