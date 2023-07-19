@@ -8,7 +8,7 @@ void bicudo::gpupipeline::set_pipeline_property(bicudo::pipelineproperty &pipeli
 }
 
 void bicudo::gpupipeline::invoke() {
-    glUseProgram(this->render_layer_list.at(0));   
+    glUseProgram(this->render_layer_list.at(0));
 }
 
 void bicudo::gpupipeline::revoke() {

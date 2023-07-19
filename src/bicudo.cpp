@@ -23,12 +23,6 @@ void bicudo::startscene(bicudo::scene *p_scene, bool reload) {
 
 void bicudo::createasset(bicudo::assetdescriptor &asset_descriptor, bicudo::asset *p_asset) {
     bicudo::kernel::p_core->p_asset_service->registry(asset_descriptor, p_asset);
-    bicudo::kernel::p_core->generate_task() = {
-        .p_data   = nullptr,
-        .function = [p_asset](void*) {
-            p_asset->do_load_resources();
-        }
-    };
 }
 
 bicudo::asset *bicudo::getasset(std::string_view tag) {

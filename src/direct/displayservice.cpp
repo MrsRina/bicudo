@@ -34,7 +34,7 @@ void bicudo::displayservice::update(bicudo::displayproperty &display_property,
         display_root = SDL_CreateWindow("Bicudo", 
             SDL_WINDOWPOS_CENTERED, 
             SDL_WINDOWPOS_CENTERED, 
-            800, 600, 
+            800, 600,
             display_property.p_api_context_overview->get_api_window_context_flag()
         );
 

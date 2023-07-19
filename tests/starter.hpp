@@ -7,6 +7,7 @@ class scenestarter : public bicudo::scene {
 public:
     std::vector<bicudo::gpufeature*> loaded_gpu_pipeline_list {};
     std::vector<bicudo::gpufeature*> loaded_gpu_renderable_list {};
+
     bicudo::vec4 viewport {};
     bicudo::asset overlay_asset {};
 public:

@@ -93,7 +93,6 @@ void scenestarter::on_update() {
 }
 
 void scenestarter::on_render() {
-    return;
     scene::on_render();
 
     glViewport(this->viewport.x, this->viewport.y, this->viewport.z, this->viewport.w);
@@ -116,8 +115,8 @@ int32_t main(int32_t, char**) {
 
     bicudo::coreproperty core_property {
         .p_display_service = &display_service,
-        .p_scene_service = &scene_service,
-        .p_asset_service = &asset_service
+        .p_scene_service   = &scene_service,
+        .p_asset_service   = &asset_service
     };
 
     bicudo::core core {};
@@ -137,7 +136,7 @@ int32_t main(int32_t, char**) {
 
     bicudo::scene *p_scene_starter {new scenestarter()};
     bicudo::createscene(p_scene_starter);
-    bicudo::startscene(p_scene_starter, true);
+    bicudo::startscene(p_scene_starter, false);
 
     /* Run bicudo core. */
     return core.mainloop();

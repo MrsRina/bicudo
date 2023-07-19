@@ -8,6 +8,8 @@ bicudo::shadergroupresource::shadergroupresource(const std::vector<bicudo::shade
 }
 
 void bicudo::shadergroupresource::on_load() {
+    bicudo::log() << "loading shaders";
+
     std::vector<uint32_t> compiled_shader_list {};
     std::string shader_source {};
 
