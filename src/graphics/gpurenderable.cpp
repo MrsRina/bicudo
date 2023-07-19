@@ -10,8 +10,8 @@ void bicudo::gpurenderable::set_primitive(uint32_t _primitive) {
 }
 
 void bicudo::gpurenderable::draw() {
-    if (this->indexed_rendering) {
-        glDrawElements(this->primitive, this->stride[0], this->index_primitive, (void*) this->stride[1]);
+    if (this->indexing_rendering_enabled) {
+        glDrawElements(this->primitive, this->stride[1], this->index_primitive, (void*) this->stride[0]);
     } else {
         glDrawArrays(this->primitive, this->stride[0], this->stride[1]);
     }

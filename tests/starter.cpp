@@ -22,10 +22,10 @@ void scenestarter::on_create() {
 
     bicudo::createasset(overlay_descriptor, &this->overlay_asset);
 
-    float resources[6] {
-        0.0f, 0.0f,
-        1.0f, 0.0f,
-        1.0f, 1.0f
+    float resources[12] {
+        0.0f, 0.0f, 0.0f, 0.0f,
+        1.0f, 0.0f, 1.0f, 0.0f,
+        1.0f, 1.0f, 1.0f, 1.0f
     };
 
     uint8_t indices[6] {
@@ -37,25 +37,25 @@ void scenestarter::on_create() {
     mesh_descriptor.resource_size = sizeof(resources);
     mesh_descriptor.p_resources = resources;
 
-    //mesh_descriptor.indice_size = sizeof(indices);
-    //mesh_descriptor.indice_type = GL_UNSIGNED_BYTE;
-    //mesh_descriptor.p_indices = indices;
+    mesh_descriptor.indice_size = sizeof(indices);
+    mesh_descriptor.indice_type = GL_UNSIGNED_BYTE;
+    mesh_descriptor.p_indices = indices;
 
     mesh_descriptor.attrib_pos = {
         .location = 0,
         .size     = 2,
         .type     = GL_FLOAT,
-        .stride   = sizeof(float)*4*0,
+        .stride   = sizeof(float)*4,
         .offset   = 0
     };
 
-    /* mesh_descriptor.attrib_texcoord = {
+    mesh_descriptor.attrib_texcoord = {
         .location = 1,
         .size     = 2,
         .type     = GL_FLOAT, 
         .stride   = sizeof(float)*4, 
         .offset   = sizeof(float)*2
-    };*/
+    };
 
     bicudo::gpufeature *p_triangle = this->loaded_gpu_renderable_list.emplace_back(new bicudo::gpurenderable());
     p_triangle->set_mesh_descriptor(mesh_descriptor);

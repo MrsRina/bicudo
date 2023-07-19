@@ -8,7 +8,6 @@ namespace bicudo {
     protected:
         uint32_t primitive {};
         uint32_t vertex_arrays_object {};
-        uint32_t indexed_rendering {};
         int64_t stride[2] {};
     public:
         void set_primitive(uint32_t _primitive) override;
