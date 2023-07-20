@@ -11,7 +11,7 @@ void bicudo::gpubuffer::set_mesh_descriptor(bicudo::meshdescriptor &mesh_descrip
 
     if (mesh_descriptor.resource_size > 0) {
         this->bind(0, GL_ARRAY_BUFFER);
-        this->send(mesh_descriptor.resource_size, mesh_descriptor.p_resources, true);
+        this->send(mesh_descriptor.resource_size, mesh_descriptor.p_resources, GL_STATIC_DRAW);
     }
 
     if (mesh_descriptor.attrib_pos.size > 0) {
@@ -40,7 +40,7 @@ void bicudo::gpubuffer::set_mesh_descriptor(bicudo::meshdescriptor &mesh_descrip
 
     if (mesh_descriptor.indice_size > 0 && mesh_descriptor.p_indices != nullptr) {
         this->bind(1, GL_ELEMENT_ARRAY_BUFFER);
-        this->send(mesh_descriptor.indice_size, mesh_descriptor.p_indices, true);
+        this->send(mesh_descriptor.indice_size, mesh_descriptor.p_indices, GL_STATIC_DRAW);
         this->set_index_primitive(mesh_descriptor.indice_type);
     }
 

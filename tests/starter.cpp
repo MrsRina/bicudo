@@ -35,11 +35,11 @@ void scenestarter::on_create() {
 
     bicudo::meshdescriptor mesh_descriptor {};
     mesh_descriptor.resource_size = sizeof(resources);
-    mesh_descriptor.p_resources = resources;
+    mesh_descriptor.p_resources = static_cast<void*>(resources);
 
-    mesh_descriptor.indice_size = sizeof(indices);
-    mesh_descriptor.indice_type = GL_UNSIGNED_BYTE;
-    mesh_descriptor.p_indices = indices;
+    //mesh_descriptor.indice_size = sizeof(indices);
+    //mesh_descriptor.indice_type = GL_UNSIGNED_BYTE;
+    //mesh_descriptor.p_indices = indices;
 
     mesh_descriptor.attrib_pos = {
         .location = 0,
@@ -52,8 +52,8 @@ void scenestarter::on_create() {
     mesh_descriptor.attrib_texcoord = {
         .location = 1,
         .size     = 2,
-        .type     = GL_FLOAT, 
-        .stride   = sizeof(float)*4, 
+        .type     = GL_FLOAT,
+        .stride   = sizeof(float)*4,
         .offset   = sizeof(float)*2
     };
 
