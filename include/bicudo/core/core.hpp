@@ -22,6 +22,7 @@ namespace bicudo {
         bicudo::displayservice *p_display_service {};
         bicudo::sceneservice *p_scene_service {};
         bicudo::assetservice *p_asset_service {};
+        bicudo::vec4 clean_color {0.34547584f, 0.12231312f, 1.0f, 1.0f};
     protected:
         bool window_show {};
         bool running_mainloop {};

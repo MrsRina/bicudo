@@ -74,7 +74,7 @@ int32_t bicudo::core::mainloop() {
             this->p_scene_service->p_current_scene->on_update();
         }
 
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClearColor(this->color_back);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         if (this->p_scene_service->p_current_scene != nullptr) {

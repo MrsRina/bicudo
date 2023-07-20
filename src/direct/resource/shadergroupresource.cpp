@@ -66,6 +66,26 @@ void bicudo::shadergroupresource::on_load() {
         }
 
         bicudo::log() << "Resource shader group compiled & program sucessfully linked!";
+    
+        int32_t active_uniforms_location {};
+        glGetProgramInterfaceiv(this->program, GL_UNIFORM, GL_ACTIVE_RESOURCES, &active_uniforms_location);
+
+        GLenum properties[4] {GL_NAME_LENGTH, GL_TYPE, GL_LOCATION, GL_BLOCK_INDEX};
+        int32_t results[4] {};
+
+        std::string uniform {};
+        for (int32_t it {}; it < active_uniforms_location; ++it) {
+            glGetProgramResourceiv(this->program_buffer_name_object, GL_UNIFORM, it, 4, properties, 4, nullptr, results);
+            int32_t name_buf_size {results[0] + 1};
+            
+            uniform.clear();
+            uniform.resize(name_buf_size);
+
+            glGetProgramResourceName(this->program_buffer_name_object, GL_UNIFORM, it, name_buf_size, nullptr, uniform.data());
+            std::cout << uniform << std::endl;
+
+            this->loaded_uniform_map.insert({uniform.c_str(), it});
+        }
     }
 }
 

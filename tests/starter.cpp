@@ -22,9 +22,10 @@ void scenestarter::on_create() {
 
     bicudo::createasset(overlay_descriptor, &this->overlay_asset);
 
-    float resources[12] {
+    float resources[16] {
         0.0f, 0.0f, 0.0f, 0.0f,
         1.0f, 0.0f, 1.0f, 0.0f,
+        0.0f, 1.0f, 0.0f, 1.0f,
         1.0f, 1.0f, 1.0f, 1.0f
     };
 
@@ -35,11 +36,11 @@ void scenestarter::on_create() {
 
     bicudo::meshdescriptor mesh_descriptor {};
     mesh_descriptor.resource_size = sizeof(resources);
-    mesh_descriptor.p_resources = static_cast<void*>(resources);
+    mesh_descriptor.p_resources = resources;
 
-    //mesh_descriptor.indice_size = sizeof(indices);
-    //mesh_descriptor.indice_type = GL_UNSIGNED_BYTE;
-    //mesh_descriptor.p_indices = indices;
+    mesh_descriptor.indice_size = sizeof(indices);
+    mesh_descriptor.indice_type = GL_UNSIGNED_BYTE;
+    mesh_descriptor.p_indices = indices;
 
     mesh_descriptor.attrib_pos = {
         .location = 0,
@@ -60,7 +61,7 @@ void scenestarter::on_create() {
     bicudo::gpufeature *p_triangle = this->loaded_gpu_renderable_list.emplace_back(new bicudo::gpurenderable());
     p_triangle->set_mesh_descriptor(mesh_descriptor);
     p_triangle->set_primitive(GL_TRIANGLES);
-    p_triangle->set_draw_stride(0, 3);
+    p_triangle->set_draw_stride(0, 6);
 
     uint32_t overlay_programs[] {
         bicudo::getasset("overlay")->get(0)->get_program()
@@ -95,7 +96,9 @@ void scenestarter::on_render() {
     scene::on_render();
 
     glViewport(this->viewport.x, this->viewport.y, this->viewport.z, this->viewport.w);
-    this->loaded_gpu_pipeline_list.at(0)->invoke();
+
+    uint32_t pipeline_program {this->loaded_gpu_pipeline_list.at(0)->get_gpu_reference(0)};
+    glUseProgram(pipeline_program);
 
     for (bicudo::gpufeature *&p_gpu_feature : this->loaded_gpu_renderable_list) {
         p_gpu_feature->invoke();
@@ -103,7 +106,7 @@ void scenestarter::on_render() {
         p_gpu_feature->revoke();
     }
 
-    this->loaded_gpu_pipeline_list.at(0)->revoke();
+    glUseProgram(0);
 }
 
 int32_t main(int32_t, char**) {

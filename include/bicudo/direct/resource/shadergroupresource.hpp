@@ -4,6 +4,7 @@
 #include "resource.hpp"
 #include "bicudo/platform/platform.hpp"
 #include <vector>
+#include <unordered_map>
 
 namespace bicudo {
     struct shadermodule {
@@ -15,6 +16,7 @@ namespace bicudo {
     class shadergroupresource : public resource {
     protected:
         std::vector<bicudo::shadermodule> loaded_shader_module_list {};
+        std::unordered_map<const char*, uint32_t> loaded_uniform_map {};
         uint32_t program {};
     public:
         explicit shadergroupresource(const std::vector<bicudo::shadermodule> &pipeline_shader_module_list);

@@ -14,3 +14,7 @@ void bicudo::gpupipeline::invoke() {
 void bicudo::gpupipeline::revoke() {
     glUseProgram(0);
 }
+
+uint32_t bicudo::gpupipeline::get_gpu_reference(uint32_t index) {
+    return this->render_layer_list.at(index);
+}

@@ -11,6 +11,7 @@ namespace bicudo {
         void set_pipeline_property(bicudo::pipelineproperty &pipeline_property) override;
         void invoke() override;
         void revoke() override;
+        uint32_t get_gpu_reference(uint32_t index) override;
     };
 }
 
