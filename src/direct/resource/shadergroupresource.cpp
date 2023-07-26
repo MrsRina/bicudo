@@ -75,7 +75,7 @@ void bicudo::shadergroupresource::on_load() {
 
         std::string uniform {};
         for (int32_t it {}; it < active_uniforms_location; ++it) {
-            glGetProgramResourceiv(this->program_buffer_name_object, GL_UNIFORM, it, 4, properties, 4, nullptr, results);
+            glGetProgramResourceiv(this->id, GL_UNIFORM, it, 4, properties, 4, nullptr, results);
             int32_t name_buf_size {results[0] + 1};
             
             uniform.clear();

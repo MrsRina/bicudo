@@ -132,6 +132,7 @@ int32_t main(int32_t, char**) {
     display_property.size = {1280, 800};
     display_property.position = {SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED};
     display_property.p_api_context_overview = p_context_overview;
+    display_property.vsync = true;
 
     bicudo::display display {};
     bicudo::createdisplay(display_property, &display);

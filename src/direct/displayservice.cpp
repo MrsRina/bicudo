@@ -58,6 +58,10 @@ void bicudo::displayservice::update(bicudo::displayproperty &display_property,
     if (display_property.resizable != -1) {
         SDL_SetWindowResizable(display_root, static_cast<SDL_bool>(display_property.resizable));   
     }
+
+    if (display_property.vsync != -2) {
+        SDL_GL_SetSwapInterval(display_property.vsync);
+    }
 }
 
 void bicudo::displayservice::on_shutdown() {

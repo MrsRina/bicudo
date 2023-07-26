@@ -13,6 +13,7 @@ namespace bicudo {
         bicudo::ivec2 position {-1, -1};
         int8_t fullscreen {-1};
         int8_t resizable {-1};
+        int8_t vsync {-2};
         bicudo::contextoverview *p_api_context_overview {};
     };
 
@@ -21,6 +22,7 @@ namespace bicudo {
         SDL_Window *p_root {};
         uint16_t context_api {};
         int32_t display_id {};
+        int8_t vysnc {};
     public:
         bicudo::ivec2 size {};
     public:
